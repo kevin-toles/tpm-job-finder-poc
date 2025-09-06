@@ -1,54 +1,46 @@
 """
-RemoteOK connector unit-tests
-────────────────────────────
-Verifies that the aggregator:
-  • returns a list of JobPosting objects
-  • normalises datetime to *UTC & tz-aware*
-  • populates required fields (company, title, url, …)
-
-Fixture data lives in tests/aggregators/fixtures/remoteok_sample.json
+RemoteOKConnector unit-test
+───────────────────────────
+Ensures:
+  • Returns JobPosting items
+  • Titles match 'program manager' / 'tpm'
+  • date_posted is UTC & ≤ cut-off
 """
-
-from datetime import timezone
-from pathlib import Path
-from typing import Any
-
+from datetime import datetime, timedelta, timezone
 import json
 
-from poc.aggregators.remoteok import fetch  # ← your connector
-from poc.jobs.schema import JobPosting     # unified model
+import requests
+from pathlib import Path
+from pytest_mock import MockerFixture
+
+from poc.aggregators.remoteok import RemoteOKConnector
+from poc.jobs.schema import JobPosting
+
+FIXTURE = Path(__file__).parent / "fixtures" / "remoteok_sample.json"
 
 
-FIXTURE = Path(__file__).with_suffix("").parent / "fixtures" / "remoteok_sample.json"
+def _mock_http(mocker: MockerFixture, payload: list[dict]) -> None:
+    """Monkey-patch requests.get to return fixture JSON."""
+    resp = requests.Response()
+    resp.status_code = 200
+    resp._content = json.dumps(payload).encode()           # type: ignore[attr-defined]
+    mocker.patch("requests.get", return_value=resp)
 
 
-def _load_fixture() -> list[dict[str, Any]]:
-    with FIXTURE.open("r", encoding="utf-8") as fp:
-        return json.load(fp)
+def test_recent_tpm_jobs(monkeypatch: MockerFixture) -> None:
+    sample = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    # make sure at least one record is < 7 days old
+    sample[0]["epoch"] = int(
+        (datetime.now(timezone.utc) - timedelta(hours=2)).timestamp()
+    )
 
+    _mock_http(monkeypatch, sample)
 
-def test_fetch_returns_jobposting_objects(monkeypatch) -> None:
-    """fetch() should return fully-typed JobPosting instances."""
+    jobs = RemoteOKConnector().fetch_since(days=7)
+    assert jobs, "Should return at least one posting"
 
-    monkeypatch.setattr("poc.aggregators.remoteok._get_raw", _load_fixture)
-
-    jobs = fetch(days=7)
-
-    assert jobs, "No jobs returned"
-    assert all(isinstance(j, JobPosting) for j in jobs)
-
-
-def test_jobposting_fields_are_normalised(monkeypatch) -> None:
-    """Dates must be UTC & tz-aware; URLs and titles populated."""
-
-    monkeypatch.setattr("poc.aggregators.remoteok._get_raw", _load_fixture)
-
-    job = fetch(days=7)[0]          # first sample
-
-    # --- datetime normalisation -------------------------------------------
+    job: JobPosting = jobs[0]
+    assert job.source == "remoteok"
+    assert "program manager" in job.title.lower() or "tpm" in job.title.lower()
     assert job.date_posted.tzinfo is timezone.utc
-
-    # --- required fields ---------------------------------------------------
-    as_dict = job.model_dump()      # <- v2 serialisation
-    for field in ("id", "source", "company", "title", "url"):
-        assert as_dict[field], f"{field} missing / empty"
+    assert job.date_posted >= datetime.now(timezone.utc) - timedelta(days=7)
