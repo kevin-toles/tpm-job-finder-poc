@@ -16,7 +16,7 @@ from pytest_mock import MockerFixture
 from poc.aggregators.remoteok import RemoteOKConnector
 from poc.jobs.schema import JobPosting
 
-FIXTURE = Path(__file__).parent / "fixtures" / "remoteok_sample.json"
+FIXTURE = Path(__file__).parents[1] / "fixtures" / "remoteok_sample.json"
 
 
 def _mock_http(mocker: MockerFixture, payload: list[dict]) -> None:
@@ -24,7 +24,7 @@ def _mock_http(mocker: MockerFixture, payload: list[dict]) -> None:
     resp = requests.Response()
     resp.status_code = 200
     resp._content = json.dumps(payload).encode()           # type: ignore[attr-defined]
-    mocker.patch("requests.get", return_value=resp)
+    mocker.setattr("requests.get", lambda *args, **kwargs: resp)
 
 
 def test_recent_tpm_jobs(monkeypatch: MockerFixture) -> None:
