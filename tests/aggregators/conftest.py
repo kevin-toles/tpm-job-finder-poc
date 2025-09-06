@@ -1,3 +1,9 @@
+import pytest
+from pathlib import Path
+
+@pytest.fixture
+def fixtures_dir():
+    return Path(__file__).parents[2] / "fixtures"
 """
 Pytest fixtures for aggregator unit-tests
 ─────────────────────────────────────────
