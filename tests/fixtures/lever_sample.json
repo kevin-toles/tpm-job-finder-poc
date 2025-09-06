@@ -1,0 +1,12 @@
+[
+  {
+    "id": "abc123",
+    "text": "Technical Program Manager",
+    "createdAt": "2025-09-05T11:22:33Z",
+    "hostedUrl": "https://jobs.lever.co/sampleco/abc123",
+    "categories": {
+      "location": "San Francisco, CA",
+      "team": "Engineering"
+    }
+  }
+]
