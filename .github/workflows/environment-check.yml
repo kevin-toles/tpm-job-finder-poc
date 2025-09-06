@@ -1,51 +1,30 @@
 name: Environment Validation
 
 on:
-  workflow_dispatch:
-    inputs:
-      env:
-        description: "Environment to target (optional; defaults from branch)"
-        required: false
-        type: choice
-        options: [DEV, QA, UAT, STAGE, PROD]
   push:
-    branches: [dev, qa, uat, stage, main]
+    branches:
+      - dev
+      - qa
+      - uat
+      - stage
+      - main
 
 jobs:
-  env-check:
-    name: Validate Environment Setup
+  validate-env:
     runs-on: ubuntu-latest
-
-    # Select the GitHub Environment so environment-scoped secrets are available
-    environment:
-      name: ${{ inputs.env || (
-        github.ref_name == 'dev' && 'DEV' ||
-        github.ref_name == 'qa' && 'QA' ||
-        github.ref_name == 'uat' && 'UAT' ||
-        github.ref_name == 'stage' && 'STAGE' ||
-        github.ref_name == 'main' && 'PROD'
-      ) }}
-
     steps:
-      - name: Checkout Code
+      - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Print GitHub Context
-        run: |
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Event:  ${{ github.event_name }}"
-          echo "Actor:  ${{ github.actor }}"
-          echo "Env:    ${{ inputs.env }}"
-
-      - name: Print ENV_NAME Secret
+      - name: Validate Environment Setup
         env:
           ENV_NAME: ${{ secrets.ENV_NAME }}
         run: |
           if [ -z "$ENV_NAME" ]; then
-            echo "ERROR: ENV_NAME secret is missing! Did you set it in the selected Environment?"
+            echo "ERROR: ENV_NAME secret is missing!"
             exit 1
           fi
-          echo "✅ ENV_NAME detected: $ENV_NAME"
+          echo "ENV_NAME detected: $ENV_NAME"
 
       - name: Success Message
-        run: echo "Workflow completed successfully for ${{ github.ref_name }}"
+        run: echo "Workflow completed successfully for branch ${{ github.ref_name }}"
