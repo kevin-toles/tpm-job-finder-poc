@@ -27,13 +27,12 @@ from __future__ import annotations
 import http.client
 import json
 import time
-from datetime import datetime, timezone
-from typing import Iterable, List
+from datetime import datetime, timezone, timedelta
+from typing import List
 
 REMOTEOK_HOST = "remoteok.com"
 REMOTEOK_PATH = "/remote-jobs.json"
 PAGE_SIZE = 50  # RemoteOK returns up to 500, but smaller pages = safer
-
 
 def _get_page(offset: int = 0, limit: int = PAGE_SIZE) -> list[dict]:
     """Low-level GET wrapper (no external deps)."""
@@ -47,11 +46,9 @@ def _get_page(offset: int = 0, limit: int = PAGE_SIZE) -> list[dict]:
     conn.close()
     return json.loads(data.decode())
 
-
 def _is_tpm(job: dict) -> bool:
     title = job.get("position") or job.get("title", "")
     return "program manager" in title.lower() or "tpm" in title.lower()
-
 
 def fetch(max_days: int = 7, max_pages: int = 3) -> List[dict]:
     """
