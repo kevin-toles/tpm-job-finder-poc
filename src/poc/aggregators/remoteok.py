@@ -3,6 +3,31 @@ from datetime import datetime, timezone
 from poc.jobs.schema import JobPosting
 
 class RemoteOKConnector:
+	def _normalize_jobs(self, data):
+		jobs = []
+		from datetime import datetime, timezone
+		for item in data:
+			if not isinstance(item, dict):
+				continue
+			epoch = item.get("epoch")
+			if epoch:
+				date_posted = datetime.fromtimestamp(epoch, tz=timezone.utc)
+			else:
+				date_posted = datetime.now(timezone.utc)
+			jobs.append(JobPosting(
+				id=str(item.get("id")),
+				source=item.get("source", "remoteok"),
+				company=item.get("company"),
+				title=item.get("position"),
+				location=item.get("location"),
+				salary=item.get("salary", ""),
+				url=item.get("url"),
+				date_posted=date_posted,
+				raw=item
+			))
+		return jobs
+	def normalize_jobs_from_data(self, data):
+		return self._normalize_jobs(data)
 	API_URL = "https://remoteok.com/api"
 
 	def fetch_since(self, days=7):
