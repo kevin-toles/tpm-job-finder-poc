@@ -18,7 +18,7 @@ from pathlib import Path
 from unittest import mock
 import json
 
-import poc.aggregators.remoteok as remoteok
+import poc.connectors.remoteok as remoteok
 
 FIXTURE = Path(__file__).parent / "fixtures" / "remoteok_sample.json"
 
@@ -29,11 +29,10 @@ def load_fixture():
 
 def test_recent_tpm_jobs_only():
     """fetch(days=7) should keep only recent TPM jobs."""
-    with mock.patch("requests.get") as m:
-        m.return_value.json.return_value = load_fixture()
-        m.return_value.raise_for_status.return_value = None
+    with mock.patch("poc.connectors.remoteok._get_page") as m:
+        m.return_value = load_fixture()
 
-        jobs = remoteok.fetch(days=7)
+        jobs = remoteok.fetch(max_days=7)
 
     assert jobs, "Expected at least one job from fixture"
     cutoff = datetime.now(timezone.utc) - timedelta(days=7)

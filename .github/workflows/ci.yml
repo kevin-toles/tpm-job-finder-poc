@@ -59,6 +59,8 @@ jobs:
 
     # 4️⃣  Run unit tests (fail fast if any test breaks)
     - name: Run pytest
+      env:
+        PYTHONPATH: .
       run: pytest -q
 
     # 5️⃣  Static analysis / style check
