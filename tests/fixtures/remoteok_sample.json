@@ -1,0 +1,19 @@
+[
+  { "legal": "metadata" },           // RemoteOK’s header element
+  {
+    "id": 12345,
+    "position": "Senior Technical Program Manager",
+    "company": "Acme Corp",
+    "epoch": 1736200000,
+    "location": "Anywhere",
+    "tags": ["tpM", "remote"],
+    "salary": "$150k-$180k"
+  },
+  {
+    "id": 12346,
+    "position": "Program Manager (Marketing)",
+    "company": "Globex",
+    "epoch": 1600000000,             // old date → should be filtered out
+    "location": "Remote"
+  }
+]
