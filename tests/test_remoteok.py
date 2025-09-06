@@ -2,26 +2,15 @@
 RemoteOK aggregator · unit tests
 ────────────────────────────────
 Purpose
-    • Validate that `poc.aggregators.remoteok.fetch()` returns only
-      Technical Program Manager postings published within the requested window.
-
-Why test this early?
-    • If the RemoteOK JSON schema changes, these tests fail first.
-    • Guarantees that downstream steps (normalizer, scorer, exporter) receive
-      predictable fields.
-
-What makes a result “valid”?
-    1. Title contains “program manager” (case-insensitive)
-    2. Job’s epoch timestamp ≥ <cut-off>
-    3. Required keys: id, title, company, url, date_posted
+    Validate that `poc.aggregators.remoteok.fetch()` returns only TPM jobs
+    posted within the requested window and that `date_posted` is tz-aware.
 
 Test strategy
-    • Mock the API call (no network).
-    • Use a fixture payload identical to the real RemoteOK endpoint.
-    • Edge-case fixture covers:
-        – Job older than N days   → filtered out
-        – Non-TPM title           → filtered out
-        – Well-formed TPM posting → kept
+    • Mock the HTTP request so no network call occurs.
+    • Use a fixture JSON identical to a real RemoteOK response.
+    • Assert:
+        – Every title contains "program manager".
+        – All datetimes are timezone-aware and within the cutoff.
 """
 
 from datetime import datetime, timezone, timedelta
@@ -29,31 +18,29 @@ from pathlib import Path
 from unittest import mock
 import json
 
-import pytest
-
 import poc.aggregators.remoteok as remoteok
-
 
 FIXTURE = Path(__file__).parent / "fixtures" / "remoteok_sample.json"
 
 
-def _load_fixture():
-    """Return the JSON list that RemoteOK would normally return."""
+def load_fixture():
     return json.loads(FIXTURE.read_text())
 
 
-def test_keeps_only_recent_tpm_jobs():
-    """fetch(days=X) should return *only* TPM jobs posted within X days."""
+def test_recent_tpm_jobs_only():
+    """fetch(days=7) should keep only recent TPM jobs."""
     with mock.patch("requests.get") as m:
-        m.return_value.json.return_value = _load_fixture()
+        m.return_value.json.return_value = load_fixture()
         m.return_value.raise_for_status.return_value = None
 
         jobs = remoteok.fetch(days=7)
 
-    assert jobs, "No jobs returned (fixture should include at least one hit)"
-
+    assert jobs, "Expected at least one job from fixture"
     cutoff = datetime.now(timezone.utc) - timedelta(days=7)
 
     for job in jobs:
+        # title filter
         assert "program manager" in job["title"].lower()
-        assert job["date_posted"] >= cutoff, "Job is older than cutoff"
+        # tz-aware + within window
+        assert job["date_posted"].tzinfo is not None
+        assert job["date_posted"] >= cutoff
