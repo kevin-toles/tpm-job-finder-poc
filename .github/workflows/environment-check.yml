@@ -10,7 +10,7 @@ jobs:
     if: ${{ github.ref_name == 'dev' }}
     name: Validate DEV
     runs-on: ubuntu-latest
-    environment: DEV
+    environment: DEV                # ← ensures DEV’s secrets are available
     steps:
       - uses: actions/checkout@v3
       - name: Print context
@@ -29,7 +29,7 @@ jobs:
     if: ${{ github.ref_name == 'qa' }}
     name: Validate QA
     runs-on: ubuntu-latest
-    environment: QA
+    environment: QA                # ← QA environment
     steps:
       - uses: actions/checkout@v3
       - name: Print context
@@ -48,7 +48,7 @@ jobs:
     if: ${{ github.ref_name == 'uat' }}
     name: Validate UAT
     runs-on: ubuntu-latest
-    environment: UAT
+    environment: UAT               # ← UAT environment
     steps:
       - uses: actions/checkout@v3
       - name: Print context
@@ -67,7 +67,7 @@ jobs:
     if: ${{ github.ref_name == 'stage' }}
     name: Validate STAGE
     runs-on: ubuntu-latest
-    environment: STAGE
+    environment: STAGE             # ← STAGE environment
     steps:
       - uses: actions/checkout@v3
       - name: Print context
@@ -86,7 +86,7 @@ jobs:
     if: ${{ github.ref_name == 'main' }}
     name: Validate PROD
     runs-on: ubuntu-latest
-    environment: PROD
+    environment: PROD              # ← PROD environment
     steps:
       - uses: actions/checkout@v3
       - name: Print context
