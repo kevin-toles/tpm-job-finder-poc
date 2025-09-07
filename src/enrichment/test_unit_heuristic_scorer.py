@@ -33,11 +33,17 @@ class TestHeuristicScorerUnit(unittest.TestCase):
         self.assertIsInstance(result["rationale"], str)
 
     def test_score_resume_aggregation(self):
-        result = self.scorer.score_resume(self.bullets, self.resume_meta)
+        result = self.scorer.score_resume(self.bullets, self.resume_meta, context={"channel": "portal", "archetype": "mid-market"})
         self.assertIn("overall_score", result)
         self.assertIn("category", result)
         self.assertIn("rationales", result)
         self.assertEqual(len(result["rationales"]), len(self.bullets))
+        self.assertIn("evidence_map", result)
+        self.assertIsInstance(result["evidence_map"], dict)
+        self.assertIn("gap_map", result)
+        self.assertIsInstance(result["gap_map"], list)
+        self.assertIn("psl", result)
+        self.assertGreaterEqual(result["psl"], 0)
 
     def test_weight_tuning(self):
         custom_weights = {k: 5 for k in self.scorer.DEFAULT_WEIGHTS}

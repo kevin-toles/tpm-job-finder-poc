@@ -1,3 +1,4 @@
+import pytest
 from job_normalizer.jobs.parser import parse_job
 from job_normalizer.jobs.schema import JobPosting
 from datetime import datetime, timezone

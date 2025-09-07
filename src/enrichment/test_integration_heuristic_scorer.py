@@ -54,7 +54,7 @@ class TestHeuristicScorerAuditIntegration(unittest.TestCase):
             "Managed teams and improved delivery by 30%."
         ]
         scorer = HeuristicScorer(job_desc)
-        result = scorer.score_resume(bullets)
+        result = scorer.score_resume(bullets, context={"channel": "portal", "archetype": "mid-market"})
         log_structured(
             logging.INFO,
             "Heuristic scoring result",
@@ -75,6 +75,9 @@ class TestHeuristicScorerAuditIntegration(unittest.TestCase):
                 self.assertEqual(data["correlation_id"], 'scorer-corr-id')
                 self.assertEqual(data["details"]["score"], result["overall_score"])
                 self.assertEqual(data["details"]["category"], result["category"])
+        self.assertIn("evidence_map", result)
+        self.assertIn("gap_map", result)
+        self.assertIn("psl", result)
 
     def test_audit_logging_error_case(self):
         log_structured(

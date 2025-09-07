@@ -1,5 +1,6 @@
 from job_normalizer.jobs.parser import parse_job
 from job_normalizer.jobs.normalizer import normalize_job, dedupe_jobs
+from job_normalizer.jobs.schema import JobPosting
 from datetime import datetime, timezone
 
 def test_parse_and_normalize_integration():
