@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
-import pytest
 from job_aggregator.aggregators.greenhouse import GreenhouseConnector
 from job_aggregator.aggregators.lever import LeverConnector
 

@@ -1,5 +1,12 @@
 
+
+[![codecov](https://codecov.io/gh/kevin-toles/tpm-job-finder-poc/branch/dev/graph/badge.svg)](https://codecov.io/gh/kevin-toles/tpm-job-finder-poc)
 # TPM Job Finder POC
+
+## Test Coverage
+Automated coverage reporting is enabled via Codecov. Every PR and commit updates the badge above and provides detailed coverage reports. Coverage is enforced in CI; PRs that reduce coverage below threshold will fail.
+
+To view detailed coverage reports, click the badge or visit your Codecov dashboard.
 
 ## Overview
 This repository is organized for modular, microservice-friendly development. Each major component, utility, and script lives in its own top-level folder, with dedicated test folders for unit, integration, and end-to-end tests.
@@ -19,14 +26,31 @@ This repository is organized for modular, microservice-friendly development. Eac
 - `scripts/` — Utility scripts
 	- `tests/unit/` — Unit tests for scripts
 
+
 ## Testing
 - Unit tests are kept within their respective component or script folders.
 - Integration and cross-component tests are in `integration_tests/`.
 - End-to-end tests are in `e2e_tests/`.
+- LLM provider tests (unit, integration, e2e, regression, smoke) will be **skipped** if the required API key or local server is not configured. This is expected and ensures the suite does not fail due to missing external credentials.
 - Run all tests with:
 	```
 	PYTHONPATH=. pytest
 	```
+
+## LLM Provider API Keys & Security
+- Add your API keys to `llm_keys.txt` in the project root, e.g.:
+	```
+	ChatGPT: sk-xxxxxx
+	Anthropic: sk-ant-xxxxxx
+	Gemini: <your-key>
+	DeepSeek: <your-key>
+	Ollama:  # leave blank for local
+	```
+- You can also set API keys as environment variables (recommended for CI/CD and security):
+	- `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `OLLAMA_API_KEY`
+- **Never hard-code API keys in code or commit them to version control.**
+- Use environment variables or `llm_keys.txt` (which should be excluded from public repos).
+
 
 ## Contributing
 - Add new tests to the appropriate folder.
@@ -35,3 +59,10 @@ This repository is organized for modular, microservice-friendly development. Eac
 ## More Info
 See individual component and test folder README files for details.
 ---
+
+## Test Suite Hygiene & Organization
+
+- All test files are deduplicated, consistently structured, and free of obsolete stubs or commented code.
+- Audit logger, Heuristic Scorer, and cross-component integration/e2e tests use standardized setup/teardown and log validation.
+- Utility script `scripts/clean_py_artifacts.sh` is provided to remove Python build artifacts (`__pycache__`, `.pyc` files).
+- See individual test folder READMEs for details on test types and conventions.

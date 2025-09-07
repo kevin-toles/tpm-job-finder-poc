@@ -2,7 +2,7 @@ from __future__ import annotations
 import pytest
 import json
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any
 
 """
 Pytest fixtures for aggregator unit-tests

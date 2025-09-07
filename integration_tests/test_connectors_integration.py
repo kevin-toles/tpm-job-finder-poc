@@ -1,17 +1,16 @@
+
 from __future__ import annotations
 from datetime import datetime, timezone, timedelta
-"""
-Lightweight smoke integration: run all three connectors offline via fixtures.
-"""
 from pathlib import Path
 from typing import Any
-
 import json
-import importlib.resources as pkg
-
 from job_aggregator.aggregators.greenhouse import GreenhouseConnector
 from job_aggregator.aggregators.lever import LeverConnector
 from job_aggregator.aggregators.remoteok import RemoteOKConnector
+
+"""
+Lightweight smoke integration: run all three connectors offline via fixtures.
+"""
 
 
 def _load(path: Path) -> Any:
