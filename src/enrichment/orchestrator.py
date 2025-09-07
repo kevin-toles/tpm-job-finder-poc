@@ -85,27 +85,23 @@ class ResumeScoringOrchestrator:
             print(f"LLM provider load error: {e}")
             return None
 
-    def score_resume(self, bullets=None, resume_data=None, llm_prompt=None):
+    def score_resume(self, bullets=None, resume_data=None, llm_prompt=None, context=None):
         # Use parsed resume bullets if not provided
         if bullets is None and self.resume_struct:
-            # Try to extract experience bullets
             bullets = self.resume_struct["sections"].get("experience", [])
         if resume_data is None and self.resume_struct:
-            # Use summary/education/certs from parsed resume
             resume_data = {
                 "education": self.resume_struct["sections"].get("education", ""),
                 "certifications": self.resume_struct["sections"].get("certifications", ""),
                 "years_experience": self._extract_years_experience(self.resume_struct["raw_text"])
             }
-        heuristic_result = self.heuristic.score_resume(bullets, resume_data)
+        heuristic_result = self.heuristic.score_resume(bullets, resume_data, context=context)
         ml_result = self.ml.score_resume(resume_data)
         llm_result = None
-        # Aggregate embedding-based semantic similarity scores for bullets
         resp_sem_sims = [b.get("resp_sem_sim", 0.0) for b in heuristic_result.get("bullets", [])]
         skill_sem_sims = [b.get("skill_sem_sim", 0.0) for b in heuristic_result.get("bullets", [])]
         avg_resp_sem_sim = round(sum(resp_sem_sims) / max(1, len(resp_sem_sims)), 3)
         avg_skill_sem_sim = round(sum(skill_sem_sims) / max(1, len(skill_sem_sims)), 3)
-        # BM25/TF-IDF aggregate scores
         bm25_scores = []
         if self.bm25_matcher and bullets:
             for bullet in bullets:
@@ -113,7 +109,6 @@ class ResumeScoringOrchestrator:
                     bm25_scores.append(self.bm25_matcher.score(bullet))
                 except Exception:
                     bm25_scores.append(None)
-        # Aggregate BM25/TF-IDF scores
         import numpy as np
         def _agg_bm25(scores, key):
             vals = [s[key] for s in scores if s and key in s]
@@ -126,12 +121,23 @@ class ResumeScoringOrchestrator:
         } if bm25_scores else None
         if self.llm and llm_prompt:
             llm_result = self.llm.get_signals(llm_prompt)
+
+        # Feedback generator integration
+        from src.enrichment.resume_feedback_generator import ResumeFeedbackGenerator
+        feedback_generator = ResumeFeedbackGenerator(llm_provider=self.llm)
+        feedback = feedback_generator.generate_feedback(
+            job_desc=self.heuristic.job_desc,
+            resume_meta=resume_data,
+            scoring_result=heuristic_result,
+            context=context
+        )
         return {
             "heuristic": heuristic_result,
             "ml": ml_result,
             "llm": llm_result,
             "bm25_tfidf": bm25_tfidf_agg,
-            "aggregate": self._aggregate_results(heuristic_result, ml_result, llm_result, avg_resp_sem_sim, avg_skill_sem_sim, bm25_tfidf_agg)
+            "aggregate": self._aggregate_results(heuristic_result, ml_result, llm_result, avg_resp_sem_sim, avg_skill_sem_sim, bm25_tfidf_agg),
+            "feedback": feedback
         }
         # BM25/TF-IDF aggregate scores
         bm25_scores = []

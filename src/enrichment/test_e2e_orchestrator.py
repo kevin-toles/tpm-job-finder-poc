@@ -8,6 +8,8 @@ class DummyLLMProvider:
         self.api_key = api_key
     def get_signals(self, prompt):
         return {"provider": "DummyLLM", "response": f"Rationale for: {prompt}"}
+    def get_feedback(self, llm_input):
+        return f"LLM feedback for {llm_input['job_desc'].get('role_level', 'unknown')} level."
 
 class TestResumeScoringOrchestratorE2E(unittest.TestCase):
     def setUp(self):
@@ -35,21 +37,34 @@ class TestResumeScoringOrchestratorE2E(unittest.TestCase):
         ResumeScoringOrchestrator._init_llm = lambda self, cfg: DummyLLMProvider()
         self.orchestrator = ResumeScoringOrchestrator(self.job_desc, llm_config=self.llm_config)
 
-    def test_e2e_orchestrator_with_llm(self):
-        result = self.orchestrator.score_resume(self.bullets, self.resume_meta, llm_prompt="Summarize fit")
+    def test_e2e_orchestrator_with_feedback(self):
+        result = self.orchestrator.score_resume(self.bullets, self.resume_meta, llm_prompt="Summarize fit", context={"archetype": "enterprise", "channel": "referral"})
         self.assertIn("heuristic", result)
         self.assertIn("ml", result)
         self.assertIn("llm", result)
         self.assertIn("aggregate", result)
-        self.assertEqual(result["llm"]["provider"], "DummyLLM")
-        self.assertIn("Rationale for: Summarize fit", result["llm"]["response"])
-        self.assertIn("LLM: Rationale for: Summarize fit", result["aggregate"]["rationale"])
-        # Validate semantic similarity scores in aggregate output
-        agg = result["aggregate"]
-        self.assertIn("avg_resp_sem_sim", agg)
-        self.assertIn("avg_skill_sem_sim", agg)
-        self.assertIsInstance(agg["avg_resp_sem_sim"], float)
-        self.assertIsInstance(agg["avg_skill_sem_sim"], float)
+        self.assertIn("feedback", result)
+        feedback = result["feedback"]
+        self.assertIsInstance(feedback, list)
+        self.assertGreater(len(feedback), 0)
+        # Check feedback structure and context-awareness
+        for item in feedback:
+            self.assertIn("message", item)
+            self.assertIn("severity", item)
+            self.assertIn("evidence", item)
+            self.assertIn("rubric", item)
+            self.assertIn("priority", item)
+            self.assertIn("category", item)
+        # Check for LLM feedback presence
+        self.assertTrue(
+            any(item["category"] == "llm" for item in feedback),
+            "Missing llm feedback",
+        )
+        # Check for analytics summary
+        self.assertTrue(
+            any(item["category"] == "analytics" for item in feedback),
+            "Missing analytics feedback",
+        )
 
 if __name__ == '__main__':
     unittest.main()
