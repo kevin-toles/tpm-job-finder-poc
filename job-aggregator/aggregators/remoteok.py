@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime, timezone
-from poc.jobs.schema import JobPosting
+from job_normalizer.jobs.schema import JobPosting
 
 class RemoteOKConnector:
 	def _normalize_jobs(self, data):

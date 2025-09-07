@@ -39,6 +39,22 @@ jobs:
 
     steps:
     # 1️⃣  Fetch the repo so tests & linters can run
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install root dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Install per-service dependencies
+        run: |
+          for req in job_aggregator/requirements.txt job_normalizer/requirements.txt llm_provider/requirements.txt heuristic_scorer/requirements.txt enrichment_orchestrator/requirements.txt excel_exporter/requirements.txt resume_uploader/requirements.txt resume_store/requirements.txt storage/requirements.txt config/requirements.txt audit-logger/requirements.txt cache/requirements.txt health/requirements.txt cli/requirements.txt webhook/requirements.txt; do
+            pip install -r $req || true
+          done
+      - name: Run tests
+        run: |
+          PYTHONPATH=. pytest -v
     - name: Checkout code
       uses: actions/checkout@v4
 

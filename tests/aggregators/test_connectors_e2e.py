@@ -1,9 +1,9 @@
 import pytest
 import json
-from src.poc.aggregators.remoteok import RemoteOKConnector
-from src.poc.aggregators.greenhouse import GreenhouseConnector
-from src.poc.aggregators.lever import LeverConnector
-from src.poc.jobs.schema import JobPosting
+from job_aggregator.aggregators.remoteok import RemoteOKConnector
+from job_aggregator.aggregators.greenhouse import GreenhouseConnector
+from job_aggregator.aggregators.lever import LeverConnector
+from job_normalizer.jobs.schema import JobPosting
 
 def load_fixture(path):
     with open(path) as f:

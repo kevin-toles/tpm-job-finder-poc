@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 import pytest
-from poc.aggregators.greenhouse import GreenhouseConnector
-from poc.aggregators.lever import LeverConnector
+from job_aggregator.aggregators.greenhouse import GreenhouseConnector
+from job_aggregator.aggregators.lever import LeverConnector
 
 GREENHOUSE_FIXTURE = Path(__file__).parents[1] / "fixtures" / "greenhouse_sample.json"
 LEVER_FIXTURE = Path(__file__).parents[1] / "fixtures" / "lever_sample.json"

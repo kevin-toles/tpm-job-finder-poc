@@ -9,9 +9,9 @@ from typing import Any
 import json
 import importlib.resources as pkg
 
-from poc.aggregators.greenhouse import GreenhouseConnector
-from poc.aggregators.lever import LeverConnector
-from poc.aggregators.remoteok import RemoteOKConnector
+from job_aggregator.aggregators.greenhouse import GreenhouseConnector
+from job_aggregator.aggregators.lever import LeverConnector
+from job_aggregator.aggregators.remoteok import RemoteOKConnector
 
 
 def _load(path: Path) -> Any:

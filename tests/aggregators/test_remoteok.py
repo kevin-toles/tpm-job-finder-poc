@@ -13,8 +13,8 @@ import requests
 from pathlib import Path
 from pytest_mock import MockerFixture
 
-from poc.aggregators.remoteok import RemoteOKConnector
-from poc.jobs.schema import JobPosting
+from job_aggregator.aggregators.remoteok import RemoteOKConnector
+from job_normalizer.jobs.schema import JobPosting
 
 FIXTURE = Path(__file__).parents[1] / "fixtures" / "remoteok_sample.json"
 
