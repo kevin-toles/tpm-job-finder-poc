@@ -1,3 +1,4 @@
+from src.storage.secure_storage import SecureStorage
 import unittest
 import tempfile
 import os
@@ -9,8 +10,11 @@ class TestResumeStore(unittest.TestCase):
         self.store = ResumeStore()
         self.test_dir = tempfile.mkdtemp()
         self.test_file = os.path.join(self.test_dir, "test_resume.txt")
+        # Use SecureStorage to save the test file
         with open(self.test_file, "w") as f:
             f.write("Sample resume content.")
+        storage = SecureStorage()
+        storage.save_file(self.test_file, "test_resume.txt")
         self.metadata = {
             "filename": "test_resume.txt",
             "type": "txt",
@@ -28,7 +32,10 @@ class TestResumeStore(unittest.TestCase):
             os.rmdir(self.test_dir)
         except Exception:
             pass
-        # Remove stored resume and metadata
+        # Remove stored resume and metadata using SecureStorage
+        storage = SecureStorage()
+        storage.delete_file("test_resume.txt")
+        storage.delete_metadata("test_resume.txt")
         self.store.delete_resume("test_resume.txt")
 
     def test_save_and_retrieve_resume(self):
@@ -60,9 +67,10 @@ class TestResumeStore(unittest.TestCase):
 
     def test_directory_listing(self):
         self.store.save_resume(self.test_file, self.metadata)
-        files = os.listdir(self.store.storage_dir)
+        storage = SecureStorage()
+        files = storage.list_files()
         self.assertIn("test_resume.txt", files)
-        meta_files = os.listdir(self.store.metadata_dir)
+        meta_files = storage.list_metadata()
         self.assertTrue(any(f.startswith("test_resume.txt") for f in meta_files))
 
 if __name__ == "__main__":

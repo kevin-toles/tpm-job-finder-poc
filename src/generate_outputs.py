@@ -40,4 +40,4 @@ records = [
 save_json(records)
 save_csv(records)
 save_excel(records)
-print("All outputs saved to output/ folder.")
+print("All outputs saved to secure_storage/files/ folder via SecureStorage.")

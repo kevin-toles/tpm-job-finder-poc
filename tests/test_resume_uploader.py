@@ -1,3 +1,4 @@
+from src.storage.secure_storage import SecureStorage
 import unittest
 import tempfile
 import os
@@ -10,10 +11,21 @@ class TestResumeUploader(unittest.TestCase):
         self.test_file = os.path.join(self.test_dir, "test_resume.txt")
         with open(self.test_file, "w") as f:
             f.write("Sample resume content.")
+        storage = SecureStorage()
+        storage.save_file(self.test_file, "test_resume.txt")
 
     def tearDown(self):
-        os.remove(self.test_file)
-        os.rmdir(self.test_dir)
+        try:
+            os.remove(self.test_file)
+        except Exception:
+            pass
+        try:
+            os.rmdir(self.test_dir)
+        except Exception:
+            pass
+        storage = SecureStorage()
+        storage.delete_file("test_resume.txt")
+        storage.delete_metadata("test_resume.txt")
 
     def test_upload_valid_file(self):
         result = self.uploader.upload_resume(self.test_file, user_id="user123")

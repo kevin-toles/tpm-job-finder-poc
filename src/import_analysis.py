@@ -1,17 +1,17 @@
 import pandas as pd
 from typing import List, Dict, Any
+from src.storage.secure_storage import SecureStorage
 
 class ImportAnalysis:
     def save_results(self, results: dict, output_path: str):
         """
-        Save analysis results to a JSON file for downstream consumption.
+        Save analysis results to a JSON file for downstream consumption using SecureStorage.
         Args:
             results: Output from analyze().
             output_path: Path to save the JSON file.
         """
-        import json
-        with open(output_path, "w") as f:
-            json.dump(results, f, indent=2)
+        storage = SecureStorage()
+        storage.save_metadata(output_path, results)
     """
     ImportAnalysis reads and analyzes an Excel sheet of job matches and outcomes.
     Usage:

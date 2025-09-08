@@ -7,6 +7,7 @@ import re
 
 import json
 import os
+from src.storage.secure_storage import SecureStorage
 
 class HeuristicScorer:
     def _semantic_similarity(self, text_a: str, text_b: str) -> float:
@@ -93,8 +94,14 @@ class HeuristicScorer:
         if weights:
             return weights
         if config_path and os.path.exists(config_path):
-            with open(config_path) as f:
-                return json.load(f)
+            # Use SecureStorage to load config/weights
+            storage = SecureStorage()
+            try:
+                config_data = storage.load_metadata(config_path)
+                if config_data:
+                    return config_data
+            except Exception:
+                pass
         return self.DEFAULT_WEIGHTS.copy()
 
     def score_bullet(self, bullet: str, resume_meta: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -249,11 +256,14 @@ class HeuristicScorer:
         return round(base * ko_gate * fit_factor, 3)
 
     def log_feedback(self, resume_id: str, feedback: str):
-        # Stub: In production, store feedback in DB or file
+        # Store feedback in memory
         self.feedback_log.append({"resume_id": resume_id, "feedback": feedback})
-        # Optionally write to file
-        # with open("heuristic_feedback.log", "a") as f:
-        #     f.write(json.dumps({"resume_id": resume_id, "feedback": feedback}) + "\n")
+        # Use SecureStorage for audit logging
+        try:
+            storage = SecureStorage()
+            storage.log_event("heuristic_feedback", {"resume_id": resume_id, "feedback": feedback})
+        except Exception:
+            pass
 
     def _bucket_score(self, matches: int, total_possible: int, max_points: int) -> int:
         # Objective: scale score by match ratio, subjective: use buckets for realism

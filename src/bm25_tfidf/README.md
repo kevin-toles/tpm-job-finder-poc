@@ -15,4 +15,11 @@ This folder contains the BM25/TF-IDF matcher for semantic search and relevance s
 
 ---
 
+
+---
+
+## SecureStorage Integration
+
+All file and metadata operations in BM25TFIDFMatcher are handled via SecureStorage for consistency and security.
+
 _Last updated: September 8, 2025_

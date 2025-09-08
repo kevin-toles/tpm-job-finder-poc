@@ -14,6 +14,7 @@ def save_to_database(records, db_config=None):
 Output utilities for job/resume matching results
 Generates JSON, CSV, and Excel files in the output/ folder
 """
+
 import os
 import json
 import pandas as pd
@@ -21,24 +22,28 @@ import sys
 import pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "export"))
 from excel_exporter import export_to_excel, EXPORT_COLUMNS
+from src.storage.secure_storage import SecureStorage
 
-OUTPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output"))
+storage = SecureStorage()
 
 def save_json(records, filename="results.json"):
-    path = os.path.join(OUTPUT_DIR, filename)
+    path = os.path.join(storage.files_dir, filename)
     with open(path, "w") as f:
         json.dump(records, f, indent=2)
+    storage.log_action("save_json", {"filename": filename})
     return path
 
 def save_csv(records, filename="results.csv"):
-    path = os.path.join(OUTPUT_DIR, filename)
+    path = os.path.join(storage.files_dir, filename)
     df = pd.DataFrame(records)
     df.to_csv(path, index=False)
+    storage.log_action("save_csv", {"filename": filename})
     return path
 
 def save_excel(records, filename="results.xlsx"):
-    path = os.path.join(OUTPUT_DIR, filename)
+    path = os.path.join(storage.files_dir, filename)
     export_to_excel(records, path, columns=EXPORT_COLUMNS)
+    storage.log_action("save_excel", {"filename": filename})
     return path
 
 # Example usage:

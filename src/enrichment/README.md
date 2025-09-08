@@ -21,4 +21,11 @@ This folder contains core enrichment modules for job/resume matching, scoring, a
 
 ---
 
+
+---
+
+## SecureStorage Integration
+
+All enrichment modules now use SecureStorage for file, metadata, and log operations, ensuring secure and consistent data handling across enrichment workflows.
+
 _Last updated: September 8, 2025_

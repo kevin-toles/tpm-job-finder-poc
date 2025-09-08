@@ -1,3 +1,4 @@
+from src.storage.secure_storage import SecureStorage
 import unittest
 import tempfile
 import os
@@ -25,17 +26,37 @@ class TestAnalyticsIntegration(unittest.TestCase):
         os.unlink(self.json_path)
 
     def test_load_analytics_results(self):
-        loaded = load_analytics_results(self.json_path)
+        # Use a consistent base name for saving and retrieving metadata
+        base_name = "test_analytics"
+        self.analysis.save_results(self.results, base_name)
+        storage = SecureStorage()
+        loaded = storage.retrieve_metadata(base_name)
         self.assertEqual(loaded["Callback_rate"], self.results["Callback_rate"])
+        # Clean up
+        meta_path = os.path.join(storage.metadata_dir, base_name + ".json")
+        if os.path.exists(meta_path):
+            os.unlink(meta_path)
 
     def test_embeddings_consumer(self):
-        update_embeddings_from_analytics(self.json_path)
+        base_name = "test_analytics"
+        self.analysis.save_results(self.results, base_name)
+        storage = SecureStorage()
+        analytics_path = os.path.join(storage.metadata_dir, base_name + ".json")
+        update_embeddings_from_analytics(analytics_path)
 
     def test_ml_scoring_consumer(self):
-        calibrate_scoring_from_analytics(self.json_path)
+        base_name = "test_analytics"
+        self.analysis.save_results(self.results, base_name)
+        storage = SecureStorage()
+        analytics_path = os.path.join(storage.metadata_dir, base_name + ".json")
+        calibrate_scoring_from_analytics(analytics_path)
 
     def test_training_pipeline_consumer(self):
-        train_models_from_analytics(self.json_path)
+        base_name = "test_analytics"
+        self.analysis.save_results(self.results, base_name)
+        storage = SecureStorage()
+        analytics_path = os.path.join(storage.metadata_dir, base_name + ".json")
+        train_models_from_analytics(analytics_path)
 
 if __name__ == "__main__":
     unittest.main()

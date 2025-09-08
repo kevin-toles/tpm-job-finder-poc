@@ -3,6 +3,7 @@ ResumeParser: Extracts structured resume data from PDF, DOCX, and TXT files
 Output: JSON with sections, bullets, dates, education, certs, etc.
 """
 import os
+from src.storage.secure_storage import SecureStorage
 from typing import Dict, Any
 
 try:
@@ -29,18 +30,24 @@ class ResumeParser:
     def _parse_pdf(self, file_path: str) -> Dict[str, Any]:
         if not pdfplumber:
             raise ImportError("pdfplumber not installed")
-        with pdfplumber.open(file_path) as pdf:
+        # Use SecureStorage to get file path
+        storage = SecureStorage()
+        secure_path = storage.get_file_path(file_path)
+        with pdfplumber.open(secure_path) as pdf:
             text = "\n".join(page.extract_text() or "" for page in pdf.pages)
         return self._basic_structure(text)
 
     def _parse_docx(self, file_path: str) -> Dict[str, Any]:
         if not docx:
             raise ImportError("python-docx not installed")
-        doc = docx.Document(file_path)
+        storage = SecureStorage()
+        secure_path = storage.get_file_path(file_path)
+        doc = docx.Document(secure_path)
         text = "\n".join(p.text for p in doc.paragraphs)
         return self._basic_structure(text)
 
     def _parse_txt(self, file_path: str) -> Dict[str, Any]:
+        # If file_path is already local, use it directly
         with open(file_path, "r", encoding="utf-8") as f:
             text = f.read()
         return self._basic_structure(text)

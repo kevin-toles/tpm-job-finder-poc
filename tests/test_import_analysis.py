@@ -1,3 +1,4 @@
+from src.storage.secure_storage import SecureStorage
 import unittest
 import pandas as pd
 import tempfile
@@ -9,12 +10,16 @@ class TestImportAnalysis(unittest.TestCase):
         results = self.analysis.analyze(self.temp_file.name)
         temp_json = tempfile.NamedTemporaryFile(suffix=".json", delete=False)
         temp_json.close()
-        self.analysis.save_results(results, temp_json.name)
-        import json
-        with open(temp_json.name, "r") as f:
-            loaded = json.load(f)
+        # Use a consistent base name for saving and retrieving metadata
+        base_name = "test_results"
+        self.analysis.save_results(results, base_name)
+        storage = SecureStorage()
+        loaded = storage.retrieve_metadata(base_name)
         self.assertEqual(loaded["Callback_rate"], results["Callback_rate"])
-        os.unlink(temp_json.name)
+        # Clean up
+        meta_path = os.path.join(storage.metadata_dir, base_name + ".json")
+        if os.path.exists(meta_path):
+            os.unlink(meta_path)
     def test_missing_columns(self):
         df = pd.DataFrame({"Job ID": [1], "Match Score": [90]})
         temp_file = tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False)

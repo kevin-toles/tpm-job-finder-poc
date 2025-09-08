@@ -5,6 +5,7 @@
 
 
 import os
+from src.storage.secure_storage import SecureStorage
 
 class ResumeUploader:
     """
@@ -38,9 +39,11 @@ class ResumeUploader:
             "user_id": user_id,
             "file_path": file_path
         }
-        # Stub: DB/cloud persistence
-        self.save_to_persistence(metadata)
-        return {"status": "uploaded", "metadata": metadata}
+        # Use SecureStorage for persistence
+        storage = SecureStorage()
+        file_result = storage.save_file(file_path, metadata["filename"])
+        meta_result = storage.save_metadata(metadata["filename"], metadata)
+        return {"status": "uploaded", "metadata": metadata, "file_result": file_result, "meta_result": meta_result}
 
     def register_metadata(self, metadata):
         """
@@ -53,16 +56,7 @@ class ResumeUploader:
         # TODO: Implement metadata registration (DB or file)
         return {"status": "registered (stub)", "metadata": metadata}
 
-    def save_to_persistence(self, metadata):
-        """
-        Stub for saving metadata to a database or cloud storage.
-        Args:
-            metadata: Metadata dict.
-        Returns:
-            None (stub)
-        """
-        # TODO: Implement DB/cloud save logic when hosting/deploying
-        pass
+    # save_to_persistence is now handled by SecureStorage
 
     def find_resume(self, filename, search_dir="resumes"):
         """

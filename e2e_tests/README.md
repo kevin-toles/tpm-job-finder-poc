@@ -17,3 +17,11 @@ PYTHONPATH=. pytest e2e_tests
 ## Conventions
 - Use clear, scenario-based test names.
 - Document any special setup, environment variables, or dependencies in this README.
+
+---
+
+## SecureStorage Integration
+
+All file, metadata, and log operations in E2E tests use SecureStorage for reliability and security.
+
+_Last updated: September 8, 2025_

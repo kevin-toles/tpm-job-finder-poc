@@ -11,11 +11,15 @@ from typing import Dict, Any
 
 def load_analytics_results(path: str) -> Dict[str, Any]:
     """
-    Loads analytics results from a shared JSON file.
+    Loads analytics results from a shared JSON file using SecureStorage.
     Args:
         path: Path to the JSON file.
     Returns:
         Dictionary of analytics results.
     """
-    with open(path, "r") as f:
-        return json.load(f)
+    from src.storage.secure_storage import SecureStorage
+    storage = SecureStorage()
+    # Use the base filename without .json for retrieve_metadata
+    import os
+    base_name = os.path.basename(path).replace('.json', '')
+    return storage.retrieve_metadata(base_name)
