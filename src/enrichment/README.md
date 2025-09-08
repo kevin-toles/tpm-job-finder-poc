@@ -1,0 +1,24 @@
+# Enrichment Components - README
+
+## Overview
+This folder contains core enrichment modules for job/resume matching, scoring, and feedback. Components are modular and extensible for POC and production use.
+
+## Main Components
+- **HeuristicScorer:** Deterministic scoring for resume/job fit, using recruiter-informed logic.
+- **ResumeFeedbackGenerator:** Generates actionable feedback using heuristics and optional LLMs. Accepts txt/pdf/doc/docx resumes.
+- **TaxonomyMapper:** Maps skills/titles to canonical forms for normalization.
+- **Orchestrator:** Coordinates enrichment, scoring, and feedback across modules.
+- **Embeddings:** (Stub) For semantic similarity and advanced matching.
+
+## Extensibility
+- All components are designed for plug-and-play integration with ML/LLM services.
+- Stubs and extension points are documented in code and the main stubs README.
+- Future features: advanced analytics, feedback loops, and external API integration.
+
+## Usage
+- Import and use individual modules for scoring, feedback, or orchestration.
+- Extend stubs as needed for production features.
+
+---
+
+_Last updated: September 8, 2025_
