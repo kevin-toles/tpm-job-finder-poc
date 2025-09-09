@@ -1,6 +1,5 @@
 import json
 from src.logger.audit_logger import AuditLogger
-from pathlib import Path
 
 def test_regression_log_format(tmp_path):
     log_path = tmp_path / "regression_audit_log.jsonl"

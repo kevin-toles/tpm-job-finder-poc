@@ -1,6 +1,5 @@
 import json
 from src.logger.audit_logger import AuditLogger
-from pathlib import Path
 
 def test_e2e_audit_logger_workflow(tmp_path):
     log_path = tmp_path / "e2e_audit_log.jsonl"

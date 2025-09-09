@@ -4,8 +4,6 @@ Objective scoring, informed by recruiter/hiring manager psychology
 """
 from typing import List, Dict, Any, Optional
 import re
-
-import json
 import os
 from src.storage.secure_storage import SecureStorage
 

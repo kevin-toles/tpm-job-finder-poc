@@ -4,7 +4,6 @@ SQLite-based cache to filter duplicates by URL/hash and user_id.
 Supports multi-user, persistent deduplication for Orchestrator and Excel Exporter.
 """
 import sqlite3
-from pathlib import Path
 from typing import Optional
 
 class DedupeCache:

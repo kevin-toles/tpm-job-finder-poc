@@ -1,5 +1,4 @@
 from src.error_service.handler import handle_error
-import pytest
 
 def test_handle_error_multiple_types():
     for exc_type, msg in [(TypeError, "type error"), (IndexError, "index error"), (ZeroDivisionError, "zero division")]:

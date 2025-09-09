@@ -5,7 +5,6 @@ Returns combined results and rationales
 """
 from src.enrichment.heuristic_scorer import HeuristicScorer
 from src.enrichment.ml_scorer import MLScorer
-from src.llm_provider.base import LLMProvider
 import importlib
 
 class ResumeScoringOrchestrator:

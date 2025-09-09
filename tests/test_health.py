@@ -1,4 +1,3 @@
-import pytest
 from src.health import app
 
 def test_health_endpoint():

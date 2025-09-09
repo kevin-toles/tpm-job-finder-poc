@@ -36,11 +36,9 @@ def validate_audit_event(event: Dict[str, Any]) -> Optional[str]:
 			return f"Field '{key}' must be of type {typ}, got {type(event[key])}"
 	return None
 import queue
-import threading
 import logging
 import sys
 import json
-import os
 
 import logging.handlers
 

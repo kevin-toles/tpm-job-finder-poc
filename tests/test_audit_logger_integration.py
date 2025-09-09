@@ -1,6 +1,5 @@
 import json
 from src.logger.audit_logger import AuditLogger
-from pathlib import Path
 
 def test_integration_thread_safety(tmp_path):
     log_path = tmp_path / "integration_audit_log.jsonl"

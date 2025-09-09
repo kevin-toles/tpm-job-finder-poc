@@ -1,5 +1,4 @@
 import pytest
-import os
 from src.llm_provider.openai_provider import OpenAIProvider
 from src.poc.utils.api_key_loader import load_api_keys
 api_keys = load_api_keys()

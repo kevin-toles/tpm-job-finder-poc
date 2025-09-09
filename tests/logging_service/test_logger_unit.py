@@ -1,7 +1,5 @@
-import os
 import json
-import pytest
-from src.logging_service.logger import CentralLogger, StructuredFormatter
+from src.logging_service.logger import CentralLogger
 
 def test_logger_info_creates_log_file(tmp_path):
     log_file = tmp_path / "test_app.log"

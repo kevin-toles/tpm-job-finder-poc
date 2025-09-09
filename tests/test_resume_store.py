@@ -2,7 +2,6 @@ from src.storage.secure_storage import SecureStorage
 import unittest
 import tempfile
 import os
-import json
 from resume.store import ResumeStore
 
 class TestResumeStore(unittest.TestCase):

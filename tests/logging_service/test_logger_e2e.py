@@ -1,4 +1,3 @@
-import os
 import json
 from src.logging_service.logger import CentralLogger
 

@@ -6,7 +6,6 @@ Fields:
 - feedback_stats
 - records (list of job dicts)
 """
-import json
 from typing import Dict, Any
 
 def load_analytics_results(path: str) -> Dict[str, Any]:

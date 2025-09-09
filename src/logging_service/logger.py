@@ -1,6 +1,5 @@
 import logging
 import json
-import os
 from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 
 class StructuredFormatter(logging.Formatter):

@@ -51,8 +51,6 @@ if __name__ == '__main__':
     unittest.main()
 import unittest
 from src.enrichment.orchestrator import ResumeScoringOrchestrator
-from src.enrichment.jd_parser import JDParser
-from src.enrichment.resume_parser import ResumeParser
 import tempfile
 import os
 

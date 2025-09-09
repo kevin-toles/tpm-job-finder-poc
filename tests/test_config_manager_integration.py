@@ -1,5 +1,3 @@
-import os
-import pytest
 from src.config.config_manager import ConfigManager
 
 def test_integration_env_loading(tmp_path, monkeypatch):

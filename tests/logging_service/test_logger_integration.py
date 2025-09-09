@@ -1,5 +1,3 @@
-import os
-import json
 from src.logging_service.logger import CentralLogger
 
 def test_logger_cloud_hook(tmp_path):

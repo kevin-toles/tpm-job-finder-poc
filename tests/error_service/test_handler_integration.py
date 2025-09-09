@@ -1,4 +1,4 @@
-from src.error_service.handler import handle_error, error_catcher
+from src.error_service.handler import error_catcher
 import pytest
 
 def test_error_catcher_decorator():

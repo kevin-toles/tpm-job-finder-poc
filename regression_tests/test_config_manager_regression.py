@@ -1,5 +1,4 @@
 import os
-import pytest
 from src.config.config_manager import ConfigManager
 
 def test_regression_env_toggle_behavior():

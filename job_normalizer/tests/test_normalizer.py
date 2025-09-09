@@ -1,4 +1,3 @@
-import pytest
 from job_normalizer.jobs.normalizer import normalize_title, normalize_salary, normalize_location, normalize_job, dedupe_jobs
 from job_normalizer.jobs.schema import JobPosting
 from datetime import datetime, timezone

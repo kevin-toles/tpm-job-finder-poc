@@ -1,5 +1,4 @@
 import requests
-import subprocess
 import threading
 import time
 from src.webhook.deploy import app

@@ -1,5 +1,3 @@
-import os
-import json
 from src.logging_service.logger import CentralLogger
 
 def test_logger_rotating_file(tmp_path):

@@ -1,5 +1,4 @@
 import pytest
-import sys
 from src.cli_runner.main import CLIRunner
 
 class DummyArgs:

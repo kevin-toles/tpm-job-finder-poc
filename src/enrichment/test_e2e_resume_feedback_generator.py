@@ -1,6 +1,5 @@
 import unittest
 from src.enrichment.orchestrator import ResumeScoringOrchestrator
-from src.enrichment.resume_feedback_generator import ResumeFeedbackGenerator
 
 class DummyLLMProvider:
     def get_signals(self, prompt):

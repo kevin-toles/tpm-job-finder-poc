@@ -1,6 +1,5 @@
 import os
 import json
-import pytest
 from src.poc.utils.api_key_loader import load_api_keys
 from src.llm_provider.openai_provider import OpenAIProvider
 

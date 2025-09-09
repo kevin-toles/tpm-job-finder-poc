@@ -1,4 +1,3 @@
-import pytest
 from src.error_service.handler import handle_error
 
 def test_handle_error_basic():

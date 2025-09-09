@@ -1,7 +1,5 @@
 import unittest
 from src.enrichment.orchestrator import ResumeScoringOrchestrator
-from src.enrichment.heuristic_scorer import HeuristicScorer
-from src.enrichment.ml_scorer import MLScorer
 
 class DummyLLMProvider:
     def __init__(self, api_key=None):

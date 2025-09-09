@@ -1,6 +1,4 @@
-import json
 from src.health import app
-from pathlib import Path
 
 def test_regression_status_endpoint_missing_metadata(tmp_path):
     # No metadata file present

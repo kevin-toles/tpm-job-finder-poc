@@ -1,6 +1,5 @@
 import json
 from src.health import app
-from pathlib import Path
 
 def test_e2e_health_status_workflow(tmp_path):
     # Simulate a full workflow: create metadata, check endpoints
