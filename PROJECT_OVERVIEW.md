@@ -30,6 +30,14 @@ This document provides a high-level overview of the TPM Job Finder Proof of Conc
 - Subprocess calls are validated for input safety
 - Bandit and DeepSource scans are run regularly; all medium/high severity issues are addressed
 
+### API Key Handling
+
+- API keys are never stored in code or version control.
+- For local development, place your keys in `~/Desktop/tpm-job-finder-poc-API Keys/api_keys.json` (see main README for format).
+- For hosted/cloud/CI environments, set keys as environment variables (`OPENAI_API_KEY`, etc.).
+- The loader utility (`src/poc/utils/api_key_loader.py`) will check the repo config file (if present), then fall back to your external file.
+- Always follow best practices: never commit secrets, use environment variables for production.
+
 ## Developer Onboarding
 - Start with this overview for system context
 - Dive into module-specific documentation for details

@@ -39,18 +39,38 @@ Run all tests with:
 	```
 
 ## LLM Provider API Keys & Security
-- Add your API keys to `llm_keys.txt` in the project root, e.g.:
-	```
-	ChatGPT: sk-xxxxxx
-	Anthropic: sk-ant-xxxxxx
-	Gemini: <your-key>
-	DeepSeek: <your-key>
-	Ollama:  # leave blank for local
-	```
-- You can also set API keys as environment variables (recommended for CI/CD and security):
-	- `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `OLLAMA_API_KEY`
-- **Never hard-code API keys in code or commit them to version control.**
-- Use environment variables or `llm_keys.txt` (which should be excluded from public repos).
+
+### API Key Management
+
+**How to Provide API Keys (Local & Hosted):**
+
+1. **Local Development:**
+	 - Place your API keys in a file named `api_keys.json` at:
+		 - `~/Desktop/tpm-job-finder-poc-API Keys/api_keys.json`
+	 - Example structure:
+		 ```json
+		 {
+			 "openai": "sk-xxxxxx",
+			 "anthropic": "sk-ant-xxxxxx",
+			 "gemini": "your-key",
+			 "deepseek": "your-key",
+			 "ollama": ""  // leave blank for local
+		 }
+		 ```
+	 - This file is **never** stored in the repo. The loader utility will automatically find it.
+
+2. **Hosted/CI/CD Environments:**
+	 - Set API keys as environment variables for security:
+		 - `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `OLLAMA_API_KEY`
+	 - Most cloud platforms and CI/CD systems allow you to set these securely.
+
+**Important Security Notes:**
+- Never hard-code API keys in code or commit them to version control.
+- Do not store secrets in the repo. Only use local files or environment variables.
+- The loader utility will check the repo config file (if present), then fall back to your external file.
+- For production, always use environment variables.
+
+See below for more details and troubleshooting.
 
 
 ## Contributing

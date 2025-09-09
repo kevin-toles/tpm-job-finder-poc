@@ -4,13 +4,19 @@
 This folder contains utilities and stubs for local and future cloud storage of resumes, job data, and analytics outputs.
 
 ## Main Components
-- **LocalFS:** (Stub) For local file system storage and retrieval.
+- **SecureStorage:** Centralized class for all file, metadata, and log operations. Includes stubs for encryption, access control, and cloud integration.
+- **LocalFS:** (Legacy stub) For local file system storage and retrieval.
 
 ## Extensibility
-- Can be extended for cloud storage (S3, Azure Blob, etc.) or database integration.
+- SecureStorage is designed for future upgrades:
+	- Encryption at rest
+	- Access control
+	- Cloud storage integration (S3, Azure Blob, etc.)
+See [STUB_CATALOG.md](../../STUB_CATALOG.md) for a full list of stubs and extension points.
 
 ## Usage
-- Use LocalFS for file operations in POC workflows.
+- Use SecureStorage for all file, metadata, and log operations in POC workflows.
+
 
 ---
 

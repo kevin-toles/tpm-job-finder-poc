@@ -10,6 +10,11 @@ This folder contains core enrichment modules for job/resume matching, scoring, a
 - **Orchestrator:** Coordinates enrichment, scoring, and feedback across modules.
 - **Embeddings:** (Stub) For semantic similarity and advanced matching.
 
+## Stub Reference
+- **Embeddings:** Stub for future semantic similarity and ML/LLM integration.
+- **Orchestrator:** Extension points for analytics, feedback loops, external API integration.
+- See [STUB_CATALOG.md](../../STUB_CATALOG.md) for a full list of stubs and guidance on extending them.
+
 ## Extensibility
 - All components are designed for plug-and-play integration with ML/LLM services.
 - Stubs and extension points are documented in code and the main stubs README.

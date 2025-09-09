@@ -12,7 +12,13 @@ This folder contains services and utilities for resume intake, storage, and meta
 
 ## Main Components
 - **ResumeUploader:** Backend service for accepting txt/pdf/doc/docx resumes, registering metadata, locating files, and saving to ResumeStore for e2e/manual testing.
-- **ResumeStore:** Local storage and secure metadata management, with stubs for access control, encryption, retrieval, deletion, audit logging, and API endpoints.
+- **ResumeStore:** Local storage and secure metadata management.
+	- Stubs for:
+		- Access control (future: restrict file access by user/role)
+		- Encryption (future: encrypt resumes/metadata at rest)
+		- Audit logging (future: compliance and traceability)
+		- API endpoints (future: RESTful interface for resume ops)
+See [STUB_CATALOG.md](../../STUB_CATALOG.md) for a full list of stubs and extension points.
 
 ## Main Responsibilities
 - **File Intake:** Accepts resume files from a designated directory or via upload. Can locate files by filename for manual/e2e testing.
@@ -43,8 +49,7 @@ This folder contains services and utilities for resume intake, storage, and meta
 - Use ResumeStore to retrieve, delete, and list resumes and metadata.
 
 ## Security Notes
-- Stubs for access control and encryption are included for future upgrades.
-- Audit logging is stubbed for compliance and traceability.
+- Stubs for access control, encryption, and audit logging are included for future upgrades. See STUB_CATALOG.md for details.
 
 ## Project Goal
 To provide a modular, extensible backend for resume intake, storage, and registration, supporting rapid POC development and future production features.
