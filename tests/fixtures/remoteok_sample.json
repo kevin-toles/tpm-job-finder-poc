@@ -1,0 +1,13 @@
+[
+  {
+    "JobID": "123456",
+    "position": "Technical Program Manager",
+    "company": "Acme Corp",
+  "epoch": 1757191834,
+    "location": "Remote",
+    "url": "https://remoteok.com/remote-jobs/123456",
+    "tags": ["tpm", "remote"],
+    "salary": "$150k–$180k",
+    "source": "remoteok"
+  }
+]
