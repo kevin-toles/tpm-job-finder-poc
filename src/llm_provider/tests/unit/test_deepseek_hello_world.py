@@ -3,11 +3,14 @@ from src.llm_provider.deepseek_provider import DeepSeekProvider
 from src.poc.utils.api_key_loader import load_api_keys
 
 def test_deepseek_hello_world():
-    api_keys = load_api_keys()
+    try:
+        api_keys = load_api_keys()
+    except FileNotFoundError:
+        pytest.skip("No DeepSeek API key found in api_keys.txt or environment variables")
     api_key = api_keys.get("DEEPSEEK_API_KEY")
     print(f"DEBUG: Found DEEPSEEK_API_KEY: {repr(api_key)}")
     if not api_key:
-        pytest.skip("No DeepSeek API key found in api_keys.json")
+        pytest.skip("No DeepSeek API key found in api_keys.txt or environment variables")
     provider = DeepSeekProvider(api_key=api_key)
     prompt = "confirm successful call"
     result = provider.get_signals(prompt)

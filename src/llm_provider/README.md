@@ -4,13 +4,13 @@
 Pluggable connector for scoring jobs and extracting signals from multiple LLMs (OpenAI, Ollama, Anthropic, Gemini, DeepSeek, etc.).
 
 ## Usage
-- Add your API keys to `llm_keys.txt` in the project root, e.g.:
+- Add your API keys to `api_keys.txt` in the project root, e.g.:
   ```
-  ChatGPT: sk-xxxxxx
-  Anthropic: sk-ant-xxxxxx
-  Gemini: <your-key>
-  DeepSeek: <your-key>
-  Ollama:  # leave blank for local
+  OPENAI_API_KEY=sk-xxxxxx
+  ANTHROPIC_API_KEY=sk-ant-xxxxxx
+  GEMINI_API_KEY=your-key
+  DEEPSEEK_API_KEY=your-key
+  OLLAMA_API_KEY=  # leave blank for local
   ```
 - You can also set API keys as environment variables (recommended for CI/CD and security):
   - `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `OLLAMA_API_KEY`
@@ -22,7 +22,7 @@ Pluggable connector for scoring jobs and extracting signals from multiple LLMs (
 
 ## Security Warning
 - **Never hard-code API keys in code or commit them to version control.**
-- Use environment variables or `llm_keys.txt` (which should be excluded from public repos).
+- Use environment variables or `api_keys.txt` (which should be excluded from public repos).
 
 ## API
 - `LLMAdapter.score_job(prompt: str) -> dict`: Get scores/rationales from all available LLMs.

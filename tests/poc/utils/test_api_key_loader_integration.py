@@ -1,19 +1,18 @@
 import os
-import json
 import pytest
 from src.poc.utils.api_key_loader import load_api_keys
 from src.llm_provider.openai_provider import OpenAIProvider
 
-def setup_module(module):
-    external_path = os.path.expanduser('~/Desktop/tpm-job-finder-poc-API Keys/api_keys.json')
-    os.makedirs(os.path.dirname(external_path), exist_ok=True)
-    with open(external_path, 'w') as f:
-        json.dump({"OPENAI_API_KEY": "integration-key"}, f)
+PROJECT_ROOT_CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../api_keys.txt'))
 
-def teardown_module(module):
-    external_path = os.path.expanduser('~/Desktop/tpm-job-finder-poc-API Keys/api_keys.json')
-    if os.path.exists(external_path):
-        os.remove(external_path)
+def setup_function(function):
+    # Overwrite api_keys.txt with test values before each test
+    with open(PROJECT_ROOT_CONFIG_PATH, 'w') as f:
+        f.write("OPENAI_API_KEY=integration-key\nANTHROPIC_API_KEY=integration-anthropic\n")
+
+def teardown_function(function):
+    if os.path.exists(PROJECT_ROOT_CONFIG_PATH):
+        os.remove(PROJECT_ROOT_CONFIG_PATH)
 
 def test_provider_receives_key():
     keys = load_api_keys()

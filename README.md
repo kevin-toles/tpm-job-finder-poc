@@ -45,19 +45,21 @@ Run all tests with:
 **How to Provide API Keys (Local & Hosted):**
 
 1. **Local Development:**
-	 - Place your API keys in a file named `api_keys.json` at:
-		 - `~/Desktop/tpm-job-finder-poc-API Keys/api_keys.json`
+	 - Place your API keys in a file named `api_keys.txt` at:
+		 - `~/Desktop/tpm-job-finder-poc/api_keys.txt`
 	 - Example structure:
-		 ```json
-		 {
-			 "openai": "sk-xxxxxx",
-			 "anthropic": "sk-ant-xxxxxx",
-			 "gemini": "your-key",
-			 "deepseek": "your-key",
-			 "ollama": ""  // leave blank for local
-		 }
+		 ```txt
+		 OPENAI_API_KEY=sk-xxxxxx
+		 ANTHROPIC_API_KEY=sk-ant-xxxxxx
+		 GEMINI_API_KEY=your-key
+		 DEEPSEEK_API_KEY=your-key
+		 OLLAMA_API_KEY=  # leave blank for local
 		 ```
 	 - This file is **never** stored in the repo. The loader utility will automatically find it.
+
+2. **Public Repo Security:**
+	- The file `api_keys.json` is listed in `.gitignore` and will never be committed to the repository.
+	- You can safely make your repo public without exposing your API keys.
 
 2. **Hosted/CI/CD Environments:**
 	 - Set API keys as environment variables for security:
