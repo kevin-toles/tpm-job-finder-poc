@@ -1,0 +1,19 @@
+Component,Type,Primary Purpose,Interacts With,Design Decision,Implemented
+Job Aggregator (ATS Connectors),Service,Fetch TPM jobs (≤7 days) from public ATS feeds,"RemoteOK API; Greenhouse Boards; Lever Boards; Job Parser",Start with public, ToS-friendly sources to avoid scraping and logins; quick wins for POC.,Y
+Job Parser / Normalizer,Utility,Clean/normalize titles, salaries, locations; dedupe by URL/company/title,"Job Aggregator; Enrichment & Ranking Orchestrator",Centralize schema/cleaning in one place to keep connectors simple and stable.,Y
+LLM Connector (Provider Adapter),Service,Get rationales/research and structured signals from LLMs,"External LLM APIs (OpenAI/Anthropic/Gemini/DeepSeek) or Ollama; Orchestrator",Pluggable adapter lets us swap providers for cost/privacy (Ollama local for free).,Y
+Heuristic Scorer,Utility,Produce baseline deterministic fit scores (keywords/overlap),"Resume Store; Job Parser; Orchestrator",Deterministic, low-cost foundation; LLM optional, not required to function.,Y
+Enrichment & Ranking Orchestrator,Service,Combine heuristics + LLM signals; rank jobs and mark “Prioritized”,"LLM Connector; Heuristic Scorer; Dedupe Cache; Applied Tracker",Central brain for business rules; easy to evolve without touching connectors.,Y
+BM25/TF-IDF,Utility,Text relevance scoring for jobs/resumes,Job Parser; Orchestrator,Industry-standard for IR; complements heuristics and LLMs.,Y
+Resume Feedback Generator,Utility,Generate actionable resume feedback,Resume Store; Orchestrator,LLM-powered feedback for user improvement; optional for MVP.,Y
+Excel Exporter,Service,Write final workbook with all required columns (incl. Easy Apply),"Orchestrator; Dedupe Cache",Direct Excel export matches your daily workflow and lets you keep a master sheet.,Y
+Resume Uploader,UI/Service,Accept resume files (txt/pdf) and register metadata,"Browser; Secure Storage; Resume Store",Simple, single-route UI avoids premature UX work; keeps POC fast.,Y
+Resume Store,Storage,Store resume text + metadata for analysis,"Secure Storage; Heuristic Scorer; LLM Connector",Local-only in POC; upgrade to object storage + encryption at rest for MVP.,Y
+Secure Storage (Local FS),Storage,Hold resumes/exports/logs on disk,"Resume Uploader; Resume Store; Excel Exporter",Local filesystem is free/fast for POC; switch to S3/GCS with KMS in MVP.,Y
+Config & Secrets Manager,Utility,Centralize tokens, feature toggles per env,All runtime services,Use .env in POC; migrate to managed secret store (AWS/GCP) for MVP.,Y
+POC Audit Logger,Logging,Append-only JSONL of user/system actions,All POC services,Lightweight audit aids reproducibility and debugging without DB.,Y
+Dedupe Cache,Storage,Filter duplicates across runs by URL/hash,"Orchestrator; Excel Exporter",SQLite/JSON file is enough for POC; upgrade to DB in MVP for multi-user.,Y
+Already-Applied Tracker,Storage,Honor “Application submitted” flags across runs,"User-supplied Excel; Orchestrator",Trust the sheet as source-of-truth to match your workflow; no extra UI.,Y
+Health/Status Endpoint,Service,Expose liveness + last export metadata,"Orchestrator; Hosting/Load Balancer",Supports Render/Railway health checks without observability stack.,Y
+CLI Runner,CLI Tool,One-shot local execution of the whole pipeline,All POC services,Great for reproducibility and manual testing; zero hosting cost.,Y
+Deploy Webhook (optional),Service,Accept version changes from Admin/GitHub Actions,"Admin Dashboard; GitHub Actions; Version Registry",Bridges POC with control plane for roll-forward/rollback demos.,Y
