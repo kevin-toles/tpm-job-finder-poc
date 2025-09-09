@@ -1,0 +1,13 @@
+{
+	"jobs": [
+		{
+			"id": 7890,
+			"title": "Senior Technical Program Manager",
+			"updated_at": "2025-09-05T12:34:56Z",
+			"absolute_url": "https://boards.greenhouse.io/sampleco/jobs/7890",
+			"location": { "name": "Remote" },
+			"departments": [{ "name": "Engineering" }]
+		}
+	],
+	"company_name": "SampleCo"
+}
