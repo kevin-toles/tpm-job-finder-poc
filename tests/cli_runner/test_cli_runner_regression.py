@@ -1,5 +1,5 @@
 import pytest
-from src.cli_runner.main import CLIRunner
+from tpm_job_finder_poc.cli_runner.main import CLIRunner
 import pandas as pd
 
 def test_export_results_unsupported_format(tmp_path):

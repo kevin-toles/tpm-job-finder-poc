@@ -13,7 +13,7 @@ def test_cli_runner_e2e_real_world():
         output_path = out.name
     log_path = output_path + '.log'
     cmd = [
-        sys.executable, '-m', 'src.cli_runner.main',
+        sys.executable, '-m', 'tpm_job_finder_poc.cli_runner.main',
         '--input', sample_jobs,
         '--resume', sample_resume,
         '--applied', sample_applied,

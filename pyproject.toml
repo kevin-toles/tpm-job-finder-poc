@@ -1,0 +1,19 @@
+[project]
+name = "tpm-job-finder-poc"
+version = "0.1.0"
+description = "A tool for finding and filtering TPM job postings"
+authors = [
+    {name = "Kevin Toles", email = "kevin.toles@example.com"},
+]
+dependencies = [
+    "pandas",
+    "openpyxl",
+]
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

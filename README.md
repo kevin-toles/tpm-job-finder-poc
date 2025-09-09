@@ -1,17 +1,41 @@
-## Running the CLI Runner
+## Quick Start
 
-To run the CLI runner, use:
-
+1. **Installation**
 ```bash
-python -m src.cli_runner.main --input ... --resume ... --applied ... --output ... --log ... --export-format csv --dedupe --enrich --verbose
+# Clone the repository
+git clone https://github.com/kevin-toles/tpm-job-finder-poc.git
+cd tpm-job-finder-poc
+
+# Install in editable mode
+pip install -e .
 ```
 
-## Running the CLI Pipeline
-
-To run the CLI pipeline, use:
-
+2. **Running the CLI Runner**
 ```bash
-python -m src.cli --input ... --resume ... --applied ... --output ... --log ... --export-format excel --dedupe --enrich --verbose
+python -m tpm_job_finder_poc.cli_runner.main \
+  --input jobs.json \
+  --resume resume.pdf \
+  --applied applied.xlsx \
+  --output results.csv \
+  --log output.log \
+  --export-format csv \
+  --dedupe \
+  --enrich \
+  --verbose
+```
+
+3. **Running the CLI Pipeline**
+```bash
+python -m tpm_job_finder_poc.cli \
+  --input jobs.json \
+  --resume resume.pdf \
+  --applied applied.xlsx \
+  --output results.xlsx \
+  --log output.log \
+  --export-format excel \
+  --dedupe \
+  --enrich \
+  --verbose
 ```
 
 
@@ -24,22 +48,27 @@ Automated coverage reporting is enabled via Codecov. Every PR and commit updates
 To view detailed coverage reports, click the badge or visit your Codecov dashboard.
 
 ## Overview
-This repository is organized for modular, microservice-friendly development. All file, metadata, and log operations are now centralized through the `SecureStorage` class (`src/storage/secure_storage.py`), ensuring consistent, secure, and maintainable data handling across the application. Each major component, utility, and script lives in its own top-level folder, with dedicated test folders for unit, integration, and end-to-end tests.
+This repository is organized as a modern Python package with a src layout. All components are now part of the `tpm_job_finder_poc` package, ensuring proper isolation and dependency management.
 
-## Structure
-- `job_aggregator/` — ATS connectors and related logic
-	- `tests/unit/` — Unit tests for connectors and internal functions
-	- `tests/integration/` — Integration tests for aggregator workflows
-- `job_normalizer/` — Centralized job parsing and normalization
-	- `tests/unit/` — Unit tests for normalization and parsing
-	- `tests/integration/` — Integration tests for normalizer workflows
-- `llm_provider/`, `heuristic_scorer/`, `enrichment/`, etc. — Each service/component in its own folder
-- `integration_tests/` — Cross-component and integration tests
-	- `fixtures/` — Shared test data
-	- `conftest.py` — Shared setup/fixtures
-- `e2e_tests/` — End-to-end workflow tests
-- `scripts/` — Utility scripts
-	- `tests/unit/` — Unit tests for scripts
+## Project Structure
+```
+src/tpm_job_finder_poc/     # Main package directory
+├── __init__.py
+├── cli/                    # Command-line interface
+├── cli_runner/            # CLI runner for batch processing
+├── logging_service/       # Centralized logging
+├── error_service/        # Error handling
+├── resume/               # Resume management
+│   ├── store/           # Resume storage
+│   └── uploader/        # Resume upload handling
+├── cache/               # Caching and deduplication
+└── enrichment/          # Job enrichment and scoring
+
+tests/                   # Test directories
+├── unit/               # Unit tests
+├── integration_tests/  # Integration tests
+├── e2e_tests/         # End-to-end tests
+└── regression_tests/  # Regression tests
 
 
 ## Testing

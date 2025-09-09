@@ -1,6 +1,6 @@
 import pytest
 import sys
-from src.cli_runner.main import CLIRunner
+from tpm_job_finder_poc.cli_runner.main import CLIRunner
 
 class DummyArgs:
     def __init__(self, **kwargs):

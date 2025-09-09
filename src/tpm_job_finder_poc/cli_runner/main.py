@@ -8,8 +8,8 @@ import os
 from ..logging_service.logger import CentralLogger, example_cloud_hook
 logger = CentralLogger(name='cli_runner', log_file='cli_runner.log', cloud_hook=example_cloud_hook)
 from ..error_service.handler import handle_error
-from ..resume.store import ResumeStore
-from ..resume.uploader import ResumeUploader
+from ..resume.store.store import ResumeStore
+from ..resume.uploader.uploader import ResumeUploader
 from ..cache.applied_tracker import AlreadyAppliedTracker
 from ..cache.dedupe_cache import DedupeCache
 from ..enrichment.heuristic_scorer import HeuristicScorer

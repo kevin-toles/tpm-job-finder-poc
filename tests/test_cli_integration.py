@@ -19,7 +19,7 @@ def test_cli_pipeline_end_to_end():
     log_path = output_path + '.log'
 
     cmd = [
-        sys.executable, '-m', 'src.cli',
+        sys.executable, '-m', 'tpm_job_finder_poc.cli',
         '--input', sample_jobs,
         '--resume', sample_resume,
         '--applied', sample_applied,

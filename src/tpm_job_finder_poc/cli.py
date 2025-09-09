@@ -1,11 +1,7 @@
-"""
-CLI Runner for Job/Resume Matching Pipeline
-Supports all major pipeline options and flags for reproducibility and manual testing.
-"""
 import argparse
 import sys
 import os
-from .logger.audit_logger import AuditLogger
+from src.logger.audit_logger import AuditLogger
 from src.resume.store import ResumeStore
 from src.resume.uploader import ResumeUploader
 from src.cache.applied_tracker import AlreadyAppliedTracker
@@ -102,18 +98,5 @@ def main():
     AuditLogger.log("pipeline_complete")
     if args.verbose:
         print("Pipeline completed successfully.")
-
-    if args.dry_run:
-        print("Dry run: results not written.")
-        AuditLogger.log("pipeline_dry_run", details={"output": args.output})
-    else:
-        # Export results (placeholder)
-        print(f"Results written to {args.output} in format {args.export_format}.")
-        AuditLogger.log("pipeline_export", details={"output": args.output, "format": args.export_format})
-
-    AuditLogger.log("pipeline_complete")
-    if args.verbose:
-        print("Pipeline completed successfully.")
-
 if __name__ == "__main__":
     main()

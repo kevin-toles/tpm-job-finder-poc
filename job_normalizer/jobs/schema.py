@@ -26,6 +26,7 @@ class JobPosting(BaseModel):
     salary: str | None = None
     url: HttpUrl
     date_posted: datetime
+    description: str | None = None
     raw: dict[str, Any] = Field(
         default_factory=dict,
         description="Un-modified payload returned from the upstream API",

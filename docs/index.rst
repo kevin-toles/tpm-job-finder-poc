@@ -9,17 +9,56 @@ Welcome to TPM Job Finder POC's documentation!
    config
    modules
 
-.. automodule:: poc
+Package Components
+----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   cli
+   cli_runner
+   logging_service
+   error_service
+   resume
+   cache
+   enrichment
+
+.. automodule:: tpm_job_finder_poc
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: job_aggregator
+.. automodule:: tpm_job_finder_poc.cli
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: llm_provider
+.. automodule:: tpm_job_finder_poc.cli_runner
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: tpm_job_finder_poc.logging_service
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: tpm_job_finder_poc.error_service
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: tpm_job_finder_poc.resume
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: tpm_job_finder_poc.cache
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: tpm_job_finder_poc.enrichment
    :members:
    :undoc-members:
    :show-inheritance:
