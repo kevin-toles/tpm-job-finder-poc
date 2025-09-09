@@ -18,6 +18,14 @@ def _load(path: Path) -> Any:
 
 
 def test_all_connectors_offline(tmp_path: Path, fixtures_dir: Path, monkeypatch) -> None:
+    from config.config import config
+    import pytest
+    if not config.ENABLE_REMOTEOK:
+        pytest.skip("RemoteOK connector is disabled by feature flag")
+    if not config.ENABLE_GREENHOUSE:
+        pytest.skip("Greenhouse connector is disabled by feature flag")
+    if not config.ENABLE_LEVER:
+        pytest.skip("Lever connector is disabled by feature flag")
     """Uses local fixture files (monkey-patched) so no network hit."""
     # remoteok -----------------------------------------------------------------
     import requests

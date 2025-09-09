@@ -12,7 +12,7 @@ def test_cli_runner_end_to_end():
         output_path = out.name
     log_path = output_path + '.log'
     cmd = [
-        sys.executable, 'src/cli_runner/main.py',
+        sys.executable, '-m', 'src.cli_runner.main',
         '--input', sample_jobs,
         '--resume', sample_resume,
         '--applied', sample_applied,

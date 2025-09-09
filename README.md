@@ -1,3 +1,18 @@
+## Running the CLI Runner
+
+To run the CLI runner, use:
+
+```bash
+python -m src.cli_runner.main --input ... --resume ... --applied ... --output ... --log ... --export-format csv --dedupe --enrich --verbose
+```
+
+## Running the CLI Pipeline
+
+To run the CLI pipeline, use:
+
+```bash
+python -m src.cli --input ... --resume ... --applied ... --output ... --log ... --export-format excel --dedupe --enrich --verbose
+```
 
 
 [![codecov](https://codecov.io/gh/kevin-toles/tpm-job-finder-poc/branch/dev/graph/badge.svg)](https://codecov.io/gh/kevin-toles/tpm-job-finder-poc)

@@ -18,7 +18,7 @@ def test_cli_pipeline_end_to_end():
     log_path = output_path + '.log'
 
     cmd = [
-        sys.executable, 'src/cli.py',
+        sys.executable, '-m', 'src.cli',
         '--input', sample_jobs,
         '--resume', sample_resume,
         '--applied', sample_applied,

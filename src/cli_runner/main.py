@@ -5,14 +5,14 @@ Handles argument parsing, pipeline orchestration, error handling, logging, and e
 import argparse
 import sys
 import os
-from src.logging_service.logger import CentralLogger, example_cloud_hook
-from src.error_service.handler import handle_error
+from ..logging_service.logger import CentralLogger, example_cloud_hook
 logger = CentralLogger(name='cli_runner', log_file='cli_runner.log', cloud_hook=example_cloud_hook)
-from src.resume.store import ResumeStore
-from src.resume.uploader import ResumeUploader
-from src.cache.applied_tracker import AlreadyAppliedTracker
-from src.cache.dedupe_cache import DedupeCache
-from src.enrichment.heuristic_scorer import HeuristicScorer
+from ..error_service.handler import handle_error
+from ..resume.store import ResumeStore
+from ..resume.uploader import ResumeUploader
+from ..cache.applied_tracker import AlreadyAppliedTracker
+from ..cache.dedupe_cache import DedupeCache
+from ..enrichment.heuristic_scorer import HeuristicScorer
 import pandas as pd
 
 class CLIRunner:

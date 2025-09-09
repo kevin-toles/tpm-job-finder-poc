@@ -3,6 +3,8 @@ from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from job_aggregator.aggregators.greenhouse import GreenhouseConnector
 from job_aggregator.aggregators.lever import LeverConnector
+from config.config import config
+import pytest
 
 GREENHOUSE_FIXTURE = Path(__file__).parents[1] / "fixtures" / "greenhouse_sample.json"
 LEVER_FIXTURE = Path(__file__).parents[1] / "fixtures" / "lever_sample.json"
@@ -15,6 +17,8 @@ def _mock_http(monkeypatch, payload):
     monkeypatch.setattr("requests.get", lambda *args, **kwargs: resp)
 
 def test_greenhouse_fetch_since(monkeypatch):
+    if not config.ENABLE_GREENHOUSE:
+        pytest.skip("Greenhouse connector is disabled by feature flag")
     sample = json.loads(GREENHOUSE_FIXTURE.read_text(encoding="utf-8"))
     # Set job date to recent
     for job in sample["jobs"]:
@@ -27,6 +31,8 @@ def test_greenhouse_fetch_since(monkeypatch):
         assert job.date_posted >= datetime.now(timezone.utc) - timedelta(days=7)
 
 def test_lever_fetch_since(monkeypatch):
+    if not config.ENABLE_LEVER:
+        pytest.skip("Lever connector is disabled by feature flag")
     sample = json.loads(LEVER_FIXTURE.read_text(encoding="utf-8"))
     # Set job date to recent
     for job in sample:

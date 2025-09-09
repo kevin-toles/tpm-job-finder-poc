@@ -1,3 +1,18 @@
+### Running the CLI Runner
+
+To run the CLI runner, use:
+
+```bash
+python -m src.cli_runner.main --input ... --resume ... --applied ... --output ... --log ... --export-format csv --dedupe --enrich --verbose
+```
+
+### Running the CLI Pipeline
+
+To run the CLI pipeline, use:
+
+```bash
+python -m src.cli --input ... --resume ... --applied ... --output ... --log ... --export-format excel --dedupe --enrich --verbose
+```
 # TPM Job Finder POC: Project Overview
 
 ## Purpose
@@ -32,11 +47,19 @@ This document provides a high-level overview of the TPM Job Finder Proof of Conc
 
 ### API Key Handling
 
-- API keys are never stored in code or version control.
-- For local development, place your keys in `~/Desktop/tpm-job-finder-poc-API Keys/api_keys.json` (see main README for format).
-- For hosted/cloud/CI environments, set keys as environment variables (`OPENAI_API_KEY`, etc.).
-- The loader utility (`src/poc/utils/api_key_loader.py`) will check the repo config file (if present), then fall back to your external file.
-- Always follow best practices: never commit secrets, use environment variables for production.
+
+### Feature Flags for Job Source Connectors
+
+You can enable or disable job source connectors (Greenhouse, Lever, RemoteOK) using feature flags in your environment or `.env` file. This helps control which APIs are called without changing code.
+
+**How to use:**
+- Add the following to your `.env` file or set as environment variables:
+  - `ENABLE_GREENHOUSE=true` (default: enabled)
+  - `ENABLE_LEVER=true` (default: enabled)
+  - `ENABLE_REMOTEOK=true` (default: enabled)
+- The application will only call the APIs for connectors that are enabled.
+
+See `config/config.py` for details.
 
 ## Developer Onboarding
 - Start with this overview for system context

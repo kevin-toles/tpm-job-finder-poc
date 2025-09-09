@@ -5,7 +5,7 @@ Supports all major pipeline options and flags for reproducibility and manual tes
 import argparse
 import sys
 import os
-from src.logger.audit_logger import AuditLogger
+from .logger.audit_logger import AuditLogger
 from src.resume.store import ResumeStore
 from src.resume.uploader import ResumeUploader
 from src.cache.applied_tracker import AlreadyAppliedTracker

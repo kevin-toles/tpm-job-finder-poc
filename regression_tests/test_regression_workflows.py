@@ -6,6 +6,8 @@ import pytest
 from job_aggregator.aggregators.remoteok import RemoteOKConnector
 from job_aggregator.aggregators.greenhouse import GreenhouseConnector
 from job_aggregator.aggregators.lever import LeverConnector
+from config.config import config
+import pytest
 from job_normalizer.jobs.parser import parse_job
 from job_normalizer.jobs.normalizer import normalize_job, dedupe_jobs
 from job_normalizer.jobs.schema import JobPosting
@@ -78,6 +80,13 @@ LEVER_RAW = {
     }),
 ])
 def test_connector_to_normalizer_regression(connector, raw, mapping):
+    # Feature flag checks
+    if isinstance(connector, RemoteOKConnector) and not config.ENABLE_REMOTEOK:
+        pytest.skip("RemoteOK connector is disabled by feature flag")
+    if isinstance(connector, GreenhouseConnector) and not config.ENABLE_GREENHOUSE:
+        pytest.skip("Greenhouse connector is disabled by feature flag")
+    if isinstance(connector, LeverConnector) and not config.ENABLE_LEVER:
+        pytest.skip("Lever connector is disabled by feature flag")
     # Map raw connector data to unified schema
     mapped = {k: fn(raw) for k, fn in mapping.items()}
     job = parse_job(mapped, source=connector.__class__.__name__.replace('Connector','').lower())

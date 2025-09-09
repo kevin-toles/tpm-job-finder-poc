@@ -28,6 +28,10 @@ def _mock_http(mocker: MockerFixture, payload: list[dict]) -> None:
 
 
 def test_recent_tpm_jobs(monkeypatch: MockerFixture) -> None:
+    from config.config import config
+    import pytest
+    if not config.ENABLE_REMOTEOK:
+        pytest.skip("RemoteOK connector is disabled by feature flag")
     sample = json.loads(FIXTURE.read_text(encoding="utf-8"))
     # make sure at least one record is < 7 days old
     sample[0]["epoch"] = int(
