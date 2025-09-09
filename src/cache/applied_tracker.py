@@ -17,16 +17,21 @@ class AlreadyAppliedTracker:
         self._load_applied()
 
     def _load_applied(self):
+        from src.error_service.handler import handle_error
         if not self.excel_path.exists():
             self._applied_ids = set()
             return
-        df = pd.read_excel(self.excel_path)
-        if self.status_column not in df.columns or self.job_id_column not in df.columns:
-            # If required columns are missing, treat all as unapplied
+        try:
+            df = pd.read_excel(self.excel_path)
+            if self.status_column not in df.columns or self.job_id_column not in df.columns:
+                # If required columns are missing, treat all as unapplied
+                self._applied_ids = set()
+                return
+            applied = df[df[self.status_column] == self.applied_flag][self.job_id_column]
+            self._applied_ids = set(str(jid) for jid in applied.dropna())
+        except Exception as e:
+            handle_error(e, context={'component': 'applied_tracker', 'method': '_load_applied', 'excel_path': str(self.excel_path)})
             self._applied_ids = set()
-            return
-        applied = df[df[self.status_column] == self.applied_flag][self.job_id_column]
-        self._applied_ids = set(str(jid) for jid in applied.dropna())
 
     def is_applied(self, job_id: str) -> bool:
         return str(job_id) in self._applied_ids

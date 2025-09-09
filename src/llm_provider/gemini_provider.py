@@ -27,4 +27,6 @@ class GeminiProvider(LLMProvider):
             content = candidates[0].get("content", "") if candidates else ""
             return {"provider": "Gemini", "response": content}
         except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'gemini_provider', 'method': 'get_signals', 'prompt': prompt})
             return {"provider": "Gemini", "error": str(e)}

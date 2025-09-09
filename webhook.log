@@ -1,0 +1,216 @@
+{"timestamp": "2025-09-08 19:26:27,268", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,268", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,271", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,271", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,272", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,276", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,276", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:27,277", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,288", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,288", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,289", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,289", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,290", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,800", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:28,800", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,518", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,518", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,520", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,520", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,520", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,520", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,520", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,520", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,735", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,735", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,737", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,737", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,739", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,739", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,740", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:26:29,740", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,075", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,075", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,078", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,080", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,080", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:20,081", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,095", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,095", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,097", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,612", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:21,612", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,334", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,334", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,336", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,336", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,336", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,336", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,336", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,336", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,552", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,552", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,554", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,554", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,555", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,555", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,557", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 19:44:22,557", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,633", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,633", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,636", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,640", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,640", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,640", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,640", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:28,641", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,654", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,654", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,655", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,655", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,655", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,655", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,656", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,656", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,656", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,656", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,656", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:29,656", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,171", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,171", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,892", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,892", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,894", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,894", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,894", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,894", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,894", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:30,894", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,109", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,109", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,111", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,111", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,113", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,113", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,114", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:26:31,114", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 40}
+{"timestamp": "2025-09-08 20:38:06,721", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:06,721", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:06,723", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "roll-forward", "version": "v2.0.0", "source": "github"}
+{"timestamp": "2025-09-08 20:38:06,723", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "roll-forward", "version": "v2.0.0", "source": "github"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v2.0.0 by github", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "roll-forward", "version": "v2.0.0"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v2.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "roll-forward", "version": "v2.0.0"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_restart_service_stub"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_restart_service_stub"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_roll_forward", "version": "v2.0.0"}
+{"timestamp": "2025-09-08 20:38:06,724", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v2.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_roll_forward", "version": "v2.0.0"}
+{"timestamp": "2025-09-08 20:38:06,728", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:06,728", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:06,728", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "rollback", "version": "v1.0.0", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:06,728", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "rollback", "version": "v1.0.0", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:06,728", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:06,728", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] rollback to version v1.0.0 by admin", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:06,729", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "rollback", "version": "v1.0.0"}
+{"timestamp": "2025-09-08 20:38:06,729", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] rollback v1.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "rollback", "version": "v1.0.0"}
+{"timestamp": "2025-09-08 20:38:06,729", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_restart_service_stub"}
+{"timestamp": "2025-09-08 20:38:06,729", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_restart_service_stub"}
+{"timestamp": "2025-09-08 20:38:06,729", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_rollback", "version": "v1.0.0"}
+{"timestamp": "2025-09-08 20:38:06,729", "level": "INFO", "name": "webhook", "message": "Stubbed rollback to v1.0.0", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_rollback", "version": "v1.0.0"}
+{"timestamp": "2025-09-08 20:38:07,746", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:07,746", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:07,747", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "roll-forward", "version": "v1.2.3", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:07,747", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "roll-forward", "version": "v1.2.3", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:07,747", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:07,747", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] roll-forward to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:07,748", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "roll-forward", "version": "v1.2.3"}
+{"timestamp": "2025-09-08 20:38:07,748", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "roll-forward", "version": "v1.2.3"}
+{"timestamp": "2025-09-08 20:38:07,748", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_restart_service_stub"}
+{"timestamp": "2025-09-08 20:38:07,748", "level": "INFO", "name": "webhook", "message": "[SERVICE RESTART] Simulated restart.", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_restart_service_stub"}
+{"timestamp": "2025-09-08 20:38:07,748", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_roll_forward", "version": "v1.2.3"}
+{"timestamp": "2025-09-08 20:38:07,748", "level": "INFO", "name": "webhook", "message": "Stubbed roll-forward to v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "_roll_forward", "version": "v1.2.3"}
+{"timestamp": "2025-09-08 20:38:08,260", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:08,260", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:08,979", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:08,979", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:08,980", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "unknown", "version": "v1.2.3", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:08,980", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "unknown", "version": "v1.2.3", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:08,980", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:08,980", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] unknown to version v1.2.3 by admin", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:08,981", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "unknown", "version": "v1.2.3"}
+{"timestamp": "2025-09-08 20:38:08,981", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] unknown v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "unknown", "version": "v1.2.3"}
+{"timestamp": "2025-09-08 20:38:09,191", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "roll-forward", "version": "v1.2.3", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:09,191", "level": "INFO", "name": "webhook", "message": "Version registry updated", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "action": "roll-forward", "version": "v1.2.3", "source": "admin"}
+{"timestamp": "2025-09-08 20:38:09,194", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:09,194", "level": "INFO", "name": "webhook", "message": "Authenticating request", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "authenticate_request"}
+{"timestamp": "2025-09-08 20:38:09,195", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:09,195", "level": "INFO", "name": "webhook", "message": "[ADMIN NOTIFY] Test message", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "notify_admin"}
+{"timestamp": "2025-09-08 20:38:09,196", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "roll-forward", "version": "v1.2.3"}
+{"timestamp": "2025-09-08 20:38:09,196", "level": "INFO", "name": "webhook", "message": "[CLOUD HOOK] roll-forward v1.2.3", "module": "logger", "funcName": "info", "lineNo": 44, "taskName": null, "func": "cloud_deploy_hook", "action": "roll-forward", "version": "v1.2.3"}

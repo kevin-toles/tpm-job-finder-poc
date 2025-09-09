@@ -10,7 +10,9 @@ def main():
     analysis = ImportAnalysis()
     results = analysis.analyze(args.excel_path)
     analysis.save_results(results, args.output_path)
-    print(f"Analysis complete. Results saved to {args.output_path}")
+    from src.logging_service.logger import CentralLogger
+    logger = CentralLogger()
+    logger.info(f"Analysis complete. Results saved to {args.output_path}")
 
 if __name__ == "__main__":
     main()

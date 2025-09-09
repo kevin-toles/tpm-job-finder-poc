@@ -27,4 +27,6 @@ class DeepSeekProvider(LLMProvider):
             content = result["choices"][0]["message"]["content"] if result.get("choices") else ""
             return {"provider": "DeepSeek", "response": content}
         except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'deepseek_provider', 'method': 'get_signals', 'prompt': prompt})
             return {"provider": "DeepSeek", "error": str(e)}

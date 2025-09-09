@@ -31,6 +31,8 @@ class ResumeUploader:
         try:
             size = os.path.getsize(file_path)
         except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'resume_uploader', 'method': 'upload_resume', 'file_path': file_path})
             size = None
         metadata = {
             "filename": os.path.basename(file_path),
@@ -40,10 +42,15 @@ class ResumeUploader:
             "file_path": file_path
         }
         # Use SecureStorage for persistence
-        storage = SecureStorage()
-        file_result = storage.save_file(file_path, metadata["filename"])
-        meta_result = storage.save_metadata(metadata["filename"], metadata)
-        return {"status": "uploaded", "metadata": metadata, "file_result": file_result, "meta_result": meta_result}
+        try:
+            storage = SecureStorage()
+            file_result = storage.save_file(file_path, metadata["filename"])
+            meta_result = storage.save_metadata(metadata["filename"], metadata)
+            return {"status": "uploaded", "metadata": metadata, "file_result": file_result, "meta_result": meta_result}
+        except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'resume_uploader', 'method': 'upload_resume', 'file_path': file_path})
+            return {"error": str(e), "metadata": metadata}
 
     def register_metadata(self, metadata):
         """
@@ -82,6 +89,8 @@ if __name__ == "__main__":
     uploader = ResumeUploader()
     file_path = uploader.find_resume(args.filename)
     if not file_path:
+        from src.error_service.handler import handle_error
+        handle_error(FileNotFoundError(f"File '{args.filename}' not found in resumes/ directory."), context={'component': 'resume_uploader_cli', 'filename': args.filename})
         print(f"File '{args.filename}' not found in resumes/ directory.")
     else:
         result = uploader.upload_resume(file_path, user_id=args.user_id)

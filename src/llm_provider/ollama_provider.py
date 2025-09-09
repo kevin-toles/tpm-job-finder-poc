@@ -15,4 +15,6 @@ class OllamaProvider(LLMProvider):
             result = resp.json()
             return {"provider": "Ollama", "response": result.get("response", "")}
         except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'ollama_provider', 'method': 'get_signals', 'prompt': prompt})
             return {"provider": "Ollama", "error": str(e)}

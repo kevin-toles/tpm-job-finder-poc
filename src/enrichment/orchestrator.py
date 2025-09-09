@@ -1,3 +1,4 @@
+from src.error_service.handler import handle_error
 """
 Orchestrator: Integrates HeuristicScorer and MLScorer for resume scoring
 Returns combined results and rationales
@@ -86,59 +87,63 @@ class ResumeScoringOrchestrator:
             return None
 
     def score_resume(self, bullets=None, resume_data=None, llm_prompt=None, context=None):
-        # Use parsed resume bullets if not provided
-        if bullets is None and self.resume_struct:
-            bullets = self.resume_struct["sections"].get("experience", [])
-        if resume_data is None and self.resume_struct:
-            resume_data = {
-                "education": self.resume_struct["sections"].get("education", ""),
-                "certifications": self.resume_struct["sections"].get("certifications", ""),
-                "years_experience": self._extract_years_experience(self.resume_struct["raw_text"])
-            }
-        heuristic_result = self.heuristic.score_resume(bullets, resume_data, context=context)
-        ml_result = self.ml.score_resume(resume_data)
-        llm_result = None
-        resp_sem_sims = [b.get("resp_sem_sim", 0.0) for b in heuristic_result.get("bullets", [])]
-        skill_sem_sims = [b.get("skill_sem_sim", 0.0) for b in heuristic_result.get("bullets", [])]
-        avg_resp_sem_sim = round(sum(resp_sem_sims) / max(1, len(resp_sem_sims)), 3)
-        avg_skill_sem_sim = round(sum(skill_sem_sims) / max(1, len(skill_sem_sims)), 3)
-        bm25_scores = []
-        if self.bm25_matcher and bullets:
-            for bullet in bullets:
-                try:
-                    bm25_scores.append(self.bm25_matcher.score(bullet))
-                except Exception:
-                    bm25_scores.append(None)
-        import numpy as np
-        def _agg_bm25(scores, key):
-            vals = [s[key] for s in scores if s and key in s]
-            return round(float(np.mean(vals)), 4) if vals else None
-        bm25_tfidf_agg = {
-            "tfidf_max": _agg_bm25(bm25_scores, "tfidf_max"),
-            "tfidf_mean": _agg_bm25(bm25_scores, "tfidf_mean"),
-            "bm25_max": _agg_bm25(bm25_scores, "bm25_max"),
-            "bm25_mean": _agg_bm25(bm25_scores, "bm25_mean")
-        } if bm25_scores else None
-        if self.llm and llm_prompt:
-            llm_result = self.llm.get_signals(llm_prompt)
+        try:
+            # Use parsed resume bullets if not provided
+            if bullets is None and self.resume_struct:
+                bullets = self.resume_struct["sections"].get("experience", [])
+            if resume_data is None and self.resume_struct:
+                resume_data = {
+                    "education": self.resume_struct["sections"].get("education", ""),
+                    "certifications": self.resume_struct["sections"].get("certifications", ""),
+                    "years_experience": self._extract_years_experience(self.resume_struct["raw_text"])
+                }
+            heuristic_result = self.heuristic.score_resume(bullets, resume_data, context=context)
+            ml_result = self.ml.score_resume(resume_data)
+            llm_result = None
+            resp_sem_sims = [b.get("resp_sem_sim", 0.0) for b in heuristic_result.get("bullets", [])]
+            skill_sem_sims = [b.get("skill_sem_sim", 0.0) for b in heuristic_result.get("bullets", [])]
+            avg_resp_sem_sim = round(sum(resp_sem_sims) / max(1, len(resp_sem_sims)), 3)
+            avg_skill_sem_sim = round(sum(skill_sem_sims) / max(1, len(skill_sem_sims)), 3)
+            bm25_scores = []
+            if self.bm25_matcher and bullets:
+                for bullet in bullets:
+                    try:
+                        bm25_scores.append(self.bm25_matcher.score(bullet))
+                    except Exception:
+                        bm25_scores.append(None)
+            import numpy as np
+            def _agg_bm25(scores, key):
+                vals = [s[key] for s in scores if s and key in s]
+                return round(float(np.mean(vals)), 4) if vals else None
+            bm25_tfidf_agg = {
+                "tfidf_max": _agg_bm25(bm25_scores, "tfidf_max"),
+                "tfidf_mean": _agg_bm25(bm25_scores, "tfidf_mean"),
+                "bm25_max": _agg_bm25(bm25_scores, "bm25_max"),
+                "bm25_mean": _agg_bm25(bm25_scores, "bm25_mean")
+            } if bm25_scores else None
+            if self.llm and llm_prompt:
+                llm_result = self.llm.get_signals(llm_prompt)
 
-        # Feedback generator integration
-        from src.enrichment.resume_feedback_generator import ResumeFeedbackGenerator
-        feedback_generator = ResumeFeedbackGenerator(llm_provider=self.llm)
-        feedback = feedback_generator.generate_feedback(
-            job_desc=self.heuristic.job_desc,
-            resume_meta=resume_data,
-            scoring_result=heuristic_result,
-            context=context
-        )
-        return {
-            "heuristic": heuristic_result,
-            "ml": ml_result,
-            "llm": llm_result,
-            "bm25_tfidf": bm25_tfidf_agg,
-            "aggregate": self._aggregate_results(heuristic_result, ml_result, llm_result, avg_resp_sem_sim, avg_skill_sem_sim, bm25_tfidf_agg),
-            "feedback": feedback
-        }
+            # Feedback generator integration
+            from src.enrichment.resume_feedback_generator import ResumeFeedbackGenerator
+            feedback_generator = ResumeFeedbackGenerator(llm_provider=self.llm)
+            feedback = feedback_generator.generate_feedback(
+                job_desc=self.heuristic.job_desc,
+                resume_meta=resume_data,
+                scoring_result=heuristic_result,
+                context=context
+            )
+            return {
+                "heuristic": heuristic_result,
+                "ml": ml_result,
+                "llm": llm_result,
+                "bm25_tfidf": bm25_tfidf_agg,
+                "aggregate": self._aggregate_results(heuristic_result, ml_result, llm_result, avg_resp_sem_sim, avg_skill_sem_sim, bm25_tfidf_agg),
+                "feedback": feedback
+            }
+        except Exception as e:
+            handle_error(e, context={'component': 'enrichment', 'method': 'score_resume'})
+            return None
         # BM25/TF-IDF aggregate scores
         bm25_scores = []
         if self.bm25_matcher and bullets:

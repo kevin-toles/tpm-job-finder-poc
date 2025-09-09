@@ -8,11 +8,15 @@ from typing import Dict, Any
 
 try:
     import pdfplumber
-except ImportError:
+except ImportError as e:
+    from src.error_service.handler import handle_error
+    handle_error(e, context={'component': 'resume_parser', 'import': 'pdfplumber'})
     pdfplumber = None
 try:
     import docx
-except ImportError:
+except ImportError as e:
+    from src.error_service.handler import handle_error
+    handle_error(e, context={'component': 'resume_parser', 'import': 'docx'})
     docx = None
 
 class ResumeParser:
@@ -30,27 +34,40 @@ class ResumeParser:
     def _parse_pdf(self, file_path: str) -> Dict[str, Any]:
         if not pdfplumber:
             raise ImportError("pdfplumber not installed")
-        # Use SecureStorage to get file path
-        storage = SecureStorage()
-        secure_path = storage.get_file_path(file_path)
-        with pdfplumber.open(secure_path) as pdf:
-            text = "\n".join(page.extract_text() or "" for page in pdf.pages)
-        return self._basic_structure(text)
+        try:
+            storage = SecureStorage()
+            secure_path = storage.get_file_path(file_path)
+            with pdfplumber.open(secure_path) as pdf:
+                text = "\n".join(page.extract_text() or "" for page in pdf.pages)
+            return self._basic_structure(text)
+        except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'resume_parser', 'method': '_parse_pdf', 'file_path': file_path})
+            return {"error": str(e)}
 
     def _parse_docx(self, file_path: str) -> Dict[str, Any]:
         if not docx:
             raise ImportError("python-docx not installed")
-        storage = SecureStorage()
-        secure_path = storage.get_file_path(file_path)
-        doc = docx.Document(secure_path)
-        text = "\n".join(p.text for p in doc.paragraphs)
-        return self._basic_structure(text)
+        try:
+            storage = SecureStorage()
+            secure_path = storage.get_file_path(file_path)
+            doc = docx.Document(secure_path)
+            text = "\n".join(p.text for p in doc.paragraphs)
+            return self._basic_structure(text)
+        except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'resume_parser', 'method': '_parse_docx', 'file_path': file_path})
+            return {"error": str(e)}
 
     def _parse_txt(self, file_path: str) -> Dict[str, Any]:
-        # If file_path is already local, use it directly
-        with open(file_path, "r", encoding="utf-8") as f:
-            text = f.read()
-        return self._basic_structure(text)
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                text = f.read()
+            return self._basic_structure(text)
+        except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'resume_parser', 'method': '_parse_txt', 'file_path': file_path})
+            return {"error": str(e)}
 
     def _basic_structure(self, text: str) -> Dict[str, Any]:
         # Simple section and bullet extraction (can be improved)

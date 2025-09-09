@@ -138,8 +138,9 @@ class ResumeFeedbackGenerator:
                     "priority": 2,
                     "category": "llm"
                 })
-            except Exception:
-                pass
+            except Exception as e:
+                from src.error_service.handler import handle_error
+                handle_error(e, context={'component': 'resume_feedback_generator', 'method': 'generate_feedback', 'llm_input': llm_input})
 
         # Analytics: aggregate feedback for reporting
         analytics = {

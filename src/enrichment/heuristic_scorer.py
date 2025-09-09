@@ -16,7 +16,9 @@ class HeuristicScorer:
             from src.enrichment.embeddings import EmbeddingEngine
             engine = EmbeddingEngine()
             return engine.similarity(text_a, text_b)
-        except Exception:
+        except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'heuristic_scorer', 'method': '_semantic_similarity', 'text_a': text_a, 'text_b': text_b})
             return 0.0
     KO_FIELDS = ["location", "education", "certifications", "years_experience"]
 
@@ -87,7 +89,9 @@ class HeuristicScorer:
             from src.bm25_tfidf.bm25_tfidf_matcher import BM25TFIDFMatcher
             corpus = list(self.keywords | self.responsibilities | self.skills)
             self.bm25_matcher = BM25TFIDFMatcher(corpus) if corpus else None
-        except Exception:
+        except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'heuristic_scorer', 'method': '__init__'})
             self.bm25_matcher = None
 
     def _load_weights(self, weights, config_path):
@@ -100,8 +104,9 @@ class HeuristicScorer:
                 config_data = storage.load_metadata(config_path)
                 if config_data:
                     return config_data
-            except Exception:
-                pass
+            except Exception as e:
+                from src.error_service.handler import handle_error
+                handle_error(e, context={'component': 'heuristic_scorer', 'method': '_load_weights', 'config_path': config_path})
         return self.DEFAULT_WEIGHTS.copy()
 
     def score_bullet(self, bullet: str, resume_meta: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -131,7 +136,9 @@ class HeuristicScorer:
         if self.bm25_matcher:
             try:
                 bm25_scores = self.bm25_matcher.score(bullet)
-            except Exception:
+            except Exception as e:
+                from src.error_service.handler import handle_error
+                handle_error(e, context={'component': 'heuristic_scorer', 'method': 'score_bullet', 'bullet': bullet})
                 bm25_scores = None
         # New features
         edu_score = 0
@@ -262,8 +269,9 @@ class HeuristicScorer:
         try:
             storage = SecureStorage()
             storage.log_event("heuristic_feedback", {"resume_id": resume_id, "feedback": feedback})
-        except Exception:
-            pass
+        except Exception as e:
+            from src.error_service.handler import handle_error
+            handle_error(e, context={'component': 'heuristic_scorer', 'method': 'log_feedback', 'resume_id': resume_id})
 
     def _bucket_score(self, matches: int, total_possible: int, max_points: int) -> int:
         # Objective: scale score by match ratio, subjective: use buckets for realism
