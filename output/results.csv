@@ -1,0 +1,3 @@
+Job Title,Company,Location,Salary,Job Description,Resume Name,Resume Match Score,Heuristic Score,ML Score,Application Status,Resume Feedback Score,Resume Feedback Summary,Actionable Recommendations
+TPM,Acme Corp,Remote,$150k,Lead projects,resume1.pdf,92,88,85,Applied,4.5,"Strong skills, missing certifications.",Add AWS certification.
+TPM,Beta Inc,NYC,$140k,Manage teams,resume2.pdf,80,75,70,Interview,3.8,"Good fit, improve impact statements.",Add quantifiable results.

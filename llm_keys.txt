@@ -1,0 +1,11 @@
+
+# LLM Provider API Keys
+# Format: PROVIDER_NAME: API_KEY
+# Example:
+ChatGPT: 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
+ANTHROPIC: 
+GEMINI: 
+OLLAMA: 
+DEEPSEEK: 
+
+# Add or update your keys below. If a key is missing or blank, that provider will be skipped.

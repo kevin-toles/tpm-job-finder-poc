@@ -1,0 +1,148 @@
+  health-check:
+    runs-on: ubuntu-latest
+    needs: release-and-deploy
+    steps:
+      - name: Check poc health endpoint
+        run: |
+          curl --fail http://localhost:8000/health || (echo "POC health check failed!" && exit 1)
+      - name: Check job aggregator health endpoint
+        run: |
+          curl --fail http://localhost:8001/health || (echo "Job Aggregator health check failed!" && exit 1)
+  release-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install release tools
+        run: |
+          pip install bump2version auto-changelog sphinx
+      - name: Bump version (patch)
+        run: bump2version patch
+      - name: Update changelog
+        run: auto-changelog -p
+      - name: Run deploy script
+        run: bash deploy.sh
+  docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Sphinx
+        run: pip install sphinx
+      - name: Build documentation
+        run: sphinx-build -b html docs docs/_build/html
+      - name: Check docs output
+        run: |
+          if [ ! -d docs/_build/html ]; then
+            echo "Docs build failed!"
+            exit 1
+          fi
+# ──────────────────────────────────────────────────────────────────────────────
+#  tpm-job-finder-poc  ·  Continuous-Integration Pipeline (ci.yml)
+#
+#  ▸ Purpose
+#    • Run basic quality gates each time code is pushed or a PR is opened.
+#    • Keep the repository “green” before promoting dev → qa → uat → stage → main.
+#
+#  ▸ Why these steps?
+#    1. **Unit tests**   – ensure core logic still passes. (pytest)
+#    2. **Lint check**   – enforce a consistent code style. (ruff)
+#
+#  ▸ Environments & secrets
+#    • No write-secrets needed; read-only workflow.
+#    • Runs on any branch, but branch-protections require it to pass on:
+#         dev / qa / uat / stage / main
+#
+#  ▸ How to extend
+#    • Add more Python versions to the ‘matrix’ if desired.
+#    • Add build / package / deploy jobs later; keep this one focused on fast
+#      feedback (< 1 min typical).
+# ──────────────────────────────────────────────────────────────────────────────
+name: CI
+
+on:
+  push:
+    branches: [ dev, qa, uat, stage, main ]
+  pull_request:
+    branches: [ dev, qa, uat, stage, main ]
+
+jobs:
+  test-and-lint:
+    # ---- Why 'ubuntu-latest'? Cheapest/fastest hosted runner that supports Python 3.*
+    runs-on: ubuntu-latest
+
+    # ---- run the same steps for each Python version (easy to expand later)
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
+
+    steps:
+    # 1️⃣  Fetch the repo so tests & linters can run
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install root dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Install per-service dependencies
+        run: |
+          for req in job_aggregator/requirements.txt job_normalizer/requirements.txt llm_provider/requirements.txt heuristic_scorer/requirements.txt enrichment_orchestrator/requirements.txt excel_exporter/requirements.txt resume_uploader/requirements.txt resume_store/requirements.txt storage/requirements.txt config/requirements.txt audit-logger/requirements.txt cache/requirements.txt health/requirements.txt cli/requirements.txt webhook/requirements.txt; do
+            pip install -r $req || true
+          done
+      - name: Install coverage tools
+        run: |
+          pip install pytest-cov codecov
+
+      - name: Run tests with coverage
+        run: |
+          PYTHONPATH=. pytest --cov=. --cov-report=xml --cov-report=term
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: true
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2️⃣  Install the requested Python version
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: "pip"        # speeds up subsequent runs
+
+    # 3️⃣  Install runtime + dev dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # dev-only tools
+        pip install pytest ruff
+
+    # 4️⃣  Run unit tests (fail fast if any test breaks)
+    - name: Run pytest
+      env:
+        PYTHONPATH: .
+      run: pytest --cov=. --cov-report=xml --cov-report=term
+
+    # 5️⃣  Static analysis / style check
+    - name: Run ruff linter
+      run: ruff check .
+
+    # 6️⃣  (Optional) show summary in the Actions UI
+    - name: Job summary
+      if: always()
+      run: |
+        echo "### Test + Lint results" >> $GITHUB_STEP_SUMMARY
+        echo "* Python version: ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
