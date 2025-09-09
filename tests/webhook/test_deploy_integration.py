@@ -9,6 +9,8 @@ def run_flask():
 
 def test_webhook_deploy_integration(monkeypatch):
     # Start Flask app in a thread
+    import os
+    os.environ["WEBHOOK_TEST_MODE"] = "1"
     thread = threading.Thread(target=run_flask, daemon=True)
     thread.start()
     time.sleep(1)  # Wait for server to start

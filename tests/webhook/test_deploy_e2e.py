@@ -7,6 +7,8 @@ def run_flask():
     app.run(port=5004)
 
 def test_webhook_e2e_rollforward_and_rollback():
+    import os
+    os.environ["WEBHOOK_TEST_MODE"] = "1"
     thread = threading.Thread(target=run_flask, daemon=True)
     thread.start()
     time.sleep(1)

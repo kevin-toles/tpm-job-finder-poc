@@ -72,7 +72,11 @@ def _roll_forward(version):
         _restart_service_stub()
         logger.info(f"Stubbed roll-forward to {version}", func='_roll_forward', version=version)
         return f"Rolled forward to {version}"
+    import re
     try:
+        # SECURITY: Only allow safe git version strings (semantic version, optional 'v' prefix)
+        if not isinstance(version, str) or not re.match(r'^v?\d+\.\d+\.\d+$', version):
+            raise ValueError("Unsafe git version string")
         subprocess.run(["git", "checkout", version], check=True)
         _restart_service_stub()
         logger.info(f"Rolled forward to {version}", func='_roll_forward', version=version)
@@ -88,7 +92,11 @@ def _rollback(version):
         _restart_service_stub()
         logger.info(f"Stubbed rollback to {version}", func='_rollback', version=version)
         return f"Rolled back to {version}"
+    import re
     try:
+        # SECURITY: Only allow safe git version strings (semantic version, optional 'v' prefix)
+        if not isinstance(version, str) or not re.match(r'^v?\d+\.\d+\.\d+$', version):
+            raise ValueError("Unsafe git version string")
         subprocess.run(["git", "checkout", version], check=True)
         _restart_service_stub()
         logger.info(f"Rolled back to {version}", func='_rollback', version=version)

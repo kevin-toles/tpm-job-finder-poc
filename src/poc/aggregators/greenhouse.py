@@ -42,7 +42,7 @@ class GreenhouseConnector:
 		cutoff = datetime.now(timezone.utc).timestamp() - days * 86400
 		for company in self.companies:
 			url = self.API_URL_PATTERN.format(board_token=company)
-			resp = requests.get(url)
+			resp = requests.get(url, timeout=10)
 			if resp.status_code != 200:
 				continue
 			data = resp.json()

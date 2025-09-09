@@ -1,21 +1,13 @@
 import pytest
-import os
 from src.llm_provider.gemini_provider import GeminiProvider
-
-def get_api_key():
-    key = None
-    config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "llm_keys.txt")
-    if os.path.exists(config_path):
-        with open(config_path) as f:
-            for line in f:
-                if line.strip().startswith("GEMINI:"):
-                    key = line.split(":", 1)[1].strip()
-    return key
+from src.poc.utils.api_key_loader import load_api_keys
 
 def test_gemini_hello_world():
-    api_key = get_api_key()
+    api_keys = load_api_keys()
+    api_key = api_keys.get("GEMINI_API_KEY")
+    print(f"DEBUG: Found GEMINI_API_KEY: {repr(api_key)}")
     if not api_key:
-        pytest.skip("No Gemini API key found in llm_keys.txt")
+        pytest.skip("No Gemini API key found in api_keys.json")
     provider = GeminiProvider(api_key=api_key)
     prompt = "confirm successful call"
     result = provider.get_signals(prompt)

@@ -36,7 +36,7 @@ class RemoteOKConnector:
 	API_URL = "https://remoteok.com/api"
 
 	def fetch_since(self, days=7):
-		resp = requests.get(self.API_URL)
+		resp = requests.get(self.API_URL, timeout=10)
 		if resp.status_code != 200:
 			return []
 		data = resp.json()
