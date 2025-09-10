@@ -1,0 +1,200 @@
+{
+  "linkedin": {
+    "job_card_title": {
+      "selector": "h3.base-search-card__title",
+      "required": true,
+      "fallbacks": [
+        "h3.job-search-card__title",
+        ".job-card-title"
+      ]
+    },
+    "job_card_company": {
+      "selector": "h4.base-search-card__subtitle",
+      "required": true,
+      "fallbacks": [
+        "h4.job-search-card__subtitle",
+        ".job-card-company"
+      ]
+    },
+    "job_card_location": {
+      "selector": "span.job-search-card__location",
+      "required": true,
+      "fallbacks": [
+        ".job-card-location",
+        ".job-search-card__location-text"
+      ]
+    },
+    "job_title": {
+      "selector": "h1.job-title",
+      "required": true,
+      "fallbacks": [
+        ".jobs-unified-top-card__job-title",
+        ".top-card-layout__title"
+      ]
+    },
+    "company_name": {
+      "selector": ".jobs-unified-top-card__company-name",
+      "required": true,
+      "fallbacks": [
+        ".top-card-layout__company",
+        "a[data-tracking-control-name='public_jobs_topcard-org-name']"
+      ]
+    },
+    "location": {
+      "selector": ".jobs-unified-top-card__bullet",
+      "required": true,
+      "fallbacks": [
+        ".top-card-layout__location",
+        ".jobs-unified-top-card__workplace-type"
+      ]
+    },
+    "salary": {
+      "selector": ".compensation__salary-range",
+      "required": false,
+      "fallbacks": [
+        ".jobs-unified-top-card__salary-range",
+        ".jobs-unified-top-card__job-insight"
+      ]
+    }
+  },
+  "indeed": {
+    "job_card_title": {
+      "selector": "h2.jobTitle",
+      "required": true,
+      "fallbacks": [
+        "[data-testid='jobCardTitle']",
+        ".job-title"
+      ]
+    },
+    "job_card_company": {
+      "selector": "span.companyName",
+      "required": true,
+      "fallbacks": [
+        "[data-testid='company-name']",
+        ".company-name"
+      ]
+    },
+    "job_card_location": {
+      "selector": "div.companyLocation",
+      "required": true,
+      "fallbacks": [
+        "[data-testid='job-location']",
+        ".job-location"
+      ]
+    },
+    "job_card_salary": {
+      "selector": "div.salary-snippet",
+      "required": false,
+      "fallbacks": [
+        "[data-testid='salary-snippet']",
+        ".salary-information"
+      ]
+    },
+    "job_title": {
+      "selector": "h1.jobsearch-JobInfoHeader-title",
+      "required": true,
+      "fallbacks": [
+        ".jobsearch-JobComponent-title",
+        "[data-testid='jobTitle']"
+      ]
+    },
+    "company_name": {
+      "selector": "[data-testid='inlineHeader-companyName']",
+      "required": true,
+      "fallbacks": [
+        ".jobsearch-InlineCompanyRating div",
+        ".jobsearch-CompanyInfoContainer"
+      ]
+    },
+    "location": {
+      "selector": "[data-testid='jobLocation']",
+      "required": true,
+      "fallbacks": [
+        ".jobsearch-JobInfoHeader-subtitle .jobsearch-JobInfoHeader-subtitle-location",
+        ".jobsearch-CompanyLocation"
+      ]
+    },
+    "salary": {
+      "selector": "[data-testid='attribute_snippet_compensation']",
+      "required": false,
+      "fallbacks": [
+        ".jobsearch-JobMetadataHeader-item .attribute_snippet",
+        ".salarySnippet"
+      ]
+    }
+  },
+  "ziprecruiter": {
+    "job_card_title": {
+      "selector": "h2.title",
+      "required": true,
+      "fallbacks": [
+        ".job-title",
+        ".jobList-title"
+      ]
+    },
+    "job_card_company": {
+      "selector": "a.company_name",
+      "required": true,
+      "fallbacks": [
+        ".company",
+        ".hiring-company"
+      ]
+    },
+    "job_card_location": {
+      "selector": "a.location",
+      "required": true,
+      "fallbacks": [
+        ".job-location",
+        ".location-text"
+      ]
+    },
+    "job_card_salary": {
+      "selector": "span.salary",
+      "required": false,
+      "fallbacks": [
+        ".compensation",
+        ".salary-range"
+      ]
+    },
+    "job_card_date": {
+      "selector": "div.posted",
+      "required": true,
+      "fallbacks": [
+        ".job-age",
+        ".posting-date"
+      ]
+    },
+    "job_title": {
+      "selector": ".job_title",
+      "required": true,
+      "fallbacks": [
+        "h1.job_title",
+        ".job-details-header h1"
+      ]
+    },
+    "company_name": {
+      "selector": ".hiring_company",
+      "required": true,
+      "fallbacks": [
+        ".company_name",
+        ".job-details-company-name"
+      ]
+    },
+    "location": {
+      "selector": ".location",
+      "required": true,
+      "fallbacks": [
+        ".job_location",
+        ".job-details-location"
+      ]
+    },
+    "salary": {
+      "selector": ".salary_estimate",
+      "required": false,
+      "fallbacks": [
+        ".job_salary",
+        ".compensation"
+      ]
+    }
+  }
+}

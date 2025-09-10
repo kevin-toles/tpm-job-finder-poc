@@ -21,16 +21,33 @@ The project follows a modern Python package structure with `src/tpm_job_finder_p
 ```
 src/tpm_job_finder_poc/
 ├── __init__.py
-├── cli/                # Command-line interface
-├── cli_runner/        # CLI runner for batch processing
-├── logging_service/   # Centralized logging
-├── error_service/     # Error handling
+├── aggregators/        # Job aggregation service
+│   ├── api/           # FastAPI endpoints
+│   ├── core/          # Core aggregation logic
+│   └── models/        # Aggregator data models
+├── applied_tracker/   # Applied job tracking
+├── cache/            # Unified caching system
+├── cli/              # Command-line interface
+├── cli_runner/       # CLI runner for batch processing
+├── config/           # Configuration management
+├── enrichment/       # Job enrichment and scoring
+│   ├── heuristic/    # Rule-based scoring
+│   └── llm/          # LLM-based enrichment
+├── llm/              # LLM service adapters
+├── logging/          # Centralized logging
+├── models/           # Shared data models
+├── normalizer/       # Job normalization
+│   ├── api/          # Normalization API
+│   └── core/         # Core normalization logic
 ├── resume/           # Resume management
-│   ├── store/       # Resume storage
-│   └── uploader/    # Resume upload handling
-├── cache/           # Caching and deduplication
-├── enrichment/      # Job enrichment and scoring
-└── models/          # Data models
+│   ├── store/        # Resume storage
+│   └── uploader/     # Resume upload handling
+├── scrapers/         # Job scraper microservice
+│   ├── api/          # FastAPI endpoints
+│   ├── core/         # Scraper implementations
+│   └── models/       # Scraper data models
+├── storage/          # Secure storage implementation
+└── webhook/          # Webhook handling
 ```
 
 ## Key Components

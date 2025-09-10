@@ -26,12 +26,39 @@ Cleans, normalizes, validates, and dedupes job postings from ATS connectors.
 
 ## Tests
 Run with:
-```
+```bash
+# Run all tests
 PYTHONPATH=. pytest job_normalizer/tests/
+
+# Run specific test types
+pytest job_normalizer/tests/unit/
+pytest job_normalizer/tests/integration/
+pytest job_normalizer/tests/regression/
+pytest job_normalizer/tests/e2e/
 ```
 
 ## Integration
-- Integration tests simulate real-world job feeds and edge cases.
+The job normalizer integrates with several components:
+
+### Job Aggregator Integration
+- Receives raw job data from multiple sources
+- Normalizes and validates job fields
+- Returns standardized job objects
+- See `job_aggregator/tests/integration/` for integration tests
+
+### Cache Integration
+- Deduplicates jobs using cache service
+- Maintains job history for tracking
+- Validates against existing entries
+
+### Error Handling
+- Reports validation errors to audit logger
+- Maintains error statistics for monitoring
+- Provides detailed error context for debugging
+
+For integration test examples, see:
+- `job_normalizer/tests/integration/`
+- `integration_tests/test_normalizer_pipeline.py`
 
 ## Example
 ```python

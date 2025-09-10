@@ -1,0 +1,35 @@
+{
+  "linkedin": {
+    "enabled": true,
+    "requests_per_minute": 10,
+    "cache_enabled": true,
+    "cache_max_age": 3600,
+    "proxy_enabled": false,
+    "browser_simulation_enabled": true,
+    "captcha_service_enabled": false,
+    "captcha_service_url": null,
+    "captcha_api_key": null
+  },
+  "indeed": {
+    "enabled": true,
+    "requests_per_minute": 10,
+    "cache_enabled": true,
+    "cache_max_age": 3600,
+    "proxy_enabled": false,
+    "browser_simulation_enabled": true,
+    "captcha_service_enabled": false,
+    "captcha_service_url": null,
+    "captcha_api_key": null
+  },
+  "ziprecruiter": {
+    "enabled": true,
+    "requests_per_minute": 10,
+    "cache_enabled": true,
+    "cache_max_age": 3600,
+    "proxy_enabled": false,
+    "browser_simulation_enabled": true,
+    "captcha_service_enabled": false,
+    "captcha_service_url": null,
+    "captcha_api_key": null
+  }
+}
