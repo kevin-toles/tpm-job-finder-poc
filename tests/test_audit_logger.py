@@ -1,6 +1,6 @@
 import os
 import json
-from src.logger.audit_logger import AuditLogger
+from audit_logger.logger import AuditLogger
 from pathlib import Path
 
 def test_log_creates_jsonl_entry(tmp_path):

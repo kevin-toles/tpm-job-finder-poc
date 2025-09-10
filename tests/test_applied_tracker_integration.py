@@ -1,7 +1,7 @@
 import pandas as pd
 import tempfile
 import os
-from src.cache.applied_tracker import AlreadyAppliedTracker
+from cache.applied_tracker import AlreadyAppliedTracker
 
 def create_excel(path, job_ids, applied_ids):
     df = pd.DataFrame({

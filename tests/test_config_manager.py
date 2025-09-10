@@ -1,6 +1,6 @@
 import os
 import pytest
-from src.config.config_manager import ConfigManager
+from config.config_manager import ConfigManager
 
 class TestConfigManager:
     def setup_method(self):

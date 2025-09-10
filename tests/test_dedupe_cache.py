@@ -1,5 +1,5 @@
 import os
-from src.cache.dedupe_cache import DedupeCache
+from cache.dedupe_cache import DedupeCache
 import tempfile
 import uuid
 

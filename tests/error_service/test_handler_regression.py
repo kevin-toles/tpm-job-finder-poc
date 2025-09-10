@@ -1,4 +1,4 @@
-from src.error_service.handler import handle_error
+from error_handler.handler import handle_error
 import pytest
 
 def test_handle_error_multiple_types():

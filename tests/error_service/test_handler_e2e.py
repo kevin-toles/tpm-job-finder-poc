@@ -1,4 +1,4 @@
-from src.error_service.handler import handle_error, error_catcher
+from error_handler.handler import handle_error, error_catcher
 import pytest
 
 def test_e2e_error_handling():

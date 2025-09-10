@@ -1,5 +1,5 @@
 import pytest
-from src.error_service.handler import handle_error
+from error_handler.handler import handle_error
 
 def test_handle_error_basic():
     exc = ValueError("unit test error")

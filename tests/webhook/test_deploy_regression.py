@@ -2,7 +2,7 @@
 import requests
 import threading
 import time
-from src.webhook.deploy import app
+from webhook.deploy import app
 from werkzeug.serving import make_server
 
 class ServerThread(threading.Thread):

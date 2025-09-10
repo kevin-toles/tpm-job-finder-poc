@@ -1,4 +1,4 @@
-from src.storage.secure_storage import SecureStorage
+from storage.secure_storage import SecureStorage
 import unittest
 import tempfile
 import os

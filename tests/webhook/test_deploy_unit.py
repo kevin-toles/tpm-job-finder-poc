@@ -1,5 +1,5 @@
 import pytest
-from src.webhook.deploy import VersionRegistry, authenticate_request, notify_admin, cloud_deploy_hook
+from webhook.deploy import VersionRegistry, authenticate_request, notify_admin, cloud_deploy_hook
 
 def test_version_registry_log(tmp_path):
     reg = VersionRegistry(str(tmp_path / "registry.txt"))

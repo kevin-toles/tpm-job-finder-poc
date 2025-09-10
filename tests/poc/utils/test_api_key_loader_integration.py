@@ -1,7 +1,7 @@
 import os
 import pytest
 from src.poc.utils.api_key_loader import load_api_keys
-from src.llm_provider.openai_provider import OpenAIProvider
+from llm_provider.openai_provider import OpenAIProvider
 
 PROJECT_ROOT_CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../api_keys.txt'))
 

@@ -18,6 +18,27 @@ class AuditLogFilter(logging.Filter):
 			return False
 		return True
 from typing import Optional, Dict, Any
+
+class AuditLogger:
+    """Audit logger for tracking user actions and system events"""
+    
+    def __init__(self, user_id: Optional[str] = None):
+        self.user_id = user_id
+        self.logger = logging.getLogger('audit')
+    
+    def log_event(self, event_type: str, event_data: Dict[str, Any], user_id: Optional[str] = None):
+        """Log an audit event"""
+        user = user_id or self.user_id or 'anonymous'
+        self.logger.info(f"AUDIT: {event_type} - User: {user} - Data: {event_data}")
+    
+    def log_user_action(self, action: str, details: Dict[str, Any]):
+        """Log a user action"""
+        self.log_event('user_action', {'action': action, **details})
+    
+    def log_system_event(self, event: str, details: Dict[str, Any]):
+        """Log a system event"""
+        self.log_event('system_event', {'event': event, **details})
+
 # Audit event schema definition
 AUDIT_EVENT_SCHEMA = {
 	"event_type": str,
@@ -46,7 +67,7 @@ import logging.handlers
 
 # Centralized config manager
 try:
-	from src.config_manager import Config
+	from config.config import Config
 except ImportError:
 	Config = None
 

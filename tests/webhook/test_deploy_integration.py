@@ -2,7 +2,7 @@ import requests
 import subprocess
 import threading
 import time
-from src.webhook.deploy import app
+from webhook.deploy import app
 
 def run_flask():
     app.run(port=5002)
