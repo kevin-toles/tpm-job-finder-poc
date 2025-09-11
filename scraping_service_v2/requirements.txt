@@ -1,0 +1,18 @@
+# Scraping Service v2 Requirements
+
+# Core dependencies
+aiohttp>=3.8.0
+asyncio-throttle>=1.0.2
+python-dateutil>=2.8.0
+
+# Browser automation dependencies
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+
+# Optional dependencies for enhanced browser automation
+undetected-chromedriver>=3.5.0  # For better anti-detection
+
+# Development dependencies (optional)
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.10.0

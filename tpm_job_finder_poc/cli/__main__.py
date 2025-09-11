@@ -1,10 +1,16 @@
 """
 CLI entry point for Job/Resume Matching Pipeline
-Moved main() here to avoid circular import issues.
+
+Supports both legacy pipeline mode and new automated workflows:
+- Legacy: python -m tpm_job_finder_poc.cli --input jobs.xlsx --resume resume.pdf ...
+- Automated: python -m tpm_job_finder_poc.cli automated daily-search --resume resume.pdf
+
+The automated mode provides the complete workflow requested by the user.
 """
 import argparse
 import sys
 import os
+import asyncio
 from tpm_job_finder_poc.audit_logger.logger import AuditLogger
 from tpm_job_finder_poc.resume_store.store import ResumeStore
 from tpm_job_finder_poc.resume_uploader.uploader import ResumeUploader
@@ -13,7 +19,7 @@ from tpm_job_finder_poc.cache.dedupe_cache import DedupeCache
 from tpm_job_finder_poc.enrichment.heuristic_scorer import HeuristicScorer
 import pandas as pd
 
-def main():
+def legacy_main():
     parser = argparse.ArgumentParser(description="Run the job/resume matching pipeline locally.")
     parser.add_argument('--input', type=str, required=True, help='Path to job data file (Excel, CSV, JSON, etc.)')
     parser.add_argument('--resume', type=str, required=True, help='Path to resume file (PDF, DOCX, TXT)')
@@ -102,6 +108,17 @@ def main():
     AuditLogger.log("pipeline_complete")
     if args.verbose:
         print("Pipeline completed successfully.")
+
+def main():
+    """Main entry point - route between legacy and automated modes."""
+    if len(sys.argv) > 1 and sys.argv[1] == 'automated':
+        # Remove 'automated' from args and run automated CLI
+        sys.argv.pop(1)
+        from .automated_cli import main as automated_main
+        asyncio.run(automated_main())
+    else:
+        # Run legacy pipeline
+        legacy_main()
 
 if __name__ == "__main__":
     main()

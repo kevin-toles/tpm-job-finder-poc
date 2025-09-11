@@ -1,0 +1,62 @@
+# Test Dependencies for TPM Job Finder POC
+# Core testing framework
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+
+# Additional testing utilities
+pytest-xdist>=3.0.0  # Parallel test execution
+pytest-html>=3.1.0   # HTML test reports
+pytest-benchmark>=4.0.0  # Performance benchmarking
+
+# Mocking and test data
+factory-boy>=3.2.0   # Test data factories
+freezegun>=1.2.0     # Time mocking
+responses>=0.23.0    # HTTP request mocking
+
+# Test environment utilities
+tox>=4.0.0          # Testing across environments
+coverage>=7.0.0     # Coverage reporting
+
+# Browser testing (for scraper tests)
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+
+# Data validation for tests
+pydantic>=2.0.0
+jsonschema>=4.17.0
+
+# Async testing utilities
+aioresponses>=0.7.4  # Mock aiohttp responses
+asynctest>=0.13.0    # Additional async test utilities
+
+# Performance testing
+memory-profiler>=0.60.0  # Memory usage profiling
+py-spy>=0.3.14          # Performance profiling (optional)
+
+# Test database (if needed for integration tests)
+sqlite3  # Built-in, but listed for completeness
+
+# Utilities for file/path testing
+pathlib2>=2.3.7     # Enhanced pathlib for older Python
+tempfile            # Built-in, temporary file handling
+
+# Network testing utilities
+httpx>=0.24.0        # Modern HTTP client for testing
+requests-mock>=1.10.0  # Mock requests library
+
+# Date/time testing
+python-dateutil>=2.8.0  # Date parsing utilities
+
+# Configuration testing
+pyyaml>=6.0         # YAML config testing
+toml>=0.10.2        # TOML config testing
+
+# Logging testing utilities
+testfixtures>=7.0.0  # Advanced test fixtures including logging
+
+# Development utilities (optional but helpful)
+black>=23.0.0       # Code formatting (for test consistency)
+flake8>=6.0.0       # Code linting
+mypy>=1.0.0         # Type checking

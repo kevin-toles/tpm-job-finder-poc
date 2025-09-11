@@ -19,6 +19,12 @@ This file automatically tracks all temporary files created to assist with develo
 | 2025-09-10 | tests/integration/temp_dev_files/test_audit_system_integration.py | Integration tests for complete audit system workflow | Pending | Completed |  |
 | 2025-09-10 | tests/e2e/temp_dev_files/test_audit_system_e2e.py | End-to-end tests for real-world audit system usage | Pending | Completed |  |
 | 2025-09-10 | tests/regression/temp_dev_files/test_audit_system_regression.py | Regression tests for audit system stability | Pending | Completed |  |
+| 2025-09-10 | refactoring_helpers/scraper_service_refactor_plan.md | Comprehensive plan for refactoring scrapers into independent service | Pending | Created |  |
+| 2025-09-10 | debug_tools/scraper_service_v2_demo.py | Demo script to test new scraper service architecture | Pending | Created |  |
+| 2025-09-10 | refactoring_helpers/scraper_refactor_phase1_complete.md | Phase 1 completion report - Core infrastructure successful | Pending | Created |  |
+| 2025-09-10 | refactoring_helpers/phase1_correction_plan.md | Correcting Phase 1 architecture for browser scrapers focus | Pending | Created |  |
+| 2025-09-10 | debug_tools/scraper_service_v2_browser_demo.py | Corrected demo for browser scraper architecture | Pending | Created |  |
+| 2025-09-10 | refactoring_helpers/phase2_migration_progress.md | Phase 2: Browser scraper migration in progress | Pending | Created |  |
 
 ## Cleanup Guidelines
 

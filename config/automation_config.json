@@ -1,0 +1,63 @@
+{
+  "search_params": {
+    "keywords": [
+      "product manager",
+      "technical product manager", 
+      "tpm",
+      "program manager",
+      "senior product manager",
+      "principal product manager"
+    ],
+    "location": "Remote",
+    "max_jobs_per_source": 50,
+    "excluded_companies": [
+      "known-bad-company1",
+      "known-bad-company2"
+    ]
+  },
+  "output": {
+    "directory": "./output",
+    "format": "excel",
+    "filename_template": "daily_jobs_{date}.xlsx",
+    "backup_previous": true
+  },
+  "enrichment": {
+    "enable_scoring": true,
+    "enable_feedback": true,
+    "min_score_threshold": 0.3,
+    "llm_provider": "openai",
+    "max_concurrent_scoring": 5
+  },
+  "automation": {
+    "cron_time": "09:00",
+    "notify_email": null,
+    "backup_results": true,
+    "max_daily_jobs": 200,
+    "retry_failed_sources": true
+  },
+  "sources": {
+    "api_aggregators": {
+      "remoteok": { "enabled": true },
+      "greenhouse": { 
+        "enabled": true,
+        "companies": [
+          "airbnb", "stripe", "gitlab", "dropbox", "shopify", 
+          "notion", "figma", "discord", "spotify", "uber"
+        ]
+      },
+      "lever": { 
+        "enabled": true,
+        "companies": []
+      },
+      "ashby": { "enabled": true },
+      "workable": { "enabled": true },
+      "smartrecruiters": { "enabled": true }
+    },
+    "browser_scrapers": {
+      "indeed": { "enabled": true, "max_pages": 3 },
+      "linkedin": { "enabled": true, "max_pages": 2 },
+      "ziprecruiter": { "enabled": true, "max_pages": 3 },
+      "greenhouse_browser": { "enabled": true, "max_pages": 2 }
+    }
+  }
+}
