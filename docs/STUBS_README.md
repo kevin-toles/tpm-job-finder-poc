@@ -57,7 +57,7 @@ print(f"Match score: {result['aggregate_score']}")
 ```
 
 ### 3. Scraping Service v2 (Production Ready)
-- **Location:** `scraping_service_v2/`
+- **Location:** `tpm_job_finder_poc/scraping_service/`
 - **Status:** ✅ **Fully Implemented**
 - **Features:**
   - Modular scraper architecture
@@ -68,7 +68,7 @@ print(f"Match score: {result['aggregate_score']}")
 
 **Usage:**
 ```python
-from scraping_service_v2.orchestrator import ScrapingOrchestrator
+from tpm_job_finder_poc.scraping_service.core.orchestrator import ScrapingOrchestrator
 
 orchestrator = ScrapingOrchestrator()
 jobs = orchestrator.scrape_jobs({

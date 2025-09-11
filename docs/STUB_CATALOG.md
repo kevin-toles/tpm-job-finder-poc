@@ -39,11 +39,11 @@ class CustomAPIAggregator(BaseAPIAggregator):
 - International job boards (Xing, SEEK, InfoJobs)
 
 #### Browser Scraper Sources
-**Location**: `scraping_service_v2/scrapers/`
+**Location**: `tpm_job_finder_poc/scraping_service/scrapers/`
 
 **Extension Pattern**:
 ```python
-from scraping_service_v2.scrapers.base import BaseScraper
+from tpm_job_finder_poc.scraping_service.scrapers.base_scraper import BaseScraper
 
 class CustomScraper(BaseScraper):
     def __init__(self):

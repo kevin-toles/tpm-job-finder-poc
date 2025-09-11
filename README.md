@@ -50,25 +50,38 @@ tpm_job_finder_poc/           # Main package
 ├── enrichment/              # Job enhancement and scoring
 ├── models/                  # Data models (Job, User, Application, Resume)
 ├── llm_provider/            # LLM integration for enrichment
-└── storage/                 # Secure data storage
+├── scraping_service/        # Browser scraping engine (moved from scraping_service_v2)
+│   ├── core/                # Core scraping infrastructure
+│   │   ├── service_registry.py  # Service registration and discovery
+│   │   ├── orchestrator.py      # Multi-source orchestration
+│   │   └── base_job_source.py   # Base classes and types
+│   └── scrapers/            # Browser-based scrapers
+│       ├── base_scraper.py  # Base scraper implementation
+│       ├── indeed/          # Indeed.com scraper
+│       ├── linkedin/        # LinkedIn scraper
+│       ├── ziprecruiter/    # ZipRecruiter scraper
+│       └── greenhouse/      # Greenhouse.io scraper
+├── error_handler/           # Error handling system (moved)
+├── secure_storage/          # Secure file storage (moved)
+├── config/                  # Configuration management
+└── storage/                 # Data storage layer
 
-scraping_service_v2/          # Independent scraping service
-├── core/                    # Core scraping infrastructure
-│   ├── service_registry.py  # Service registration and discovery
-│   ├── orchestrator.py      # Multi-source orchestration
-│   └── base_job_source.py   # Base classes and types
-└── scrapers/                # Browser-based scrapers
-    ├── base_scraper.py      # Base scraper implementation
-    ├── indeed/              # Indeed.com scraper
-    ├── linkedin/            # LinkedIn scraper
-    ├── ziprecruiter/        # ZipRecruiter scraper
-    └── greenhouse/          # Greenhouse.io scraper
+scripts/                     # Development automation tools (moved)
+├── demo_automation.py       # Demo workflow automation
+├── run_tests.py            # Test automation
+└── validate_automation.py  # Validation workflows
+
+docs/                        # Centralized documentation (organized)
+├── components/              # Component-specific documentation
+├── PROJECT_STRUCTURE.md     # Complete structure guide
+└── [strategic plans]       # All documentation centralized
 
 tests/                       # Comprehensive test suite
 ├── unit/                    # Unit tests (45+ tests)
 ├── integration/             # Integration tests (15+ tests)
 ├── e2e/                     # End-to-end tests (5+ tests)
-└── regression/              # Regression tests (5+ tests)
+├── regression/              # Regression tests (5+ tests)
+└── cross_component_tests/   # Cross-component tests (moved)
 ```
 
 ## 📊 Test Coverage & Quality
@@ -110,40 +123,21 @@ cp config/automation_config.json.template config/automation_config.json
 
 ### 3. Basic Usage
 
-#### Automated Job Search Workflow
-```bash
-# Run complete automated job search
-python -m tpm_job_finder_poc.cli.automated_cli \
-  --config config/automation_config.json \
-  --keywords "product manager" "technical product manager" \
-  --location "Remote" \
-  --max-jobs 100 \
-  --output results.xlsx \
-  --verbose
-```
+#### Automated Workflow (Recommended)
+```python
+# Import current package structure
+from tpm_job_finder_poc.job_aggregator.main import JobAggregatorService
+from tpm_job_finder_poc.scraping_service.core.base_job_source import FetchParams
 
-#### Manual Job Aggregation
-```bash
-# Run job aggregation service directly
-python -m tpm_job_finder_poc.job_aggregator.main \
-  --keywords "senior product manager" \
-  --location "San Francisco" \
-  --max-jobs-per-source 25 \
-  --output jobs.json
-```
+# Initialize the service
+service = JobAggregatorService()
 
-#### Browser Scraping Only
-```bash
-# Use scraping service independently
-python -c "
-from scraping_service_v2 import ScrapingOrchestrator
-from scraping_service_v2.core.base_job_source import FetchParams
-
-orchestrator = ScrapingOrchestrator()
-params = FetchParams(keywords=['python developer'], location='Remote', limit=50)
-jobs = await orchestrator.collect_jobs(['indeed', 'linkedin'], params)
-print(f'Collected {len(jobs)} jobs')
-"
+# Run automated job collection
+results = await service.collect_jobs(
+    search_terms=["Product Manager", "TPM"],
+    location="Remote",
+    max_jobs=100
+)
 ```
 
 ### 4. Run Tests
@@ -229,49 +223,10 @@ tpm_job_finder_poc/               # Main application package
 │   └── deepseek_provider.py      # DeepSeek integration
 └── storage/                      # Data persistence
 
-# Independent Scraping Service
-scraping_service_v2/              # Modern scraping architecture
-├── __init__.py
-├── core/                         # Core infrastructure
-│   ├── service_registry.py       # Service discovery
-│   ├── orchestrator.py           # Multi-source coordination
-│   ├── base_job_source.py        # Base classes and types
-│   └── health_monitor.py         # Service health checking
-└── scrapers/                     # Browser-based scrapers
-    ├── base_scraper.py           # Base scraper implementation
-    ├── indeed/                   # Indeed.com scraper
-    ├── linkedin/                 # LinkedIn scraper
-    ├── ziprecruiter/             # ZipRecruiter scraper
-    └── greenhouse/               # Greenhouse.io scraper
-
-# Comprehensive Testing
-tests/                            # Test suite (70+ tests)
-├── unit/                         # Unit tests (45+ tests)
-│   ├── test_job_aggregator/      # JobAggregatorService tests
-│   ├── test_scrapers/            # Scraper tests
-│   ├── test_enrichment/          # Enrichment pipeline tests
-│   └── test_cli/                 # CLI tests
-├── integration/                  # Integration tests (15+ tests)
-│   ├── test_connectors_integration.py
-│   └── test_service_integration.py
-├── e2e/                          # End-to-end tests (5+ tests)
-│   └── test_connectors_e2e.py
-└── regression/                   # Regression tests (5+ tests)
-    └── test_regression_workflows.py
-
-# Configuration & Documentation
-config/                           # Configuration management
-docs/                            # Sphinx documentation
-audit_logger/                    # Audit logging system
-health_monitor/                  # System health monitoring
-scripts/                         # Utility scripts
-output/                          # Default output directory
-```
-
 ## 🔧 Configuration
 
 ### Automation Configuration
-Create `config/automation_config.json`:
+Create `tpm_job_finder_poc/config/automation_config.json`:
 ```json
 {
   "search_params": {
@@ -326,8 +281,9 @@ export LOG_LEVEL="INFO"
 Add new job sources by extending the base classes:
 
 ```python
-from scraping_service_v2.scrapers.base_scraper import BaseScraper
-from scraping_service_v2.core.base_job_source import FetchParams, JobResult
+# Updated imports using current package structure
+from tpm_job_finder_poc.scraping_service.scrapers.base_scraper import BaseScraper
+from tpm_job_finder_poc.scraping_service.core.base_job_source import FetchParams, JobResult
 
 class CustomJobScraper(BaseScraper):
     source_name = "custom_site"
@@ -367,7 +323,7 @@ print(f'Service Health: {health.status}')
 
 # Check scraping service health
 python -c "
-from scraping_service_v2 import ScrapingOrchestrator
+from tpm_job_finder_poc.scraping_service.core.orchestrator import ScrapingOrchestrator
 orchestrator = ScrapingOrchestrator()
 health = await orchestrator.health_check()
 print(f'Scrapers: {health}')

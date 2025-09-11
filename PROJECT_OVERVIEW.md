@@ -81,32 +81,30 @@ tpm_job_finder_poc/               # Main application package
 │   ├── deepseek_provider.py      # DeepSeek integration
 │   └── ollama_provider.py        # Ollama local LLM integration
 ├── storage/                      # Data persistence
-│   └── secure_storage.py         # Secure file operations
 ├── config/                       # Configuration management
+├── secure_storage/               # Secure file operations (moved)
+├── error_handler/                # Error handling system (moved)
+├── scraping_service/             # Browser scraping engine (moved)
+│   ├── core/                     # Core infrastructure
+│   │   ├── service_registry.py   # Service discovery and registration
+│   │   ├── orchestrator.py       # Multi-source coordination
+│   │   ├── base_job_source.py    # Base classes and type definitions
+│   │   └── health_monitor.py     # Service health checking
+│   └── scrapers/                 # Browser-based scrapers
+│       ├── base_scraper.py       # Base scraper implementation
+│       ├── indeed/               # Indeed.com scraper
+│       │   ├── scraper.py        # Indeed scraping logic
+│       │   └── __init__.py
+│       ├── linkedin/             # LinkedIn scraper
+│       │   ├── scraper.py        # LinkedIn scraping logic
+│       │   └── __init__.py
+│       ├── ziprecruiter/         # ZipRecruiter scraper
+│       │   ├── scraper.py        # ZipRecruiter scraping logic
+│       │   └── __init__.py
+│       └── greenhouse/           # Greenhouse.io scraper
+│           ├── scraper.py        # Greenhouse scraping logic
+│           └── __init__.py
 └── webhook/                      # Webhook handling
-
-# Independent Scraping Service
-scraping_service_v2/              # Modern scraping architecture
-├── __init__.py
-├── core/                         # Core infrastructure
-│   ├── service_registry.py       # Service discovery and registration
-│   ├── orchestrator.py           # Multi-source coordination
-│   ├── base_job_source.py        # Base classes and type definitions
-│   └── health_monitor.py         # Service health checking
-└── scrapers/                     # Browser-based scrapers
-    ├── base_scraper.py           # Base scraper implementation
-    ├── indeed/                   # Indeed.com scraper
-    │   ├── scraper.py            # Indeed scraping logic
-    │   └── __init__.py
-    ├── linkedin/                 # LinkedIn scraper
-    │   ├── scraper.py            # LinkedIn scraping logic
-    │   └── __init__.py
-    ├── ziprecruiter/             # ZipRecruiter scraper
-    │   ├── scraper.py            # ZipRecruiter scraping logic
-    │   └── __init__.py
-    └── greenhouse/               # Greenhouse.io scraper
-        ├── scraper.py            # Greenhouse scraping logic
-        └── __init__.py
 
 # Comprehensive Testing
 tests/                            # Test suite (70+ tests)
@@ -156,7 +154,7 @@ Central orchestration service that coordinates all job collection activities:
 - Cache System: Deduplication and applied job tracking
 - Enrichment Pipeline: Job enhancement and scoring
 
-### 2. Scraping Service v2 (`scraping_service_v2/`)
+### 2. Scraping Service (`tpm_job_finder_poc/scraping_service/`)
 Independent, production-ready browser scraping service:
 
 **Architecture:**
@@ -309,8 +307,9 @@ python -m tpm_job_finder_poc.job_aggregator.main \
 
 ### 3. Independent Browser Scraping
 ```python
-from scraping_service_v2 import ScrapingOrchestrator
-from scraping_service_v2.core.base_job_source import FetchParams
+# Updated imports using current package structure
+from tpm_job_finder_poc.job_aggregator.main import JobAggregatorService
+from tpm_job_finder_poc.scraping_service.core.base_job_source import FetchParams
 
 orchestrator = ScrapingOrchestrator()
 params = FetchParams(keywords=['python developer'], location='Remote', limit=50)

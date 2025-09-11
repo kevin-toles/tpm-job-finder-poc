@@ -637,7 +637,7 @@ spec:
 
 - **[Main README](./README.md)**: Project overview and setup
 - **[Job Aggregator Service](./tpm_job_finder_poc/job_aggregator/README.md)**: Core orchestration
-- **[Scraping Service v2](./scraping_service_v2/README.md)**: Browser automation
+- **[Scraping Service](../tpm_job_finder_poc/scraping_service/README.md)**: Browser automation
 - **[Enrichment Pipeline](./tpm_job_finder_poc/enrichment/README.md)**: LLM analysis
 - **[CLI Documentation](./tpm_job_finder_poc/cli/README.md)**: Command-line interface
 - **[Test Suite](./tests/README.md)**: Comprehensive testing
