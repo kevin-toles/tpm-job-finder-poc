@@ -5,7 +5,7 @@ Script to generate a dynamic markdown document listing all feature flags and the
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from config.config import Config
+from tpm_job_finder_poc.config.config import Config
 
 FEATURE_FLAGS = {
     "Greenhouse Connector": "ENABLE_GREENHOUSE",

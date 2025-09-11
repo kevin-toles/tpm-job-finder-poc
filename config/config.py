@@ -20,3 +20,15 @@ class Config:
 	# Add more config variables as needed
 
 config = Config()
+
+# Stub for legacy tests
+class ConfigManager:
+	@classmethod
+	def get(cls, key, default=None):
+		return default
+	@classmethod
+	def is_feature_enabled(cls, feature):
+		return True
+	@classmethod
+	def all(cls):
+		return {}

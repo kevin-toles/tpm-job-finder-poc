@@ -64,11 +64,11 @@ src/tpm_job_finder_poc/     # Main package directory
 ├── cache/               # Caching and deduplication
 └── enrichment/          # Job enrichment and scoring
 
-tests/                   # Test directories
-├── unit/               # Unit tests
-├── integration_tests/  # Integration tests
-├── e2e_tests/         # End-to-end tests
-└── regression_tests/  # Regression tests
+cross_component_tests/      # Shared, cross-component and utility tests
+├── unit/                   # Unit tests
+├── integration_tests/      # Integration tests
+├── e2e_tests/              # End-to-end tests
+└── regression_tests/       # Regression tests
 
 
 ## Testing
@@ -79,7 +79,7 @@ All file operations in tests and production code use `SecureStorage` for reading
 LLM provider tests (unit, integration, e2e, regression, smoke) will be **skipped** if the required API key or local server is not configured. This is expected and ensures the suite does not fail due to missing external credentials.
 Run all tests with:
 	```
-	PYTHONPATH=. pytest
+	PYTHONPATH=. pytest cross_component_tests
 	```
 
 ## LLM Provider API Keys & Security

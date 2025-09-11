@@ -12,7 +12,7 @@ def fetch_remoteok():
     resp = requests.get(url)
     resp.raise_for_status()
     jobs = resp.json()
-    save_fixture(jobs, "tests/fixtures/remoteok_sample.json")
+    save_fixture(jobs, "cross_component_tests/fixtures/remoteok_sample.json")
 
 def fetch_greenhouse():
     # Example: Greenhouse public jobs endpoint for a company
@@ -21,7 +21,7 @@ def fetch_greenhouse():
     resp = requests.get(url)
     resp.raise_for_status()
     jobs = resp.json()
-    save_fixture(jobs, "tests/fixtures/greenhouse_sample.json")
+    save_fixture(jobs, "cross_component_tests/fixtures/greenhouse_sample.json")
 
 def fetch_lever():
     # Example: Lever public jobs endpoint for a company
@@ -30,7 +30,7 @@ def fetch_lever():
     resp = requests.get(url)
     resp.raise_for_status()
     jobs = resp.json()
-    save_fixture(jobs, "tests/fixtures/lever_sample.json")
+    save_fixture(jobs, "cross_component_tests/fixtures/lever_sample.json")
 
 def main():
     print("Fetching RemoteOK sample...")

@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: tpm-job-finder-poc
+Version: 0.1.0
+Requires-Python: >=3.8
+Requires-Dist: pandas
+Requires-Dist: python-dotenv
+Requires-Dist: flask
+Requires-Dist: pydantic
+Requires-Dist: openpyxl
+Requires-Dist: pytest
+Requires-Dist: pytest-asyncio
+Requires-Dist: aiohttp
+Dynamic: requires-dist
+Dynamic: requires-python

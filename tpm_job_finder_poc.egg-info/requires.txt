@@ -1,0 +1,8 @@
+pandas
+python-dotenv
+flask
+pydantic
+openpyxl
+pytest
+pytest-asyncio
+aiohttp

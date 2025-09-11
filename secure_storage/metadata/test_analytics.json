@@ -1,0 +1,28 @@
+{
+  "status": "analyzed",
+  "path": "/var/folders/xt/t9j52vt94jd1z18_zh6m68yc0000gn/T/tmp47px441f.xlsx",
+  "records": [
+    {
+      "Job ID": 1,
+      "Match Score": 100,
+      "Callback": "Yes",
+      "Resume Feedback": "Good fit"
+    }
+  ],
+  "total_records": 1,
+  "columns": [
+    "Job ID",
+    "Match Score",
+    "Callback",
+    "Resume Feedback"
+  ],
+  "Callback_rate": 100.0,
+  "score_success_correlation": 0.75,
+  "feedback_stats": {
+    "avg_length": 20.5,
+    "common_themes": [
+      "skills",
+      "certifications"
+    ]
+  }
+}
