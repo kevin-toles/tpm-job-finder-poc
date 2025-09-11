@@ -67,7 +67,7 @@ class JobAggregatorService:
     def _init_browser_scrapers(self):
         """Initialize browser-based scrapers."""
         try:
-            from scraping_service_v2 import registry
+            from tpm_job_finder_poc.scraping_service import registry
             
             # Register default scrapers if not already done
             registry.register_default_scrapers()
@@ -180,7 +180,7 @@ class JobAggregatorService:
                                            search_params: Dict[str, Any], 
                                            max_jobs: int) -> List[Dict[str, Any]]:
         """Collect jobs from browser scrapers."""
-        from scraping_service_v2.core.base_job_source import FetchParams
+        from tpm_job_finder_poc.scraping_service.core.base_job_source import FetchParams
         
         jobs = []
         
