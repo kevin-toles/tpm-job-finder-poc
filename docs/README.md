@@ -2,11 +2,27 @@
 
 Welcome to the comprehensive documentation for the TPM Job Finder POC, a production-ready automated job search and aggregation system.
 
+## 📁 **Project Structure & Organization**
+
+- **[📖 PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Comprehensive guide to project organization, file placement, and development workflows
+- **[⚡ QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Fast lookup reference for file placement and common commands  
+- **[🔄 IMPORT_MIGRATION_PLAN.md](IMPORT_MIGRATION_PLAN.md)** - Import system migration guide and compatibility layer documentation
+
 ## Documentation Structure
 
 ```
 docs/
 ├── README.md                    # This file - documentation home
+├── PROJECT_STRUCTURE.md         # Complete project structure guide
+├── QUICK_REFERENCE.md           # Quick reference for file placement
+├── IMPORT_MIGRATION_PLAN.md     # Import migration documentation
+├── components/                  # Component-specific documentation
+│   ├── job_aggregator.md        # Job aggregation service docs
+│   ├── scraping_service.md      # Web scraping service docs
+│   ├── enrichment.md            # Data enrichment docs
+│   ├── llm_provider.md          # LLM integration docs
+│   └── [other components]       # Additional component docs
+├── Careerjet_Integration_Plan.* # Strategic enhancement plans
 ├── index.rst                    # Sphinx documentation index
 ├── conf.py                      # Sphinx configuration
 ├── config.rst                   # Configuration documentation

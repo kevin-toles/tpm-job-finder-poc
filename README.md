@@ -14,6 +14,25 @@ A comprehensive, production-ready automated job search and aggregation system de
 - **Health Monitoring**: Comprehensive service health checks and monitoring
 - **Production-Ready**: Full test coverage (70+ tests), error handling, and audit logging
 
+## 📁 Project Structure
+
+This project follows a **clean, professional Python package structure**. For detailed guidance on file organization and development workflows:
+
+- **📖 [Complete Structure Guide](docs/PROJECT_STRUCTURE.md)** - Comprehensive guide to project organization
+- **⚡ [Quick Reference](docs/QUICK_REFERENCE.md)** - Fast lookup for file placement
+- **🔄 [Import Migration Plan](docs/IMPORT_MIGRATION_PLAN.md)** - Import system migration guide
+
+**Quick Structure Overview:**
+```
+tpm-job-finder-poc/
+├── 📦 tpm_job_finder_poc/    # Main application package
+├── 📚 docs/                  # Centralized documentation
+├── 🧪 tests/                 # Test suite (70+ tests)
+├── 🔧 scripts/               # Development automation
+├── 📊 logs/                  # Application logs
+└── 📈 output/                # Generated results
+```
+
 ## 🏗️ Architecture Overview
 
 The system follows a modular, microservice-inspired architecture:
