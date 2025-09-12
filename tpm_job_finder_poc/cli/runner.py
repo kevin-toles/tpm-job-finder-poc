@@ -243,73 +243,24 @@ class AutomatedJobSearchRunner:
     async def _export_results(self, 
                             jobs: List[Dict[str, Any]], 
                             output_path: str) -> str:
-        """Export jobs to Excel with enhanced formatting."""
+        """Export jobs to Excel with geographic organization."""
         try:
-            import pandas as pd
             from pathlib import Path
+            from .geographic_excel_exporter import GeographicExcelExporter
             
             # Ensure output directory exists
             output_file = Path(output_path)
             output_file.parent.mkdir(parents=True, exist_ok=True)
             
-            # Prepare data for Excel
-            excel_data = []
+            # Use geographic Excel exporter
+            exporter = GeographicExcelExporter()
+            workbook = exporter.create_regional_workbook(jobs)
             
-            for job in jobs:
-                excel_row = {
-                    'Title': job.get('title', ''),
-                    'Company': job.get('company', ''),
-                    'Location': job.get('location', ''),
-                    'Source': job.get('source', ''),
-                    'Match Score': job.get('match_score', 0),
-                    'Recommended Action': job.get('recommended_action', ''),
-                    'URL': job.get('url', ''),
-                    'Date Posted': job.get('date_posted', ''),
-                    'Applied': 'No',  # User will update this
-                    'Status': 'New',  # User will update this
-                    'Notes': '',      # User can add notes
-                    'Fit Analysis': job.get('fit_analysis', '')[:500]  # Truncate for Excel
-                }
-                excel_data.append(excel_row)
-                
-            # Create DataFrame and export
-            df = pd.DataFrame(excel_data)
+            # Save workbook
+            workbook.save(output_path)
             
-            # Sort by match score (highest first)
-            df = df.sort_values('Match Score', ascending=False)
-            
-            # Export to Excel with formatting
-            with pd.ExcelWriter(output_path, engine='xlsxwriter') as writer:
-                df.to_excel(writer, sheet_name='Job Opportunities', index=False)
-                
-                # Get workbook and worksheet for formatting
-                workbook = writer.book
-                worksheet = writer.sheets['Job Opportunities']
-                
-                # Add formatting
-                header_format = workbook.add_format({
-                    'bold': True,
-                    'text_wrap': True,
-                    'valign': 'top',
-                    'fg_color': '#D7E4BC',
-                    'border': 1
-                })
-                
-                # Format header row
-                for col_num, value in enumerate(df.columns.values):
-                    worksheet.write(0, col_num, value, header_format)
-                    
-                # Auto-adjust column widths
-                for i, col in enumerate(df.columns):
-                    max_len = max(
-                        df[col].astype(str).str.len().max(),
-                        len(str(col))
-                    )
-                    worksheet.set_column(i, i, min(max_len + 2, 50))
-                    
-            logger.info(f"Results exported to {output_path}")
-            
-            return str(output_path)
+            logger.info(f"Geographic Excel workbook exported with {len(workbook.worksheets)} worksheets")
+            return output_path
             
         except Exception as e:
             logger.error(f"Export failed: {e}")

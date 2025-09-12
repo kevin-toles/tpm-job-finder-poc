@@ -2,10 +2,10 @@
 
 from typing import List, Optional, Type
 
-from job_aggregator.scrapers.base import BaseJobScraper
-from job_aggregator.scrapers.linkedin import LinkedInScraper
-from job_aggregator.scrapers.indeed import IndeedScraper
-from job_aggregator.scrapers.ziprecruiter import ZipRecruiterScraper
+from tpm_job_finder_poc.job_aggregator.scrapers.base import BaseJobScraper
+from tpm_job_finder_poc.job_aggregator.scrapers.linkedin import LinkedInScraper
+from tpm_job_finder_poc.job_aggregator.scrapers.indeed import IndeedScraper
+from tpm_job_finder_poc.job_aggregator.scrapers.ziprecruiter import ZipRecruiterScraper
 
 class ScraperFactory:
     """Factory for creating job board scrapers."""

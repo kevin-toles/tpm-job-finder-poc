@@ -4,8 +4,8 @@ import asyncio
 from datetime import datetime
 from typing import List, Optional
 
-from job_normalizer.jobs.schema import JobPosting
-from job_aggregator.scrapers.factory import ScraperFactory
+from tpm_job_finder_poc.job_normalizer.jobs.schema import JobPosting
+from tpm_job_finder_poc.job_aggregator.scrapers.factory import ScraperFactory
 
 class JobScrapingService:
     """Service for scraping jobs from multiple job boards."""

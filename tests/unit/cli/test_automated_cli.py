@@ -14,7 +14,7 @@ import tempfile
 import json
 from pathlib import Path
 from datetime import datetime
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
+from unittest.mock import patch, Mock, MagicMock, AsyncMock
 
 from tpm_job_finder_poc.cli.runner import AutomatedJobSearchRunner
 from tpm_job_finder_poc.cli.automated_cli import AutomatedJobFinderCLI
@@ -141,12 +141,19 @@ class TestAutomatedJobSearchRunner:
             output_path = f.name
 
         try:
-            with patch('pandas.DataFrame.to_excel') as mock_to_excel:
-                with patch('pandas.ExcelWriter') as mock_writer:
+            with patch('tpm_job_finder_poc.cli.geographic_excel_exporter.GeographicExcelExporter') as mock_exporter_class:
+                with patch('pathlib.Path.mkdir') as mock_mkdir:
+                    # Setup mock exporter
+                    mock_exporter = mock_exporter_class.return_value
+                    mock_workbook = Mock()
+                    mock_workbook.worksheets = ['sheet1', 'sheet2']  # Mock worksheets property
+                    mock_exporter.create_regional_workbook.return_value = mock_workbook
+                    
                     result_path = await runner._export_results(jobs, output_path)
 
                     assert result_path == output_path
-                assert mock_to_excel.called
+                    assert mock_exporter.create_regional_workbook.called
+                    assert mock_workbook.save.called
         finally:
             Path(output_path).unlink(missing_ok=True)
             

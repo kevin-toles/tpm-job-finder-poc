@@ -2,19 +2,20 @@
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
-from job_normalizer.jobs.schema import JobPosting
-from job_aggregator.services.job_scraping_service import JobScrapingService
+from tpm_job_finder_poc.job_normalizer.jobs.schema import JobPosting
+from tpm_job_finder_poc.job_aggregator.services.job_scraping_service import JobScrapingService
 
 # Import API-based connectors
-from job_aggregator.aggregators.adzuna import AdzunaConnector
-from job_aggregator.aggregators.ashby import AshbyConnector
-from job_aggregator.aggregators.jooble import JoobleConnector
-from job_aggregator.aggregators.recruitee import RecruiteeConnector
-from job_aggregator.aggregators.smartrecruiters import SmartRecruitersConnector
-from job_aggregator.aggregators.usajobs import USAJobsConnector
-from job_aggregator.aggregators.workable import WorkableConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.adzuna import AdzunaConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.ashby import AshbyConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.careerjet import CareerjetConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.jooble import JoobleConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.recruitee import RecruiteeConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.smartrecruiters import SmartRecruitersConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.usajobs import USAJobsConnector
+from tpm_job_finder_poc.job_aggregator.aggregators.workable import WorkableConnector
 
 class JobAggregationService:
     """Service for aggregating jobs from all available sources."""
@@ -33,6 +34,7 @@ class JobAggregationService:
             location: Optional location filter
             api_config: Configuration for API-based connectors including:
                 - adzuna: {"app_id": str, "app_key": str}
+                - careerjet: {"affiliate_id": str, "locales": List[str]}
                 - jooble: {"api_key": str}
                 - usajobs: {"user_agent": str, "api_key": str}
                 - smartrecruiters: {"companies": List[str]}
@@ -52,6 +54,15 @@ class JobAggregationService:
             cfg = self.api_config["adzuna"]
             self.api_connectors.append(
                 AdzunaConnector(cfg["app_id"], cfg["app_key"])
+            )
+            
+        if "careerjet" in self.api_config:
+            cfg = self.api_config["careerjet"]
+            self.api_connectors.append(
+                CareerjetConnector(
+                    affiliate_id=cfg["affiliate_id"],
+                    locales=cfg.get("locales", ["en_US", "en_GB", "en_CA", "en_AU", "en_SG"])
+                )
             )
             
         if "jooble" in self.api_config:
@@ -88,7 +99,7 @@ class JobAggregationService:
             sources=scraping_sources
         )
         
-    async def fetch_all_jobs(self) -> List[JobPosting]:
+    async def fetch_all_jobs(self) -> List[Dict[str, Any]]:
         """Fetch jobs from all sources - both API-based and scraped.
         
         Returns:
@@ -118,7 +129,7 @@ class JobAggregationService:
             
         return all_jobs
         
-    def deduplicate_jobs(self, jobs: List[JobPosting]) -> List[JobPosting]:
+    def deduplicate_jobs(self, jobs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Remove duplicate jobs based on URL.
         
         Args:
@@ -131,8 +142,9 @@ class JobAggregationService:
         unique_jobs = []
         
         for job in jobs:
-            if job.url not in seen_urls:
-                seen_urls.add(job.url)
+            job_url = job.get('url', '')
+            if job_url and job_url not in seen_urls:
+                seen_urls.add(job_url)
                 unique_jobs.append(job)
                 
         return unique_jobs
