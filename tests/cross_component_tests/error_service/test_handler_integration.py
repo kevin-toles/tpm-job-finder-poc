@@ -1,4 +1,4 @@
-from error_handler.handler import handle_error, error_catcher
+from tpm_job_finder_poc.error_handler.handler import handle_error, error_catcher
 import pytest
 
 def test_error_catcher_decorator():

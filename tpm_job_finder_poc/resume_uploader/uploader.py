@@ -31,7 +31,7 @@ class ResumeUploader:
         try:
             size = os.path.getsize(file_path)
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'resume_uploader', 'method': 'upload_resume', 'file_path': file_path})
             size = None
         metadata = {
@@ -48,7 +48,7 @@ class ResumeUploader:
             meta_result = storage.save_metadata(metadata["filename"], metadata)
             return {"status": "uploaded", "metadata": metadata, "file_result": file_result, "meta_result": meta_result}
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'resume_uploader', 'method': 'upload_resume', 'file_path': file_path})
             return {"error": str(e), "metadata": metadata}
 
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     uploader = ResumeUploader()
     file_path = uploader.find_resume(args.filename)
     if not file_path:
-        from error_handler.handler import handle_error
+        from tpm_job_finder_poc.error_handler.handler import handle_error
         handle_error(FileNotFoundError(f"File '{args.filename}' not found in resumes/ directory."), context={'component': 'resume_uploader_cli', 'filename': args.filename})
         print(f"File '{args.filename}' not found in resumes/ directory.")
     else:

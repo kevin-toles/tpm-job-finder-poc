@@ -20,11 +20,11 @@ def test_audit_logger_basic_functionality():
     
     if not audit_logger_path.exists():
         print(f"❌ Audit logger not found at {audit_logger_path}")
-        return False
+        assert False, f"Audit logger not found at {audit_logger_path}"
     
     if not python_path.exists():
         print(f"❌ Python venv not found at {python_path}")
-        return False
+        assert False, f"Python venv not found at {python_path}"
     
     try:
         # Change to temp_dev_files directory for testing
@@ -35,7 +35,7 @@ def test_audit_logger_basic_functionality():
                               capture_output=True, text=True)
         if result.returncode != 0:
             print(f"❌ List command failed: {result.stderr}")
-            return False
+            assert False, f"List command failed: {result.stderr}"
         print("✅ List command works")
         
         # Test 2: Log a file
@@ -44,10 +44,10 @@ def test_audit_logger_basic_functionality():
                               capture_output=True, text=True)
         if result.returncode != 0:
             print(f"❌ Log command failed: {result.stderr}")
-            return False
+            assert False, f"Log command failed: {result.stderr}"
         if "Logged:" not in result.stdout:
             print(f"❌ Log command didn't provide expected output: {result.stdout}")
-            return False
+            assert False, "Log command didn't provide expected output"
         print("✅ Log command works")
         
         # Test 3: Update the file
@@ -56,10 +56,10 @@ def test_audit_logger_basic_functionality():
                               capture_output=True, text=True)
         if result.returncode != 0:
             print(f"❌ Update command failed: {result.stderr}")
-            return False
+            assert False, f"Update command failed: {result.stderr}"
         if "Updated:" not in result.stdout:
             print(f"❌ Update command didn't provide expected output: {result.stdout}")
-            return False
+            assert False, "Update command didn't provide expected output"
         print("✅ Update command works")
         
         # Test 4: Verify the file appears in list
@@ -67,17 +67,18 @@ def test_audit_logger_basic_functionality():
                               capture_output=True, text=True)
         if result.returncode != 0:
             print(f"❌ Final list command failed: {result.stderr}")
-            return False
+            assert False, f"Final list command failed: {result.stderr}"
         if "test_file.py" not in result.stdout or "Completed" not in result.stdout:
             print(f"❌ File not properly tracked: {result.stdout}")
-            return False
+            assert False, "File not properly tracked"
         print("✅ File tracking works end-to-end")
         
-        return True
+        # Test passed
+        print("\n🎉 All audit logger tests passed!")
         
     except Exception as e:
         print(f"❌ Test failed with exception: {e}")
-        return False
+        assert False, f"Test failed with exception: {e}"
 
 if __name__ == "__main__":
     success = test_audit_logger_basic_functionality()

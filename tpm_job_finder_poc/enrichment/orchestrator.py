@@ -1,25 +1,25 @@
-from error_handler.handler import handle_error
+from tpm_job_finder_poc.error_handler.handler import handle_error
 """
 Orchestrator: Integrates HeuristicScorer and MLScorer for resume scoring
 Returns combined results and rationales
 """
-from enrichment.heuristic_scorer import HeuristicScorer
-from enrichment.ml_scorer import MLScorer
-from llm_provider.base import LLMProvider
+from tpm_job_finder_poc.enrichment.heuristic_scorer import HeuristicScorer
+from tpm_job_finder_poc.enrichment.ml_scorer import MLScorer
+from tpm_job_finder_poc.llm_provider.base import LLMProvider
 import importlib
 
 class ResumeScoringOrchestrator:
     def __init__(self, job_desc=None, ml_model=None, llm_config=None, resume_path=None, jd_text=None):
         # Parse resume if path provided
         if resume_path:
-            from enrichment.resume_parser import ResumeParser
+            from tpm_job_finder_poc.enrichment.resume_parser import ResumeParser
             resume_struct = ResumeParser().parse(resume_path)
             # Canonicalize resume entities
-            from enrichment.entity_canonicalizer import EntityCanonicalizer
+            from tpm_job_finder_poc.enrichment.entity_canonicalizer import EntityCanonicalizer
             canonicalizer = EntityCanonicalizer()
             resume_struct["sections"] = canonicalizer.canonicalize(resume_struct["sections"])
             # Timeline analysis for resume
-            from enrichment.timeline_analyzer import TimelineAnalyzer
+            from tpm_job_finder_poc.enrichment.timeline_analyzer import TimelineAnalyzer
             analyzer = TimelineAnalyzer()
             timeline = resume_struct["sections"].get("timeline", [])
             roles = analyzer.extract_roles(timeline)
@@ -30,14 +30,14 @@ class ResumeScoringOrchestrator:
             self.resume_struct = None
         # Parse JD if raw text provided
         if jd_text:
-            from enrichment.jd_parser import JDParser
+            from tpm_job_finder_poc.enrichment.jd_parser import JDParser
             job_desc = JDParser().parse(jd_text)
             # Canonicalize JD entities
-            from enrichment.entity_canonicalizer import EntityCanonicalizer
+            from tpm_job_finder_poc.enrichment.entity_canonicalizer import EntityCanonicalizer
             canonicalizer = EntityCanonicalizer()
             job_desc = canonicalizer.canonicalize(job_desc)
             # Timeline analysis for JD
-            from enrichment.timeline_analyzer import TimelineAnalyzer
+            from tpm_job_finder_poc.enrichment.timeline_analyzer import TimelineAnalyzer
             analyzer = TimelineAnalyzer()
             timeline = job_desc.get("timeline", [])
             roles = analyzer.extract_roles(timeline)
@@ -45,7 +45,7 @@ class ResumeScoringOrchestrator:
             job_desc["time_in_title"] = analyzer.time_in_title(roles)
         # Taxonomy mapping for skills/titles
         if job_desc:
-            from enrichment.taxonomy_mapper import TaxonomyMapper
+            from tpm_job_finder_poc.enrichment.taxonomy_mapper import TaxonomyMapper
             taxonomy_mapper = TaxonomyMapper()
             job_desc["keywords"] = taxonomy_mapper.map_skills(job_desc.get("keywords", []))
             job_desc["responsibilities"] = taxonomy_mapper.map_titles(job_desc.get("responsibilities", []))
@@ -125,7 +125,7 @@ class ResumeScoringOrchestrator:
                 llm_result = self.llm.get_signals(llm_prompt)
 
             # Feedback generator integration
-            from enrichment.resume_feedback_generator import ResumeFeedbackGenerator
+            from tpm_job_finder_poc.enrichment.resume_feedback_generator import ResumeFeedbackGenerator
             feedback_generator = ResumeFeedbackGenerator(llm_provider=self.llm)
             feedback = feedback_generator.generate_feedback(
                 job_desc=self.heuristic.job_desc,

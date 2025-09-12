@@ -1,5 +1,5 @@
 """
-Unit tests for scraping_service_v2 core components.
+Unit tests for scraping service core components.
 
 Tests the base infrastructure:
 - BaseJobSource interface
@@ -14,7 +14,8 @@ from datetime import datetime, timezone
 from unittest.mock import Mock, AsyncMock, patch
 from typing import Dict, Any, List
 
-from scraping_service_v2.core.base_job_source import (
+# ✅ Updated imports following README.md package structure
+from tpm_job_finder_poc.scraping_service.core.base_job_source import (
     BaseJobSource, 
     SourceType, 
     JobPosting, 
@@ -23,8 +24,8 @@ from scraping_service_v2.core.base_job_source import (
     HealthStatus,
     RateLimitConfig
 )
-from scraping_service_v2.core.service_registry import ServiceRegistry
-from scraping_service_v2.core.orchestrator import ScrapingOrchestrator
+from tpm_job_finder_poc.scraping_service.core.service_registry import ServiceRegistry
+from tpm_job_finder_poc.scraping_service.core.orchestrator import ScrapingOrchestrator
 
 
 class MockJobSource(BaseJobSource):
@@ -360,7 +361,7 @@ class TestDeduplication:
     
     def test_url_deduplication(self):
         """Test deduplication by URL."""
-        from scraping_service_v2.core.orchestrator import ScrapingOrchestrator
+        from tpm_job_finder_poc.scraping_service.core.orchestrator import ScrapingOrchestrator
         
         jobs = [
             JobPosting(
@@ -391,7 +392,7 @@ class TestDeduplication:
         
     def test_title_company_deduplication(self):
         """Test deduplication by title + company."""
-        from scraping_service_v2.core.orchestrator import ScrapingOrchestrator
+        from tpm_job_finder_poc.scraping_service.core.orchestrator import ScrapingOrchestrator
         
         jobs = [
             JobPosting(

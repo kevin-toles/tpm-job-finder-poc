@@ -139,7 +139,7 @@ class ResumeFeedbackGenerator:
                     "category": "llm"
                 })
             except Exception as e:
-                from error_handler.handler import handle_error
+                from tpm_job_finder_poc.error_handler.handler import handle_error
                 handle_error(e, context={'component': 'resume_feedback_generator', 'method': 'generate_feedback', 'llm_input': llm_input})
 
         # Analytics: aggregate feedback for reporting

@@ -78,6 +78,7 @@ class RateLimitConfig:
 
 
 @dataclass
+@dataclass
 class FetchParams:
     """Parameters for job fetching operations."""
     keywords: Optional[List[str]] = None
@@ -87,6 +88,7 @@ class FetchParams:
     limit: Optional[int] = None
     offset: Optional[int] = 0
     filters: Optional[Dict[str, Any]] = None
+    extra_params: Optional[Dict[str, Any]] = None  # For backward compatibility
 
 
 class BaseJobSource(ABC):

@@ -78,11 +78,11 @@ class AutomatedJobSearchRunner:
         try:
             # Import services
             from ..job_aggregator.main import JobAggregatorService
-            from ..enrichment.orchestrator import EnrichmentOrchestrator
+            from ..enrichment.orchestrator import ResumeScoringOrchestrator
             from ..resume_uploader.uploader import ResumeUploader
             
             self.job_aggregator = JobAggregatorService(self.config)
-            self.enrichment_service = EnrichmentOrchestrator()
+            self.enrichment_service = ResumeScoringOrchestrator(job_desc={}) # Provide empty job desc for initialization
             self.resume_uploader = ResumeUploader()
             
             logger.info("All services initialized successfully")

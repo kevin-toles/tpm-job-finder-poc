@@ -5,9 +5,9 @@ import tempfile
 import pandas as pd
 
 def test_cli_runner_e2e_real_world(tmp_path):
-    # Get the root project directory and use cross_component_tests fixtures
+    # Get the root project directory and use tests/cross_component_tests fixtures
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    fixtures_dir = os.path.join(project_root, 'cross_component_tests', 'fixtures')
+    fixtures_dir = os.path.join(project_root, 'tests', 'cross_component_tests', 'fixtures')
     sample_jobs = os.path.join(fixtures_dir, 'remoteok_sample.json')
     sample_resume = os.path.join(fixtures_dir, 'sample_resume.txt')
     sample_applied = os.path.join(fixtures_dir, 'sample_applied.xlsx')

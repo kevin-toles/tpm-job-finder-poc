@@ -25,7 +25,7 @@ class ResumeStore:
             meta_path_saved = self.storage.save_metadata(file_name, metadata)
             return {"status": "saved", "file": file_path_saved, "metadata": meta_path_saved}
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'resume_store', 'method': 'save_resume', 'file_path': file_path})
             return {"error": str(e)}
 

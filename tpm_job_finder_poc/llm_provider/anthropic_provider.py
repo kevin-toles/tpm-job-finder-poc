@@ -29,6 +29,6 @@ class AnthropicProvider(LLMProvider):
             content = " ".join([c.get("text", "") for c in result.get("content", [])])
             return {"provider": "Anthropic", "response": content}
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'anthropic_provider', 'method': 'get_signals', 'prompt': prompt})
             return {"provider": "Anthropic", "error": str(e)}

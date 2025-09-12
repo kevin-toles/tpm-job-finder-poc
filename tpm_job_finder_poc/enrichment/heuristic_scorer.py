@@ -17,7 +17,7 @@ class HeuristicScorer:
             engine = EmbeddingEngine()
             return engine.similarity(text_a, text_b)
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'heuristic_scorer', 'method': '_semantic_similarity', 'text_a': text_a, 'text_b': text_b})
             return 0.0
     KO_FIELDS = ["location", "education", "certifications", "years_experience"]
@@ -90,7 +90,7 @@ class HeuristicScorer:
             corpus = list(self.keywords | self.responsibilities | self.skills)
             self.bm25_matcher = BM25TFIDFMatcher(corpus) if corpus else None
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'heuristic_scorer', 'method': '__init__'})
             self.bm25_matcher = None
 
@@ -105,7 +105,7 @@ class HeuristicScorer:
                 if config_data:
                     return config_data
             except Exception as e:
-                from error_handler.handler import handle_error
+                from tpm_job_finder_poc.error_handler.handler import handle_error
                 handle_error(e, context={'component': 'heuristic_scorer', 'method': '_load_weights', 'config_path': config_path})
         return self.DEFAULT_WEIGHTS.copy()
 
@@ -137,7 +137,7 @@ class HeuristicScorer:
             try:
                 bm25_scores = self.bm25_matcher.score(bullet)
             except Exception as e:
-                from error_handler.handler import handle_error
+                from tpm_job_finder_poc.error_handler.handler import handle_error
                 handle_error(e, context={'component': 'heuristic_scorer', 'method': 'score_bullet', 'bullet': bullet})
                 bm25_scores = None
         # New features
@@ -270,7 +270,7 @@ class HeuristicScorer:
             storage = SecureStorage()
             storage.log_event("heuristic_feedback", {"resume_id": resume_id, "feedback": feedback})
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'heuristic_scorer', 'method': 'log_feedback', 'resume_id': resume_id})
 
     def _bucket_score(self, matches: int, total_possible: int, max_points: int) -> int:

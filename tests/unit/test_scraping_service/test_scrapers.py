@@ -1,5 +1,5 @@
 """
-Unit tests for browser scrapers in scraping_service_v2.
+Unit tests for browser scrapers in tpm_job_finder_poc.scraping_service.
 
 Tests the browser-based job scrapers:
 - BaseScraper functionality
@@ -15,12 +15,12 @@ from datetime import datetime, timezone
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from typing import Dict, List
 
-from scraping_service_v2.scrapers.base_scraper import BaseScraper, BrowserProfile
-from scraping_service_v2.scrapers.indeed.scraper import IndeedScraper
-from scraping_service_v2.scrapers.linkedin.scraper import LinkedInScraper
-from scraping_service_v2.scrapers.ziprecruiter.scraper import ZipRecruiterScraper
-from scraping_service_v2.scrapers.greenhouse.scraper import GreenhouseScraper
-from scraping_service_v2.core.base_job_source import (
+from tpm_job_finder_poc.scraping_service.scrapers.base_scraper import BaseScraper, BrowserProfile
+from tpm_job_finder_poc.scraping_service.scrapers.indeed.scraper import IndeedScraper
+from tpm_job_finder_poc.scraping_service.scrapers.linkedin.scraper import LinkedInScraper
+from tpm_job_finder_poc.scraping_service.scrapers.ziprecruiter.scraper import ZipRecruiterScraper
+from tpm_job_finder_poc.scraping_service.scrapers.greenhouse.scraper import GreenhouseScraper
+from tpm_job_finder_poc.scraping_service.core.base_job_source import (
     FetchParams, 
     JobPosting, 
     HealthStatus,
@@ -103,7 +103,7 @@ class TestBaseScraper:
         
     @pytest.mark.asyncio
     @patch('selenium.webdriver.Chrome')
-    @patch('scraping_service_v2.scrapers.base_scraper.ChromeDriverManager')
+    @patch('tpm_job_finder_poc.scraping_service.scrapers.base_scraper.ChromeDriverManager')
     async def test_setup_browser(self, mock_driver_manager, mock_chrome, mock_scraper):
         """Test browser setup."""
         mock_driver = Mock()
@@ -116,7 +116,7 @@ class TestBaseScraper:
         assert mock_driver.execute_script.called  # Anti-detection script
         
     @pytest.mark.asyncio
-    @patch('scraping_service_v2.scrapers.base_scraper.ChromeDriverManager')
+    @patch('tpm_job_finder_poc.scraping_service.scrapers.base_scraper.ChromeDriverManager')
     async def test_initialize_cleanup(self, mock_driver_manager, mock_scraper):
         """Test initialization and cleanup."""
         with patch.object(mock_scraper, 'setup_browser') as mock_setup:

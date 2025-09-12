@@ -1,4 +1,4 @@
-from error_handler.handler import handle_error
+from tpm_job_finder_poc.error_handler.handler import handle_error
 import pytest
 
 def test_handle_error_multiple_types():

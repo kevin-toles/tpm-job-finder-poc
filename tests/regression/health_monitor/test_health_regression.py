@@ -1,5 +1,5 @@
 import json
-from health_monitor import app
+from tpm_job_finder_poc.health_monitor import app
 from pathlib import Path
 
 def test_regression_status_endpoint_missing_metadata(tmp_path):

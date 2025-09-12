@@ -69,7 +69,7 @@ def test_workspace():
         "cache",
         "logs",
         "resume_store/resume",
-        "scraping_service_v2/logs",
+        "tpm_job_finder_poc.scraping_service/logs",
         "job_aggregator/data"
     ]
     

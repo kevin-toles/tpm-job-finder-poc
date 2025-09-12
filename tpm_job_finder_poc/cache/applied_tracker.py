@@ -17,7 +17,7 @@ class AlreadyAppliedTracker:
         self._load_applied()
 
     def _load_applied(self):
-        from error_handler.handler import handle_error
+        from tpm_job_finder_poc.error_handler.handler import handle_error
         if not self.excel_path.exists():
             self._applied_ids = set()
             return

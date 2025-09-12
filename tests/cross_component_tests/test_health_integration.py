@@ -1,5 +1,5 @@
 import json
-from src.health import app
+from tpm_job_finder_poc.health_monitor import app
 from pathlib import Path
 
 def test_status_endpoint_with_metadata(tmp_path):

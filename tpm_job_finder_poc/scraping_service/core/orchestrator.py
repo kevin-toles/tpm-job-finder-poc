@@ -137,6 +137,8 @@ class ScrapingOrchestrator:
                 "sources_queried": len(sources),
                 "successful_sources": len(sources) - len(errors),
                 "failed_sources": len(errors),
+                "fetch_start_time": start_time.isoformat(),
+                "fetch_end_time": end_time.isoformat(),
                 "fetch_duration_seconds": fetch_duration,
                 "timestamp": end_time.isoformat(),
                 "params": {

@@ -3,19 +3,19 @@ ResumeParser: Extracts structured resume data from PDF, DOCX, and TXT files
 Output: JSON with sections, bullets, dates, education, certs, etc.
 """
 import os
-from storage.secure_storage import SecureStorage
+from tpm_job_finder_poc.storage.secure_storage import SecureStorage
 from typing import Dict, Any
 
 try:
     import pdfplumber
 except ImportError as e:
-    from error_handler.handler import handle_error
+    from tpm_job_finder_poc.error_handler.handler import handle_error
     handle_error(e, context={'component': 'resume_parser', 'import': 'pdfplumber'})
     pdfplumber = None
 try:
     import docx
 except ImportError as e:
-    from error_handler.handler import handle_error
+    from tpm_job_finder_poc.error_handler.handler import handle_error
     handle_error(e, context={'component': 'resume_parser', 'import': 'docx'})
     docx = None
 
@@ -41,7 +41,7 @@ class ResumeParser:
                 text = "\n".join(page.extract_text() or "" for page in pdf.pages)
             return self._basic_structure(text)
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'resume_parser', 'method': '_parse_pdf', 'file_path': file_path})
             return {"error": str(e)}
 
@@ -55,7 +55,7 @@ class ResumeParser:
             text = "\n".join(p.text for p in doc.paragraphs)
             return self._basic_structure(text)
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'resume_parser', 'method': '_parse_docx', 'file_path': file_path})
             return {"error": str(e)}
 
@@ -65,7 +65,7 @@ class ResumeParser:
                 text = f.read()
             return self._basic_structure(text)
         except Exception as e:
-            from error_handler.handler import handle_error
+            from tpm_job_finder_poc.error_handler.handler import handle_error
             handle_error(e, context={'component': 'resume_parser', 'method': '_parse_txt', 'file_path': file_path})
             return {"error": str(e)}
 

@@ -58,24 +58,31 @@ class TestAutomatedJobSearchRunner:
     async def test_process_resume(self, runner):
         """Test resume processing."""
         with patch.object(runner, 'resume_uploader') as mock_uploader:
-            mock_uploader.upload_and_process = AsyncMock(return_value={
+            mock_uploader.upload_resume = AsyncMock(return_value={
                 'success': True,
-                'keywords': ['python', 'developer'],
-                'skills': ['programming', 'software engineering']
+                'parsed_data': {
+                    'skills': ['python', 'developer'],
+                    'experience': ['programming', 'software engineering']
+                }
             })
-            
+
             result = await runner._process_resume('/path/to/resume.pdf')
             
-            assert result['success'] is True
-            assert 'keywords' in result
-            assert mock_uploader.upload_and_process.called
-            
+            assert result['skills'] == ['python', 'developer']
+            assert result['experience'] == ['programming', 'software engineering']
+            assert result['file_path'] == '/path/to/resume.pdf'
+            mock_uploader.upload_resume.assert_called_once_with('/path/to/resume.pdf')
+    
     @pytest.mark.asyncio
     async def test_collect_jobs(self, runner):
         """Test job collection."""
-        search_params = {
-            'keywords': ['product manager'],
-            'location': 'Remote'
+        # Set up the config with search params
+        runner.config = {
+            'search_params': {
+                'keywords': ['product manager'],
+                'location': 'Remote',
+                'max_jobs_per_source': 50
+            }
         }
         
         with patch.object(runner, 'job_aggregator') as mock_aggregator:
@@ -85,50 +92,60 @@ class TestAutomatedJobSearchRunner:
             ]
             mock_aggregator.run_daily_aggregation = AsyncMock(return_value=mock_jobs)
             
-            jobs = await runner._collect_jobs(search_params)
+            jobs = await runner._collect_jobs()
             
             assert len(jobs) == 2
-            assert mock_aggregator.run_daily_aggregation.called
-            
+            mock_aggregator.run_daily_aggregation.assert_called_once()
+    
     @pytest.mark.asyncio
     async def test_enrich_jobs(self, runner):
         """Test job enrichment."""
-        jobs = [Mock(id="job1", title="Developer", company="Tech Co")]
+        jobs = [{"id": "job1", "title": "Developer", "company": "Tech Co"}]
+        resume_data = {"skills": ["Python", "React"]}
+        
+        # Configure enrichment settings
+        runner.config = {
+            'enrichment': {'enable_scoring': True}
+        }
         
         with patch.object(runner, 'enrichment_service') as mock_enrichment:
-            mock_enrichment.enrich_jobs = AsyncMock(return_value=jobs)
+            mock_enrichment.score_job_match = AsyncMock(return_value={
+                "score": 85,
+                "feedback": "Good match"
+            })
             
-            enriched = await runner._enrich_jobs(jobs)
+            enriched = await runner._enrich_and_score_jobs(jobs, resume_data)
             
             assert len(enriched) == 1
-            assert mock_enrichment.enrich_jobs.called
+            assert enriched[0]["id"] == "job1"
+            mock_enrichment.score_job_match.assert_called_once()
             
-    def test_export_results(self, runner):
+    @pytest.mark.asyncio
+    async def test_export_results(self, runner):
         """Test exporting results to Excel."""
         jobs = [
-            Mock(
-                id="job1", 
-                title="Product Manager",
-                company="Test Company",
-                location="Remote",
-                url="https://example.com/job1",
-                date_posted=datetime.now(),
-                to_dict=Mock(return_value={
-                    'id': 'job1',
-                    'title': 'Product Manager',
-                    'company': 'Test Company'
-                })
-            )
+            {
+                'id': "job1",
+                'title': "Product Manager",
+                'company': "Test Company",
+                'location': "Remote",
+                'url': "https://example.com/job1",
+                'date_posted': datetime.now(),
+                'match_score': 0.8,
+                'recommended_action': 'High Priority',
+                'fit_analysis': 'Great match for skills'
+            }
         ]
-        
+
         with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as f:
             output_path = f.name
-            
+
         try:
             with patch('pandas.DataFrame.to_excel') as mock_to_excel:
-                result_path = runner._export_results(jobs, output_path)
-                
-                assert result_path == output_path
+                with patch('pandas.ExcelWriter') as mock_writer:
+                    result_path = await runner._export_results(jobs, output_path)
+
+                    assert result_path == output_path
                 assert mock_to_excel.called
         finally:
             Path(output_path).unlink(missing_ok=True)
@@ -142,7 +159,7 @@ class TestAutomatedJobSearchRunner:
         # Mock all the components
         with patch.object(runner, '_process_resume') as mock_resume:
             with patch.object(runner, '_collect_jobs') as mock_collect:
-                with patch.object(runner, '_enrich_jobs') as mock_enrich:
+                with patch.object(runner, '_enrich_and_score_jobs') as mock_enrich:
                     with patch.object(runner, '_export_results') as mock_export:
                         
                         mock_resume.return_value = {'success': True, 'keywords': ['pm']}
@@ -163,20 +180,18 @@ class TestAutomatedJobSearchRunner:
         """Test quick search without resume."""
         keywords = ['developer', 'python']
         location = 'San Francisco'
-        
-        with patch.object(runner, '_collect_jobs') as mock_collect:
+
+        with patch.object(runner.job_aggregator, 'run_daily_aggregation') as mock_aggregator:
             with patch.object(runner, '_export_results') as mock_export:
-                
-                mock_collect.return_value = [Mock()]
+
+                mock_aggregator.return_value = [{'title': 'Test Job'}]
                 mock_export.return_value = "/path/to/results.xlsx"
-                
+
                 result = await runner.run_quick_search(keywords, location)
-                
+
                 assert result is not None
-                assert mock_collect.called
-                assert mock_export.called
-
-
+                mock_aggregator.assert_called_once()
+                mock_export.assert_called_once()
 class TestAutomatedJobFinderCLI:
     """Test AutomatedJobFinderCLI functionality."""
     
@@ -236,8 +251,8 @@ class TestAutomatedJobFinderCLI:
     async def test_run_daily_search(self, cli):
         """Test daily search command."""
         resume_path = "/path/to/resume.pdf"
-        
-        with patch('tpm_job_finder_poc.cli.automated_cli.AutomatedJobSearchRunner') as mock_runner_class:
+
+        with patch('tpm_job_finder_poc.cli.runner.AutomatedJobSearchRunner') as mock_runner_class:
             mock_runner = Mock()
             mock_runner.run_daily_search_workflow = AsyncMock(return_value="/path/to/results.xlsx")
             mock_runner_class.return_value = mock_runner
@@ -252,8 +267,8 @@ class TestAutomatedJobFinderCLI:
         """Test quick search command."""
         keywords = ['product', 'manager']
         location = 'Remote'
-        
-        with patch('tpm_job_finder_poc.cli.automated_cli.AutomatedJobSearchRunner') as mock_runner_class:
+
+        with patch('tpm_job_finder_poc.cli.runner.AutomatedJobSearchRunner') as mock_runner_class:
             mock_runner = Mock()
             mock_runner.run_quick_search = AsyncMock(return_value="/path/to/quick_results.xlsx")
             mock_runner_class.return_value = mock_runner

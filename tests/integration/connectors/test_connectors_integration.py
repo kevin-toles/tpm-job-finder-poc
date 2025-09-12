@@ -21,7 +21,7 @@ def test_all_connectors_offline(tmp_path: Path, monkeypatch) -> None:
     # Calculate fixtures directory
     current_dir = Path(__file__).parent
     project_root = current_dir.parent.parent.parent
-    fixtures_dir = project_root / "cross_component_tests" / "fixtures"
+    fixtures_dir = project_root / "tests" / "cross_component_tests" / "fixtures"
     
     if not config.ENABLE_REMOTEOK:
         pytest.skip("RemoteOK connector is disabled by feature flag")

@@ -1,5 +1,5 @@
 """
-Regression tests for scraping_service_v2.
+Regression tests for tpm_job_finder_poc.scraping_service.
 
 Tests to ensure that refactoring hasn't broken existing functionality:
 - Service interfaces remain stable
@@ -13,14 +13,14 @@ import asyncio
 import time
 from unittest.mock import Mock, AsyncMock, patch
 
-from scraping_service_v2 import (
+from tpm_job_finder_poc.scraping_service import (
     ServiceRegistry, 
     ScrapingOrchestrator,
     FetchParams,
     JobPosting,
     HealthStatus
 )
-from scraping_service_v2.scrapers import IndeedScraper, LinkedInScraper
+from tpm_job_finder_poc.scraping_service.scrapers import IndeedScraper, LinkedInScraper
 
 
 class TestServiceInterfaceRegression:
@@ -105,30 +105,51 @@ class TestPerformanceRegression:
     @pytest.fixture
     def registry_with_sources(self):
         """Create registry with mock sources for performance testing."""
+        from tpm_job_finder_poc.scraping_service.core.base_job_source import BaseJobSource, SourceType, JobPosting, HealthStatus, HealthCheckResult
+        from unittest.mock import AsyncMock, Mock
+        from datetime import datetime, timezone
+        
+        # Create a test scraper class that properly inherits from BaseJobSource
+        class TestJobSource(BaseJobSource):
+            def __init__(self, name: str):
+                super().__init__(name, SourceType.BROWSER_SCRAPER)
+                self.job_index = int(name.split('_')[1]) if '_' in name else 0
+                
+            async def fetch_jobs(self, params):
+                return [
+                    JobPosting(
+                        id=f"job_{self.job_index}_1",
+                        source=self.name,
+                        company=f"Test Company {self.job_index}",  # Make companies unique
+                        title=f"Developer {self.job_index}",        # Make titles unique  
+                        location="Remote",
+                        url=f"https://example.com/job_{self.job_index}_1",
+                        date_posted=datetime.now(timezone.utc)
+                    )
+                ]
+                
+            async def health_check(self):
+                return HealthCheckResult(status=HealthStatus.HEALTHY, message="OK")
+                
+            async def initialize(self):
+                return True
+                
+            async def cleanup(self):
+                pass
+                
+            def get_rate_limits(self):
+                from tpm_job_finder_poc.scraping_service.core.base_job_source import RateLimitConfig
+                return RateLimitConfig(requests_per_minute=60)
+                
+            def get_supported_params(self):
+                return {"keywords": "list", "location": "string", "limit": "int"}
+        
         registry = ServiceRegistry()
         
-        # Add multiple mock sources
+        # Add multiple test sources
         for i in range(5):
-            mock_source = Mock()
-            mock_source.name = f"source_{i}"
-            mock_source.source_type = "BROWSER_SCRAPER"
-            mock_source.enabled = True
-            mock_source.fetch_jobs = AsyncMock(return_value=[
-                JobPosting(
-                    id=f"job_{i}_1",
-                    source=f"source_{i}",
-                    company="Test Co",
-                    title="Developer",
-                    location="Remote",
-                    url=f"https://example.com/job_{i}_1",
-                    date_posted=Mock()
-                )
-            ])
-            mock_source.health_check = AsyncMock(return_value=Mock(status=HealthStatus.HEALTHY))
-            mock_source.initialize = AsyncMock(return_value=True)
-            mock_source.cleanup = AsyncMock()
-            
-            registry.register_source(mock_source)
+            test_source = TestJobSource(f"source_{i}")
+            registry.register_source(test_source)
             
         return registry
         
@@ -183,17 +204,34 @@ class TestErrorHandlingRegression:
     @pytest.fixture
     def registry_with_failing_source(self):
         """Create registry with a source that fails."""
+        from tpm_job_finder_poc.scraping_service.core.base_job_source import BaseJobSource, SourceType
+        
+        # Create a test scraper class that fails properly
+        class FailingJobSource(BaseJobSource):
+            def __init__(self):
+                super().__init__("failing_source", SourceType.BROWSER_SCRAPER)
+                
+            async def fetch_jobs(self, params):
+                raise Exception("Source failed")
+                
+            async def health_check(self):
+                raise Exception("Health check failed")
+                
+            async def initialize(self):
+                raise Exception("Init failed")
+                
+            async def cleanup(self):
+                pass
+                
+            def get_rate_limits(self):
+                from tpm_job_finder_poc.scraping_service.core.base_job_source import RateLimitConfig
+                return RateLimitConfig(requests_per_minute=60)
+                
+            def get_supported_params(self):
+                return {"keywords": "list", "location": "string"}
+        
         registry = ServiceRegistry()
-        
-        failing_source = Mock()
-        failing_source.name = "failing_source"
-        failing_source.source_type = "BROWSER_SCRAPER"
-        failing_source.enabled = True
-        failing_source.fetch_jobs = AsyncMock(side_effect=Exception("Source failed"))
-        failing_source.health_check = AsyncMock(side_effect=Exception("Health check failed"))
-        failing_source.initialize = AsyncMock(side_effect=Exception("Init failed"))
-        failing_source.cleanup = AsyncMock()
-        
+        failing_source = FailingJobSource()
         registry.register_source(failing_source)
         return registry
         
@@ -220,8 +258,8 @@ class TestErrorHandlingRegression:
         health_results = await orchestrator.health_check_sources()
         
         assert "failing_source" in health_results
-        # Should report unhealthy status rather than crashing
-        assert health_results["failing_source"]["status"] == "UNHEALTHY"
+        # Should report unhealthy status rather than crashing  
+        assert health_results["failing_source"]["status"] == "unhealthy"
         
     @pytest.mark.asyncio
     async def test_initialization_error_handling(self, registry_with_failing_source):
@@ -351,21 +389,41 @@ class TestDataFormatRegression:
     @pytest.mark.asyncio
     async def test_health_check_response_format(self):
         """Test health check response format."""
+        from tpm_job_finder_poc.scraping_service.core.base_job_source import BaseJobSource, SourceType, HealthStatus, HealthCheckResult
+        from datetime import datetime, timezone
+        
+        # Create a test source that returns proper health check
+        class TestHealthSource(BaseJobSource):
+            def __init__(self):
+                super().__init__("test_source", SourceType.BROWSER_SCRAPER)
+                
+            async def fetch_jobs(self, params):
+                return []
+                
+            async def health_check(self):
+                return HealthCheckResult(
+                    status=HealthStatus.HEALTHY,
+                    message="Test message",
+                    timestamp=datetime.now(timezone.utc),
+                    response_time_ms=100.0
+                )
+                
+            async def initialize(self):
+                return True
+                
+            async def cleanup(self):
+                pass
+                
+            def get_rate_limits(self):
+                from tpm_job_finder_poc.scraping_service.core.base_job_source import RateLimitConfig
+                return RateLimitConfig(requests_per_minute=60)
+                
+            def get_supported_params(self):
+                return {"keywords": "list", "location": "string"}
+        
         registry = ServiceRegistry()
-        
-        # Add mock source
-        mock_source = Mock()
-        mock_source.name = "test_source"
-        mock_source.source_type = "BROWSER_SCRAPER"
-        mock_source.enabled = True
-        mock_source.health_check = AsyncMock(return_value=Mock(
-            status=HealthStatus.HEALTHY,
-            message="Test message",
-            timestamp=Mock(),
-            response_time_ms=100.0
-        ))
-        
-        registry.register_source(mock_source)
+        test_source = TestHealthSource()
+        registry.register_source(test_source)
         orchestrator = ScrapingOrchestrator(registry)
         
         health_results = await orchestrator.health_check_sources()
