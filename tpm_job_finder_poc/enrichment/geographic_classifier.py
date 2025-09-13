@@ -180,6 +180,93 @@ class GeographicClassifier:
         """
         return self.country_to_region.get(country_code.upper(), 'Other')
     
+    def classify_location(self, location_string: str) -> Dict[str, str]:
+        """Classify location string to region and country.
+        
+        Args:
+            location_string: Location string like 'Singapore', 'Berlin, Germany', 'Tokyo, Japan'
+            
+        Returns:
+            Dictionary with 'region' and 'country' keys
+        """
+        # Location mapping for common formats
+        location_mappings = {
+            # Direct city to country mappings
+            'singapore': {'country': 'Singapore', 'country_code': 'SG'},
+            'tokyo': {'country': 'Japan', 'country_code': 'JP'},
+            'tokyo, japan': {'country': 'Japan', 'country_code': 'JP'},
+            'berlin': {'country': 'Germany', 'country_code': 'DE'},
+            'berlin, germany': {'country': 'Germany', 'country_code': 'DE'},
+            'london': {'country': 'United Kingdom', 'country_code': 'GB'},
+            'london, uk': {'country': 'United Kingdom', 'country_code': 'GB'},
+            'new york': {'country': 'United States', 'country_code': 'US'},
+            'new york, usa': {'country': 'United States', 'country_code': 'US'},
+            'toronto': {'country': 'Canada', 'country_code': 'CA'},
+            'toronto, canada': {'country': 'Canada', 'country_code': 'CA'},
+            'sydney': {'country': 'Australia', 'country_code': 'AU'},
+            'sydney, australia': {'country': 'Australia', 'country_code': 'AU'},
+            'paris': {'country': 'France', 'country_code': 'FR'},
+            'paris, france': {'country': 'France', 'country_code': 'FR'},
+            'amsterdam': {'country': 'Netherlands', 'country_code': 'NL'},
+            'amsterdam, netherlands': {'country': 'Netherlands', 'country_code': 'NL'},
+            'zurich': {'country': 'Switzerland', 'country_code': 'CH'},
+            'zurich, switzerland': {'country': 'Switzerland', 'country_code': 'CH'},
+            'hong kong': {'country': 'Hong Kong', 'country_code': 'HK'},
+            'mumbai': {'country': 'India', 'country_code': 'IN'},
+            'mumbai, india': {'country': 'India', 'country_code': 'IN'},
+            'bangalore': {'country': 'India', 'country_code': 'IN'},
+            'bangalore, india': {'country': 'India', 'country_code': 'IN'},
+        }
+        
+        # Normalize location string
+        location_norm = location_string.lower().strip()
+        
+        # Try direct mapping first
+        if location_norm in location_mappings:
+            mapping = location_mappings[location_norm]
+            country_code = mapping['country_code']
+            region = self.classify_job_region(country_code)
+            return {
+                'region': region,
+                'country': mapping['country']
+            }
+        
+        # Try to extract country from comma-separated format
+        if ',' in location_string:
+            parts = [part.strip().lower() for part in location_string.split(',')]
+            # Check if last part is a known country
+            country_keywords = {
+                'germany': {'country': 'Germany', 'country_code': 'DE'},
+                'japan': {'country': 'Japan', 'country_code': 'JP'},
+                'singapore': {'country': 'Singapore', 'country_code': 'SG'},
+                'uk': {'country': 'United Kingdom', 'country_code': 'GB'},
+                'united kingdom': {'country': 'United Kingdom', 'country_code': 'GB'},
+                'usa': {'country': 'United States', 'country_code': 'US'},
+                'united states': {'country': 'United States', 'country_code': 'US'},
+                'canada': {'country': 'Canada', 'country_code': 'CA'},
+                'australia': {'country': 'Australia', 'country_code': 'AU'},
+                'france': {'country': 'France', 'country_code': 'FR'},
+                'netherlands': {'country': 'Netherlands', 'country_code': 'NL'},
+                'switzerland': {'country': 'Switzerland', 'country_code': 'CH'},
+                'india': {'country': 'India', 'country_code': 'IN'},
+            }
+            
+            for part in reversed(parts):
+                if part in country_keywords:
+                    mapping = country_keywords[part]
+                    country_code = mapping['country_code']
+                    region = self.classify_job_region(country_code)
+                    return {
+                        'region': region,
+                        'country': mapping['country']
+                    }
+        
+        # Default fallback
+        return {
+            'region': 'Other',
+            'country': 'Unknown'
+        }
+    
     def get_regional_metadata(self, region: str) -> Dict:
         """Get regional context and metadata.
         
