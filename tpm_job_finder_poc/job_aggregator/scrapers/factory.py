@@ -3,17 +3,15 @@
 from typing import List, Optional, Type
 
 from tpm_job_finder_poc.job_aggregator.scrapers.base import BaseJobScraper
-from tpm_job_finder_poc.job_aggregator.scrapers.linkedin import LinkedInScraper
-from tpm_job_finder_poc.job_aggregator.scrapers.indeed import IndeedScraper
-from tpm_job_finder_poc.job_aggregator.scrapers.ziprecruiter import ZipRecruiterScraper
+# from tpm_job_finder_poc.job_aggregator.scrapers.indeed import IndeedScraper
+# from tpm_job_finder_poc.job_aggregator.scrapers.ziprecruiter import ZipRecruiterScraper
 
 class ScraperFactory:
     """Factory for creating job board scrapers."""
     
     _scrapers: dict[str, Type[BaseJobScraper]] = {
-        "linkedin": LinkedInScraper,
-        "indeed": IndeedScraper,
-        "ziprecruiter": ZipRecruiterScraper
+        # "indeed": IndeedScraper,
+        # "ziprecruiter": ZipRecruiterScraper
     }
     
     @classmethod
@@ -21,7 +19,7 @@ class ScraperFactory:
         """Get a scraper instance for the given source.
         
         Args:
-            source: Name of job board ("linkedin", "indeed", etc.)
+            source: Name of job board ("indeed", "ziprecruiter", etc.)
             search_terms: List of job titles/keywords to search for
             location: Optional location filter
             
