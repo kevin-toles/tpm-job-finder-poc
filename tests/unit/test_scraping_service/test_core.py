@@ -9,11 +9,17 @@ Tests the base infrastructure:
 """
 
 import pytest
+import os
 import asyncio
 from datetime import datetime, timezone
 from unittest.mock import Mock, AsyncMock, patch
 from typing import Dict, Any, List
 
+# Fast mode check
+FAST_MODE = os.getenv('PYTEST_FAST_MODE', '0') == '1'
+
+# Skip scraping service core tests in fast mode (they involve browser orchestration)
+pytestmark = pytest.mark.skipif(FAST_MODE, reason="Scraping service core tests involve browser orchestration - skipped in fast mode")
 # ✅ Updated imports following README.md package structure
 from tpm_job_finder_poc.scraping_service.core.base_job_source import (
     BaseJobSource, 

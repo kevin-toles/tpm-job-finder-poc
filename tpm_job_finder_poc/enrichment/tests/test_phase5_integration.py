@@ -9,37 +9,58 @@ import sys
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Any
+from unittest.mock import Mock, patch
 
 # Add the parent directory to the path to import our modules
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tpm_job_finder_poc.enrichment.immigration_support_service import (
-    ImmigrationSupportService,
-    VisaType,
-    ProcessingTime,
-    immigration_support_service
-)
-from tpm_job_finder_poc.enrichment.enterprise_service import (
-    EnterpriseMultiUserService,
-    UserRole,
-    OpportunityStatus,
-    ExpansionStage,
-    enterprise_service
-)
-from tpm_job_finder_poc.enrichment.career_modeling_service import (
-    AdvancedCareerModelingService,
-    CareerStage,
-    SkillCategory,
-    PathwayType,
-    career_modeling_service
-)
+# Check for fast mode environment variable
+FAST_MODE = os.getenv('PYTEST_FAST_MODE', '0') == '1'
+
+if FAST_MODE:
+    # In fast mode, create mock versions of expensive services
+    MockImmigrationSupportService = Mock
+    MockEnterpriseMultiUserService = Mock  
+    MockAdvancedCareerModelingService = Mock
+    
+    # Mock the service instances too
+    immigration_support_service = Mock()
+    enterprise_service = Mock()
+    career_modeling_service = Mock()
+else:
+    # Normal mode - import real services
+    from tpm_job_finder_poc.enrichment.immigration_support_service import (
+        ImmigrationSupportService,
+        VisaType,
+        ProcessingTime,
+        immigration_support_service
+    )
+    from tpm_job_finder_poc.enrichment.enterprise_service import (
+        EnterpriseMultiUserService,
+        UserRole,
+        OpportunityStatus,
+        ExpansionStage,
+        enterprise_service
+    )
+    from tpm_job_finder_poc.enrichment.career_modeling_service import (
+        AdvancedCareerModelingService,
+        CareerStage,
+        SkillCategory,
+        PathwayType,
+        career_modeling_service
+    )
 
 
+@pytest.mark.skipif(FAST_MODE, reason="Expensive integration tests skipped in fast mode")
 class TestImmigrationSupportService:
     """Test Immigration Support Service functionality."""
     
     def setup_method(self):
         """Set up test data before each test."""
+        if FAST_MODE:
+            self.service = Mock()
+            return
+            
         self.service = ImmigrationSupportService()
         
         # Test user data
@@ -76,9 +97,9 @@ class TestImmigrationSupportService:
     def test_find_immigration_lawyers(self):
         """Test immigration lawyer search."""
         lawyers = self.service.find_immigration_lawyers(
-            target_country='United States',
-            specialty='H-1B',
-            budget_range=(5000, 15000)
+            country='US',  # Match the exact format in the data (US not United States)
+            specialization='H1B',  # Match the exact format in the data
+            budget_usd=10000
         )
         
         assert isinstance(lawyers, list)
@@ -96,34 +117,37 @@ class TestImmigrationSupportService:
     def test_calculate_relocation_costs(self):
         """Test relocation cost calculation."""
         cost_analysis = self.service.calculate_relocation_costs(
-            source_country=self.test_user_data['current_country'],
-            target_country=self.test_user_data['target_countries'][0],
-            family_size=self.test_user_data['family_size'],
-            job_category=self.test_user_data['job_category']
+            from_country=self.test_user_data['current_country'],
+            to_country=self.test_user_data['target_countries'][0],
+            from_city='Mumbai',
+            to_city='San Francisco',
+            family_size=self.test_user_data['family_size']
         )
         
         assert cost_analysis is not None
-        assert cost_analysis.total_cost > 0
-        assert cost_analysis.timeline_months > 0
+        assert cost_analysis.total_cost_usd > 0
+        assert cost_analysis.monthly_living_cost_difference != 0
         
-        print(f"✅ Calculated relocation costs: ${cost_analysis.total_cost:,.0f}")
-        print(f"   Timeline: {cost_analysis.timeline_months} months")
+        print(f"✅ Calculated relocation costs: ${cost_analysis.total_cost_usd:,.0f}")
+        print(f"   Monthly living cost difference: ${cost_analysis.monthly_living_cost_difference:,.0f}")
     
     def test_create_immigration_timeline(self):
         """Test immigration timeline creation."""
+        from datetime import datetime
         timeline = self.service.create_immigration_timeline(
-            self.test_user_data,
-            'United States'
+            destination_country='US',
+            visa_type='H1B',
+            target_start_date=datetime(2024, 6, 1)
         )
         
         assert timeline is not None
         assert len(timeline.phases) > 0
         assert timeline.total_duration_months > 0
-        assert 0 <= timeline.feasibility_score <= 1.0
+        assert len(timeline.critical_milestones) > 0
         
         print(f"✅ Created immigration timeline with {len(timeline.phases)} phases")
         print(f"   Total duration: {timeline.total_duration_months} months")
-        print(f"   Feasibility score: {timeline.feasibility_score:.2f}")
+        print(f"   Critical milestones: {len(timeline.critical_milestones)}")
     
     def test_get_comprehensive_immigration_insights(self):
         """Test comprehensive immigration insights."""
@@ -144,6 +168,7 @@ class TestImmigrationSupportService:
         print(f"   Recommendations: {len(insights['recommendations'])}")
 
 
+@pytest.mark.skipif(FAST_MODE, reason="Expensive integration tests skipped in fast mode")
 class TestEnterpriseMultiUserService:
     """Test Enterprise Multi-User Service functionality."""
     
@@ -378,6 +403,7 @@ class TestEnterpriseMultiUserService:
         print(f"   Regional insights: {list(insights.keys())}")
 
 
+@pytest.mark.skipif(FAST_MODE, reason="Expensive integration tests skipped in fast mode")
 class TestAdvancedCareerModelingService:
     """Test Advanced Career Modeling Service functionality."""
     
@@ -603,6 +629,7 @@ class TestAdvancedCareerModelingService:
         print(f"   Opportunities: {len(na_analysis['opportunities'])}")
 
 
+@pytest.mark.skipif(FAST_MODE, reason="Expensive integration tests skipped in fast mode")
 class TestPhase5Integration:
     """Test integration between all Phase 5+ services."""
     

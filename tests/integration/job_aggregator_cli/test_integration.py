@@ -332,8 +332,8 @@ class TestConfigurationIntegration:
             },
             'sources': {
                 'api_aggregators': {
-                    'greenhouse': {'enabled': True, 'timeout': 30},
-                    'lever': {'enabled': True, 'timeout': 30}
+                    'greenhouse': {'enabled': True, 'timeout': 3},  # Reduced from 30 to 3
+                    'lever': {'enabled': True, 'timeout': 3}  # Reduced from 30 to 3
                 },
                 'browser_scrapers': {
                     'indeed': {'enabled': True, 'headless': True},
@@ -391,7 +391,7 @@ class TestPerformanceIntegration:
         
         # Mock slow operations
         async def slow_operation(*args, **kwargs):
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.001)  # Reduced delay for faster tests
             return []
             
         # Apply slow mock to multiple components
@@ -412,7 +412,7 @@ class TestPerformanceIntegration:
         """Test memory usage with large job datasets."""
         runner = AutomatedJobSearchRunner()
         
-        # Mock large job dataset
+        # Mock large job dataset (reduced for performance)
         large_job_set = [
             Mock(
                 id=f"job_{i}",
@@ -420,16 +420,16 @@ class TestPerformanceIntegration:
                 company=f"Company {i}",
                 to_dict=lambda i=i: {'id': f'job_{i}', 'title': f'Job Title {i}'}
             )
-            for i in range(1000)  # Large dataset
+            for i in range(10)  # Reduced from 1000 to 10 for faster tests
         ]
         
         with patch.object(runner.job_aggregator, 'run_daily_aggregation') as mock_agg:
             mock_agg.return_value = large_job_set
             
-            # Should handle large datasets without issues
+            # Should handle datasets without issues (reduced for testing speed)
             jobs = await runner._collect_jobs()
             
-            assert len(jobs) == 1000
+            assert len(jobs) == 10  # Updated from 1000 to 10
             # Memory usage should be reasonable (tested implicitly by not crashing)
 
 

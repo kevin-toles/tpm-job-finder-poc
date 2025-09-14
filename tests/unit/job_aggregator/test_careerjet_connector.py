@@ -1,11 +1,15 @@
 """Unit tests for Careerjet connector."""
 
 import pytest
+import os
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime, timedelta
 from tpm_job_finder_poc.job_aggregator.aggregators.careerjet import CareerjetConnector
 
+# Fast mode check
+FAST_MODE = os.getenv('PYTEST_FAST_MODE', '0') == '1'
 
+@pytest.mark.skipif(FAST_MODE, reason="Careerjet tests involve currency conversion and network calls - skipped in fast mode")
 class TestCareerjetConnector:
     """Test suite for CareerjetConnector."""
     
@@ -221,6 +225,7 @@ def mock_careerjet_response():
     }
 
 
+@pytest.mark.skipif(FAST_MODE, reason="Integration tests with network calls - skipped in fast mode")
 class TestCareerjetIntegration:
     """Integration tests for Careerjet connector."""
     

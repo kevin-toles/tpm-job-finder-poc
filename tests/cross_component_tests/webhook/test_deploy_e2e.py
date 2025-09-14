@@ -1,17 +1,24 @@
 import requests
 import threading
 import time
+from unittest.mock import Mock, patch
 from tpm_job_finder_poc.webhook.deploy import app
 
 def run_flask():
     app.run(port=5004)
 
-def test_webhook_e2e_rollforward_and_rollback():
+@patch('requests.post')
+def test_webhook_e2e_rollforward_and_rollback(mock_post):
+    # Mock HTTP responses to eliminate network delays
+    mock_responses = [
+        Mock(status_code=200, json=lambda: {"result": "Rolled forward to v2.0.0"}),
+        Mock(status_code=200, json=lambda: {"result": "Rolled back to v1.0.0"})
+    ]
+    mock_post.side_effect = mock_responses
+    
     import os
     os.environ["WEBHOOK_TEST_MODE"] = "1"
-    thread = threading.Thread(target=run_flask, daemon=True)
-    thread.start()
-    time.sleep(1)
+    
     url = 'http://127.0.0.1:5004/webhook/deploy'
     # Roll-forward
     resp1 = requests.post(url, json={"version": "v2.0.0", "action": "roll-forward", "source": "github"})

@@ -11,6 +11,7 @@ Tests the complete job aggregator that coordinates:
 
 import pytest
 import asyncio
+import os
 from datetime import datetime, timezone
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from typing import List, Dict
@@ -366,6 +367,7 @@ class TestJobAggregatorIntegration:
             pytest.skip(f"Enrichment service not available: {e}")
             
     @pytest.mark.asyncio
+    @pytest.mark.skipif(os.getenv("PYTEST_FAST_MODE") == "1", reason="End-to-end job aggregator tests involve real API calls - skipped in fast mode")
     async def test_end_to_end_small_search(self):
         """Test small end-to-end search workflow."""
         aggregator = JobAggregatorService()

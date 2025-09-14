@@ -10,10 +10,17 @@ Tests the browser-based job scrapers:
 """
 
 import pytest
+import os
 import asyncio
 from datetime import datetime, timezone
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from typing import Dict, List
+
+# Fast mode check
+FAST_MODE = os.getenv('PYTEST_FAST_MODE', '0') == '1'
+
+# Skip all browser scraper tests in fast mode
+pytestmark = pytest.mark.skipif(FAST_MODE, reason="Browser scraper tests use Selenium and are slow - skipped in fast mode")
 
 from tpm_job_finder_poc.scraping_service.scrapers.base_scraper import BaseScraper, BrowserProfile
 from tpm_job_finder_poc.scraping_service.scrapers.indeed.scraper import IndeedScraper

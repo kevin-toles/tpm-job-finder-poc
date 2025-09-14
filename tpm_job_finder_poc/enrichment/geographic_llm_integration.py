@@ -395,16 +395,44 @@ class GeographicLLMIntegrationService:
         
         # Apply cultural modifiers
         try:
-            adapted_prompt = template.base_prompt.format(
-                region=geo_context.region,
-                cultural_context=cultural_context,
-                industry_context=industry_context,
-                economic_context=economic_context,
-                user_profile=json.dumps(user_profile or {}, indent=2),
-                user_question=additional_context.get('user_query', 'General career guidance'),
-                career_patterns='Regional career advancement patterns',
-                **{k: v for k, v in (additional_context or {}).items() if k != 'user_query'}
-            )
+            # Prepare template variables based on template type
+            template_vars = {
+                'region': geo_context.region,
+                'cultural_context': cultural_context,
+                'industry_context': industry_context,
+                'economic_context': economic_context,
+                'user_profile': json.dumps(user_profile or {}, indent=2),
+                'user_question': additional_context.get('user_query', 'General career guidance'),
+                'career_patterns': 'Regional career advancement patterns',
+            }
+            
+            # Add template-specific variables
+            if template.template_id == 'interview_prep':
+                template_vars.update({
+                    'interview_style': 'Culturally appropriate interview approach',
+                    'behavioral_norms': 'Professional and respectful behavior expected',
+                    'communication_style': 'Clear and confident communication',
+                    'evaluation_factors': 'Technical skills, cultural fit, and experience',
+                    'job_category': additional_context.get('role', 'Professional role'),
+                    'company_type': 'Modern professional organization',
+                    'interview_format': additional_context.get('interview_type', 'comprehensive'),
+                })
+            elif template.template_id == 'salary_negotiation':
+                template_vars.update({
+                    'negotiation_culture': 'Regional negotiation customs',
+                    'market_data': 'Current market salary data',
+                    'cultural_norms': 'Local business etiquette',
+                    'legal_context': 'Employment law considerations',
+                    'job_role': additional_context.get('role', 'Professional role'),
+                    'experience': str(user_profile.get('experience', 'mid-level')),
+                    'current_context': 'Career advancement opportunity',
+                })
+            
+            # Add any additional context items
+            template_vars.update({k: v for k, v in (additional_context or {}).items() if k != 'user_query'})
+            
+            adapted_prompt = template.base_prompt.format(**template_vars)
+            
         except KeyError as e:
             # Handle missing template variables by using base prompt
             adapted_prompt = f"""
@@ -442,6 +470,61 @@ class GeographicLLMIntegrationService:
         region_context = f"for the {region} region" if region else ""
         country_context = f" (specifically {country})" if country else ""
         location_context = f"{region_context}{country_context}"
+        
+        # Check if this is an interview-related query
+        prompt_lower = prompt.lower()
+        if any(word in prompt_lower for word in ['interview', 'preparation', 'prepare']):
+            return f"""
+        Based on the cultural and regional context provided, here's my interview preparation analysis and recommendations for {region or 'this region'} {country_context}:
+
+        **Interview Preparation for {region or 'This Region'}:**
+        Preparing for interviews in {country or region or 'this area'} requires understanding of local interview customs and expectations. The {region} region has distinct interview practices that influence success.
+
+        **Cultural Interview Considerations for {region or 'this region'}:**
+        The interview context in {country or region or 'this area'} suggests specific preparation approaches that align with local business practices and cultural expectations.
+
+        **{region}-Specific Interview Preparation:**
+        1. Research interview styles common in {region or 'regional'} companies
+        2. Prepare for cultural questions and behavioral assessments typical in {country or region or 'the region'}
+        3. Practice communication patterns prevalent in {region or 'this market'} professional settings
+        4. Understand evaluation criteria specific to {country or region or 'local'} hiring practices
+
+        **Interview Success Insights for {country or region or 'This Location'}:**
+        The {region} market shows specific interview patterns that candidates should understand. Interview success in {country or region} depends on adapting preparation to local expectations.
+
+        **Implementation Steps:**
+        1. Research {region} interview practices and common questions
+        2. Practice with {country or region} professionals or interview coaches
+        3. Prepare examples that resonate with {region} cultural context
+        4. Understand post-interview etiquette and follow-up expectations
+        """
+        
+        # Check if this is a salary/negotiation-related query
+        elif any(word in prompt_lower for word in ['salary', 'compensation', 'pay', 'negotiate', 'negotiation']):
+            return f"""
+        Based on the cultural and regional context provided, here's my salary negotiation analysis and recommendations for {region or 'this region'} {country_context}:
+
+        **Salary Negotiation for {region or 'This Region'}:**
+        Approaching salary negotiations in {country or region or 'this area'} requires understanding of local negotiation customs and compensation expectations. The {region} region has distinct salary negotiation practices that influence success.
+
+        **Cultural Negotiation Considerations for {region or 'this region'}:**
+        The negotiation context in {country or region or 'this area'} suggests specific approaches that align with local business practices and cultural expectations for salary discussions.
+
+        **{region}-Specific Salary Negotiation:**
+        1. Research salary benchmarks and compensation standards in {region or 'regional'} markets
+        2. Understand negotiation timing and etiquette typical in {country or region or 'the region'}
+        3. Prepare value propositions that resonate with {region or 'this market'} business culture
+        4. Learn about benefits and compensation packages specific to {country or region or 'local'} practices
+
+        **Compensation Success Insights for {country or region or 'This Location'}:**
+        The {region} market shows specific salary negotiation patterns that professionals should understand. Negotiation success in {country or region} depends on adapting approach to local expectations.
+
+        **Implementation Steps:**
+        1. Research {region} salary ranges and compensation practices
+        2. Practice negotiation scenarios with {country or region} cultural context
+        3. Prepare documentation and evidence that aligns with {region} standards
+        4. Understand post-negotiation processes and follow-up expectations
+        """
         
         return f"""
         Based on the cultural and regional context provided, here's my analysis and recommendations for {region or 'this region'} {country_context}:

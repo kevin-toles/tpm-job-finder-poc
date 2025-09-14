@@ -27,7 +27,7 @@ class TestAdvancedAnalyticsE2E:
     
     def setup_method(self):
         """Set up test fixtures."""
-        self.careerjet = CareerjetConnector()
+        self.careerjet = CareerjetConnector(affiliate_id="test_affiliate_id")
         self.geo_classifier = GeographicClassifier()
         self.market_analyzer = MarketTrendAnalyzer()
         self.salary_service = SalaryBenchmarkingService()

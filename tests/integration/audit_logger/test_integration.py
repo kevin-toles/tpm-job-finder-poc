@@ -49,8 +49,7 @@ class TestAuditLoggerIntegration(unittest.TestCase):
 		log_structured(logging.INFO, "Audit event", event_type="USER_LOGIN", user_id=42, timestamp="2025-09-06T12:00:00Z", correlation_id="abc-123", details={"ip": "127.0.0.1"})
 		# Invalid event (missing details)
 		log_structured(logging.INFO, "Audit event", event_type="USER_LOGIN", user_id=42, timestamp="2025-09-06T12:00:00Z", correlation_id="abc-123")
-		import time
-		time.sleep(0.1)
+		# Removed time.sleep(0.1) for faster tests
 		if hasattr(async_logger, "_async_listener"):
 			async_logger._async_listener.stop()
 		stream.seek(0)

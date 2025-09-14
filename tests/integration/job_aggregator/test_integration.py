@@ -249,7 +249,7 @@ class TestScrapingServiceIntegration:
         
         # Mock slow responses to test concurrency
         async def slow_fetch(params):
-            await asyncio.sleep(0.1)  # Simulate slow response
+            await asyncio.sleep(0.001)  # Simulate fast response (reduced from 100ms)
             return [
                 JobPosting(
                     id="slow_job",

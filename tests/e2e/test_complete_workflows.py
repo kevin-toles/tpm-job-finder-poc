@@ -592,7 +592,7 @@ class TestSystemPerformanceE2E:
                 
                 async def fetch_jobs(self, params: FetchParams) -> List[JobPosting]:
                     """Mock fetch with realistic delay."""
-                    await asyncio.sleep(0.1)  # 100ms simulated network delay
+                    await asyncio.sleep(0.001)  # 1ms simulated network delay (reduced from 100ms)
                     job = JobPosting(
                         id=f"job_{self.source_id}_1",
                         source=f"source_{self.source_id}",

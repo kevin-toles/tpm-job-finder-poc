@@ -1,11 +1,15 @@
 """Integration tests for Careerjet integration with job aggregation service."""
 
 import pytest
+import os
 from unittest.mock import Mock, patch, AsyncMock
 from datetime import datetime, timedelta
 from tpm_job_finder_poc.job_aggregator.services.job_aggregation_service import JobAggregationService
 
+# Fast mode check
+FAST_MODE = os.getenv('PYTEST_FAST_MODE', '0') == '1'
 
+@pytest.mark.skipif(FAST_MODE, reason="Careerjet integration tests make network calls - skipped in fast mode")
 class TestCareerjetIntegration:
     """Integration tests for Careerjet with job aggregation service."""
     
@@ -185,6 +189,7 @@ class TestCareerjetIntegration:
         assert careerjet_connector.locales == expected_defaults
 
 
+@pytest.mark.skipif(FAST_MODE, reason="Geographic Excel export integration tests - skipped in fast mode")
 class TestGeographicExcelExportIntegration:
     """Integration tests for geographic Excel export with Careerjet jobs."""
     
@@ -296,6 +301,7 @@ class TestGeographicExcelExportIntegration:
 
 
 @pytest.mark.integration
+@pytest.mark.skipif(FAST_MODE, reason="End-to-end Careerjet workflow tests - skipped in fast mode")
 class TestCareerjetEndToEndWorkflow:
     """End-to-end integration tests for Careerjet workflow."""
     
