@@ -100,6 +100,7 @@ pytestmark = pytest.mark.skipif(
 - **Executed**: 334 passed, 106 skipped 
 - **Execution Time**: 6.46 seconds
 - **Success Rate**: 100% (334/334 executed tests pass)
+- **Enrichment Tests**: 149 consolidated tests in fast mode
 
 #### **Excluded Tests Performance** ⚠️
 - **Network/Browser Tests**: 73 tests, **61.98 seconds**, 68 passed, 5 failed

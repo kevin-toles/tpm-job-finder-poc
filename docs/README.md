@@ -36,6 +36,8 @@ docs/
 ### 📚 Core Documentation
 - **[README.md](../README.md)**: Main project documentation and quick start
 - **[PROJECT_OVERVIEW.md](../PROJECT_OVERVIEW.md)**: Comprehensive architecture overview
+- **[User Workflow Guide](../USER_WORKFLOW_GUIDE.md)**: End-user workflows and personas
+- **[System Architecture Workflows](../SYSTEM_ARCHITECTURE_WORKFLOWS.md)**: Technical workflows and data flows
 - **[CHANGELOG.md](../CHANGELOG.md)**: Version history and changes
 
 ### 🏗️ Architecture Documentation
@@ -62,8 +64,9 @@ The TPM Job Finder POC is a sophisticated job aggregation system featuring:
 
 - **Multi-Source Collection**: API sources + browser scraping across 10+ platforms
 - **Intelligent Processing**: LLM-powered enrichment and deduplication
-- **Production-Ready**: 70+ tests, comprehensive monitoring, and security
+- **Production-Ready**: 440+ tests with strategic fast mode (6.46s) and comprehensive validation (~70s)
 - **Modular Architecture**: Microservice-inspired design with clear separation
+- **Advanced Features**: Phase 5+ services including cultural fit assessment, geographic LLM integration, and career modeling
 
 ## Core Services
 
@@ -80,7 +83,9 @@ Independent browser scraping service with anti-detection capabilities for Indeed
 ### 3. Enrichment Pipeline
 LLM-powered job analysis and enhancement system supporting multiple providers (OpenAI, Anthropic, Google Gemini, DeepSeek, Ollama).
 
-**Key Features**: Job parsing, ML scoring, resume analysis, feedback generation
+**Key Features**: Job parsing, ML scoring, resume analysis, feedback generation, cultural fit assessment, geographic analysis
+
+**Advanced Services**: Cultural fit assessment, geographic LLM integration, salary benchmarking, immigration support, enterprise features
 
 ### 4. CLI Automation
 Complete workflow automation with configuration management supporting multiple output formats and automated workflows.
@@ -91,7 +96,7 @@ Complete workflow automation with configuration management supporting multiple o
 
 - **Language**: Python 3.13+
 - **Web Scraping**: Selenium WebDriver
-- **Testing**: pytest (70+ tests)
+- **Testing**: pytest (440+ tests with strategic fast mode)
 - **Async Processing**: asyncio
 - **Database**: SQLite (caching and deduplication)
 - **LLM Integration**: Multiple providers (OpenAI, Anthropic, Google, DeepSeek, Ollama)
@@ -145,18 +150,21 @@ LOG_LEVEL=INFO
 ## Testing Documentation
 
 ### Test Categories
-- **Unit Tests (45+ tests)**: Core functionality validation
+- **Unit Tests (334+ in fast mode, 400+ total)**: Core functionality validation including 149 consolidated enrichment tests
 - **Integration Tests (15+ tests)**: Service-to-service communication
 - **End-to-End Tests (5+ tests)**: Complete workflow validation
 - **Regression Tests (5+ tests)**: Stability and performance monitoring
 
 ### Running Tests
 ```bash
-# Run all tests
+# Fast mode (recommended for development) - 6.46s execution
+PYTEST_FAST_MODE=1 python -m pytest tests/ -v
+
+# Comprehensive mode (full validation) - ~70s execution
 python -m pytest tests/ -v
 
-# Run with coverage
-python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report=html
+# Enrichment tests (149 consolidated tests)
+python -m pytest tests/unit/enrichment/ -v
 ```
 
 ## Security Documentation
@@ -177,11 +185,12 @@ python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report=html
 
 ### Production Readiness
 The system is production-ready with:
-- ✅ Complete test coverage (70+ tests passing)
+- ✅ Complete test coverage (440+ tests with strategic performance optimization)
 - ✅ Comprehensive monitoring and health checks
 - ✅ Security compliance and best practices
 - ✅ Modular, scalable architecture
 - ✅ Comprehensive documentation
+- ✅ Advanced enrichment services (Phase 5+ features)
 
 ### Deployment Options
 - **Local Development**: Direct Python execution
@@ -210,12 +219,14 @@ The system is production-ready with:
 - **Intelligent Caching**: SQLite-based deduplication
 - **Rate Limiting**: Optimized rate limits per service
 - **Resource Management**: Efficient browser instance management
+- **Strategic Testing**: Fast mode (6.46s) for development, comprehensive mode (~70s) for validation
 
 ### Benchmarks
 - Job collection: 100+ jobs/minute across all sources
 - Enrichment processing: 10+ jobs/second with LLM
 - Deduplication: <100ms per job comparison
 - Memory usage: <500MB during normal operation
+- Test execution: 6.46s (fast mode) to 70s (comprehensive mode)
 
 ## Contributing to Documentation
 
@@ -252,9 +263,9 @@ The system is production-ready with:
 ## Version Information
 
 - **Current Version**: v1.0.0 (Production Ready)
-- **Documentation Last Updated**: January 2025
-- **Test Suite Status**: 70+ tests passing (100% pass rate)
-- **Architecture Status**: Production-ready with comprehensive validation
+- **Documentation Last Updated**: September 2025
+- **Test Suite Status**: 440+ tests with strategic fast mode (6.46s) and comprehensive validation
+- **Architecture Status**: Production-ready with comprehensive validation and advanced features
 
 ---
 

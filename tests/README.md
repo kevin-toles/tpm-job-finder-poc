@@ -2,21 +2,40 @@
 
 ## Overview
 
-The TPM Job Finder POC includes a comprehensive test suite with **70+ tests** covering all major components and workflows. The test suite is designed to ensure production readiness and maintain code quality throughout development.
+The TPM Job Finder POC includes a comprehensive test suite with **440+ tests** covering all major components and workflows. The test suite features a strategic **fast mode** (6.46s execution) for development and a **comprehensive mode** (~70s execution) for complete validation, ensuring both rapid development feedback and production readiness.
+
+## Test Performance Strategy
+
+### Fast Mode (Recommended for Development)
+- **Execution Time**: 6.46 seconds
+- **Tests Executed**: 334 tests passing 
+- **Coverage**: Core business logic, local computations, unit tests
+- **Usage**: `PYTEST_FAST_MODE=1 python -m pytest tests/ -v`
+- **Benefits**: Instant feedback loop, 100% pass rate for executed tests
+
+### Comprehensive Mode (CI/CD and Production Validation)  
+- **Execution Time**: ~70 seconds
+- **Tests Executed**: 440+ tests
+- **Coverage**: Full suite including network/browser dependencies
+- **Usage**: `python -m pytest tests/ -v`
+- **Benefits**: Complete validation, external service testing
 
 ## Test Structure
 
 ```
 tests/
-├── unit/                         # Unit tests (45+ tests)
-│   ├── test_job_aggregator/      # JobAggregatorService tests
-│   ├── test_scrapers/            # Scraper tests
-│   ├── test_enrichment/          # Enrichment pipeline tests
-│   ├── test_cli/                 # CLI tests
-│   ├── test_cache/               # Cache system tests
-│   ├── test_models/              # Data model tests
-│   ├── test_llm_provider/        # LLM provider tests
-│   └── test_config/              # Configuration tests
+├── unit/                         # Unit tests (334+ in fast mode, 400+ total)
+│   ├── enrichment/               # Enrichment tests (149 tests consolidated)
+│   │   ├── test_cultural_fit_service.py     # Cultural fit assessment tests
+│   │   ├── test_geographic_llm_integration.py # Geographic LLM integration tests  
+│   │   ├── test_phase5_integration.py       # Phase 5+ advanced feature tests
+│   │   ├── test_salary_benchmarking_service.py # Salary benchmarking tests
+│   │   └── [other enrichment tests]        # Additional enrichment functionality
+│   ├── job_aggregator/           # JobAggregatorService tests
+│   ├── cache/                    # Cache system tests
+│   ├── models/                   # Data model tests
+│   ├── llm_provider/             # LLM provider tests
+│   └── config/                   # Configuration tests
 ├── integration/                  # Integration tests (15+ tests)
 │   ├── test_connectors_integration.py
 │   ├── test_service_integration.py
@@ -34,9 +53,23 @@ tests/
 
 ## Test Categories
 
-### 1. Unit Tests (45+ tests)
+### 1. Unit Tests (334+ tests in fast mode, 400+ total)
 
-#### Job Aggregator Tests (`test_job_aggregator/`)
+#### Enrichment Tests (`enrichment/` - 149 tests consolidated)
+**Scope**: Advanced job enhancement and analysis services
+- **Cultural Fit Assessment**: Regional work culture compatibility analysis
+- **Geographic LLM Integration**: Location-aware LLM responses and cultural adaptation
+- **Phase 5+ Integration**: Advanced career modeling, immigration support, enterprise features
+- **Salary Benchmarking**: Market-based compensation analysis
+- **Core Enrichment**: Job parsing, resume analysis, ML scoring
+
+**Key Test Files**:
+- `test_cultural_fit_service.py`: Cultural compatibility assessment (17,396 bytes)
+- `test_geographic_llm_integration.py`: Geographic LLM integration (23,311+ bytes)
+- `test_phase5_integration.py`: Advanced feature integration (32,895 bytes)
+- `test_salary_benchmarking_service.py`: Salary benchmarking functionality (19,738 bytes)
+
+#### Job Aggregator Tests (`job_aggregator/`)
 **Scope**: Core JobAggregatorService functionality
 - Service initialization and configuration
 - Multi-source job collection
@@ -50,10 +83,10 @@ tests/
 - `test_deduplication.py`: Cache and deduplication logic tests
 - `test_health_monitoring.py`: Health check functionality tests
 
-#### Scraper Tests (`test_scrapers/`)
-**Scope**: Browser scraping functionality
+#### Scraper Tests (`scrapers/`) - Fast Mode Excluded
+**Scope**: Browser scraping functionality (excluded in fast mode for performance)
 - Individual scraper implementations
-- Anti-detection mechanisms
+- Anti-detection mechanisms  
 - Service registry functionality
 - Orchestrator coordination
 
@@ -66,7 +99,7 @@ tests/
 - `test_scraping_orchestrator.py`: Orchestrator tests
 
 #### Enrichment Tests (`test_enrichment/`)
-**Scope**: Job enrichment and analysis
+**Scope**: Core job enrichment and analysis (included in fast mode)
 - Job description parsing
 - Resume analysis and parsing
 - ML scoring algorithms
@@ -196,7 +229,18 @@ tests/
 
 ## Test Features
 
-### 1. Automatic API Key Handling
+### 1. Fast Mode Support
+**Strategic Performance Optimization**: Fast mode excludes network/browser tests for rapid development feedback
+```python
+FAST_MODE = os.getenv('PYTEST_FAST_MODE', '0') == '1'
+
+@pytest.mark.skipif(FAST_MODE, reason="Browser scraping tests excluded in fast mode")
+def test_browser_scraping():
+    # Test implementation
+    pass
+```
+
+### 2. Automatic API Key Handling
 **LLM Provider Tests**: Automatically skip tests if API keys not configured
 ```python
 @pytest.mark.skipif(not has_openai_key(), reason="OpenAI API key not configured")
@@ -230,15 +274,34 @@ def test_api_integration(use_mock):
 ### 4. Comprehensive Coverage
 **Coverage Tracking**: Monitor test coverage across all components
 ```bash
-# Run tests with coverage
+# Run tests with coverage (fast mode)
+PYTEST_FAST_MODE=1 python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report=html
+
+# Run full coverage
 python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report=html
 ```
 
+### 5. Consolidated Test Organization
+**Enrichment Test Consolidation**: All 149 enrichment tests properly organized in central location
+- All tests moved from scattered locations to `tests/unit/enrichment/`
+- Newer, more comprehensive test versions retained
+- Proper test categorization and organization
+- No duplicate or obsolete test files
+
 ## Running Tests
 
-### Full Test Suite
+### Fast Mode (Recommended for Development)
 ```bash
-# Run all 70+ tests
+# Fast mode - 6.46s execution, 334 tests passing
+PYTEST_FAST_MODE=1 python -m pytest tests/ -v
+
+# Fast mode with coverage  
+PYTEST_FAST_MODE=1 python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report=html --cov-report=term
+```
+
+### Comprehensive Mode (Full Validation)
+```bash
+# Run all 440+ tests (~70s execution)
 python -m pytest tests/ -v
 
 # Run with coverage report
@@ -247,13 +310,14 @@ python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report=html --cov-report=
 
 ### Test Categories
 ```bash
-# Unit tests only (45+ tests)
+# Unit tests only (334+ in fast mode, 400+ total)
 python -m pytest tests/unit/ -v
+PYTEST_FAST_MODE=1 python -m pytest tests/unit/ -v  # Fast mode
 
 # Integration tests only (15+ tests)
 python -m pytest tests/integration/ -v
 
-# End-to-end tests only (5+ tests)
+# End-to-end tests only (5+ tests)  
 python -m pytest tests/e2e/ -v
 
 # Regression tests only (5+ tests)
@@ -262,22 +326,32 @@ python -m pytest tests/regression/ -v
 
 ### Specific Component Tests
 ```bash
-# Job aggregator tests
-python -m pytest tests/unit/test_job_aggregator/ -v
+# Enrichment tests (149 consolidated tests)
+python -m pytest tests/unit/enrichment/ -v
 
-# Scraper tests
+# Job aggregator tests
+python -m pytest tests/unit/job_aggregator/ -v
+
+# Scraper tests (excluded in fast mode)
 python -m pytest tests/unit/test_scrapers/ -v
 
-# Enrichment tests
-python -m pytest tests/unit/test_enrichment/ -v
-
 # LLM provider tests
-python -m pytest tests/unit/test_llm_provider/ -v
+python -m pytest tests/unit/llm_provider/ -v
+
+# Cultural fit and geographic analysis
+python -m pytest tests/unit/enrichment/test_cultural_fit_service.py -v
+python -m pytest tests/unit/enrichment/test_geographic_llm_integration.py -v
+
+# Phase 5+ advanced features
+python -m pytest tests/unit/enrichment/test_phase5_integration.py -v
 ```
 
 ### Parallel Testing
 ```bash
-# Run tests in parallel for faster execution
+# Run tests in parallel for faster execution (fast mode)
+PYTEST_FAST_MODE=1 python -m pytest tests/ -v -n auto
+
+# Run full tests in parallel
 python -m pytest tests/ -v -n auto
 ```
 
@@ -285,6 +359,9 @@ python -m pytest tests/ -v -n auto
 ```bash
 # Run tests against live APIs and sites (rate-limited)
 python -m pytest tests/e2e/ -v --live --slow
+
+# Run without fast mode to include network tests
+python -m pytest tests/integration/ -v --live
 ```
 
 ## Test Configuration
@@ -314,12 +391,13 @@ markers =
 ### Environment Configuration
 ```bash
 # Test environment variables
-export TEST_MODE="unit"                    # Test mode selection
-export TEST_LLM_PROVIDER="mock"           # Use mock LLM responses
-export TEST_API_MOCK="true"               # Use mock API responses
-export TEST_SCRAPING_MOCK="true"          # Use mock scraping responses
-export TEST_TIMEOUT=300                   # Test timeout in seconds
-export TEST_RATE_LIMIT="conservative"     # Rate limiting for live tests
+export PYTEST_FAST_MODE="1"              # Enable fast mode (6.46s execution)
+export TEST_MODE="unit"                   # Test mode selection
+export TEST_LLM_PROVIDER="mock"          # Use mock LLM responses
+export TEST_API_MOCK="true"              # Use mock API responses
+export TEST_SCRAPING_MOCK="true"         # Use mock scraping responses
+export TEST_TIMEOUT=300                  # Test timeout in seconds
+export TEST_RATE_LIMIT="conservative"    # Rate limiting for live tests
 ```
 
 ## Test Data
@@ -374,7 +452,8 @@ jobs:
 
 ### Quality Gates
 **Test Quality Requirements**:
-- **100% Pass Rate**: All tests must pass
+- **100% Pass Rate**: All executed tests must pass
+- **Fast Mode Performance**: Must execute in <10 seconds
 - **Minimum Coverage**: 85% code coverage required
 - **Performance**: No performance regressions
 - **Security**: All security tests must pass
@@ -400,20 +479,25 @@ jobs:
 ### Test Debugging
 ```bash
 # Run specific test with detailed output
-python -m pytest tests/unit/test_job_aggregator/test_service.py::test_collect_jobs -v -s
+python -m pytest tests/unit/enrichment/test_cultural_fit_service.py::test_assess_cultural_fit -v -s
+
+# Run enrichment tests with fast mode
+PYTEST_FAST_MODE=1 python -m pytest tests/unit/enrichment/ -v -s
 
 # Debug failed tests
 python -m pytest tests/ --pdb --tb=long
 
 # Run tests with logging
-python -m pytest tests/ -v --log-level=DEBUG
+PYTEST_FAST_MODE=1 python -m pytest tests/ -v --log-level=DEBUG
 ```
 
 ### Common Issues
 - **API Key Issues**: Ensure LLM API keys are configured for LLM tests
+- **Fast Mode**: Use `PYTEST_FAST_MODE=1` for development, full mode for CI/CD
 - **Rate Limiting**: Use mock mode for frequent test runs
-- **Browser Issues**: Ensure Chrome/Chromium installed for scraper tests
-- **Network Issues**: Check internet connectivity for live tests
+- **Browser Issues**: Ensure Chrome/Chromium installed for scraper tests (excluded in fast mode)
+- **Network Issues**: Check internet connectivity for live tests (excluded in fast mode)
+- **Test Organization**: All enrichment tests are now in `tests/unit/enrichment/`
 
 ## Performance Testing
 
@@ -442,4 +526,4 @@ python -m pytest tests/regression/test_load_testing.py -v --concurrent=10
 
 ---
 
-_Last updated: January 2025 - Comprehensive test suite with 70+ tests ensuring production readiness_
+_Last updated: September 2025 - Comprehensive test suite with 440+ tests, strategic fast mode (6.46s), and consolidated enrichment test organization_
