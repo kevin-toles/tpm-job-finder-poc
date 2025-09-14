@@ -10,6 +10,7 @@ import pytest
 from unittest.mock import Mock, patch
 from datetime import datetime
 import json
+import os
 
 from tpm_job_finder_poc.enrichment.salary_benchmarking_service import (
     SalaryBenchmarkingService,
@@ -34,6 +35,9 @@ class TestSalaryBenchmarkingService:
     
     def setup_method(self):
         """Set up test fixtures."""
+        # Set TEST_MODE to avoid network calls in currency conversion
+        os.environ['TEST_MODE'] = '1'
+        
         self.service = SalaryBenchmarkingService()
         
         # Sample data for testing
@@ -44,6 +48,12 @@ class TestSalaryBenchmarkingService:
             'experience_level': 'senior',
             'salary_range': '$120,000 - $150,000'
         }
+    
+    def teardown_method(self):
+        """Clean up test fixtures."""
+        # Remove TEST_MODE environment variable
+        if 'TEST_MODE' in os.environ:
+            del os.environ['TEST_MODE']
     
     def test_service_initialization(self):
         """Test service initializes correctly."""

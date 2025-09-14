@@ -1,32 +1,24 @@
 """
-Unit tests for Geographic LLM Integration Service.
+Tests for Geographic LLM Integration Service.
 
-This module provides comprehensive unit tests for the geographic-aware LLM integration
-functionality including context building, prompt adaptation, and response enhancement.
+This module provides comprehensive tests for the geographic LLM integration
+functionality including context building, prompt adaptation, and enhanced
+response generation.
 """
 
 import pytest
+import asyncio
 from unittest.mock import Mock, patch, AsyncMock
 from datetime import datetime
 import json
-import asyncio
 
 from tpm_job_finder_poc.enrichment.geographic_llm_integration import (
     GeographicLLMIntegrationService,
     GeographicContext,
     LLMPromptTemplate,
+    EnhancedLLMResponse,
     ContextType,
     geographic_llm_service
-)
-
-# Check if advanced LLM integration API is available
-def has_advanced_llm_api():
-    service = GeographicLLMIntegrationService()
-    return hasattr(service, 'build_geographic_context') and hasattr(service, 'supported_regions')
-
-pytestmark = pytest.mark.skipif(
-    not has_advanced_llm_api(),
-    reason="Advanced geographic LLM integration API not fully implemented"
 )
 
 
@@ -37,457 +29,529 @@ class TestGeographicLLMIntegrationService:
         """Set up test fixtures."""
         self.service = GeographicLLMIntegrationService()
         
-        # Sample data for testing
-        self.sample_geographic_context = {
-            'region': 'North America',
-            'country': 'United States',
-            'city': 'San Francisco',
-            'cultural_dimensions': {
-                'individualism': 0.8,
-                'power_distance': 0.3,
-                'uncertainty_avoidance': 0.4,
-                'long_term_orientation': 0.6
-            },
-            'economic_indicators': {
-                'gdp_per_capita': 65000,
-                'unemployment_rate': 3.5,
-                'inflation_rate': 2.1,
-                'cost_of_living_index': 180
-            },
-            'language_context': {
-                'primary_language': 'English',
-                'business_language': 'English'
-            },
-            'time_zone': 'PST',
-            'currency': 'USD'
+        # Sample user profile for testing
+        self.sample_user_profile = {
+            'name': 'Test User',
+            'experience_level': 'senior',
+            'skills': ['Python', 'Data Science', 'Machine Learning'],
+            'industry': 'technology',
+            'communication_style': 'direct',
+            'career_goals': 'leadership_role'
         }
         
-        self.sample_job_context = {
-            'job_title': 'Senior Data Scientist',
-            'company_type': 'technology',
+        # Sample additional context
+        self.sample_additional_context = {
+            'job_role': 'Senior Data Scientist',
             'company_size': 'large',
-            'industry': 'software',
-            'remote_policy': 'hybrid'
+            'industry_focus': 'fintech'
         }
     
     def test_service_initialization(self):
         """Test service initializes correctly."""
         assert self.service is not None
-        assert len(self.service.supported_regions) > 0
         assert len(self.service.prompt_templates) > 0
         assert len(self.service.cultural_adaptations) > 0
-        assert self.service.llm_providers is not None
+        assert len(self.service.regional_expertise_areas) > 0
+        assert len(self.service.cultural_frameworks) > 0
+        assert len(self.service.regional_llm_configs) > 0
     
-    def test_build_geographic_context(self):
-        """Test building geographic context."""
-        context = self.service.build_geographic_context(
-            region='North America',
-            country='United States',
-            city='San Francisco'
-        )
+    def test_cultural_frameworks_structure(self):
+        """Test cultural frameworks are properly structured."""
+        for framework_name, framework in self.service.cultural_frameworks.items():
+            assert 'dimensions' in framework
+            assert 'scale' in framework
+            assert isinstance(framework['dimensions'], list)
+            assert isinstance(framework['scale'], tuple)
+            assert len(framework['scale']) == 2
+    
+    def test_regional_llm_configs_completeness(self):
+        """Test regional LLM configurations are complete."""
+        required_keys = ['communication_style', 'decision_factors', 'cultural_sensitivity', 'business_focus']
+        
+        for region, config in self.service.regional_llm_configs.items():
+            for key in required_keys:
+                assert key in config
+                assert config[key] is not None
+    
+    def test_prompt_templates_structure(self):
+        """Test prompt templates are properly structured."""
+        for template_id, template in self.service.prompt_templates.items():
+            assert isinstance(template, LLMPromptTemplate)
+            assert template.template_id == template_id
+            assert template.category is not None
+            assert template.base_prompt is not None
+            assert isinstance(template.cultural_modifiers, dict)
+            assert isinstance(template.region_specific_context, dict)
+            assert isinstance(template.examples, list)
+    
+    @pytest.mark.asyncio
+    async def test_build_geographic_context(self):
+        """Test geographic context building."""
+        context = await self.service._build_geographic_context('North America', ContextType.CULTURAL)
         
         assert isinstance(context, GeographicContext)
         assert context.region == 'North America'
-        assert context.country == 'United States'
-        assert context.city == 'San Francisco'
-        assert context.cultural_dimensions is not None
-        assert context.economic_indicators is not None
-        assert context.currency is not None
+        assert context.country is not None
+        assert isinstance(context.cultural_dimensions, dict)
+        assert isinstance(context.economic_indicators, dict)
+        assert isinstance(context.legal_framework, dict)
+        assert isinstance(context.industry_landscape, dict)
+        assert isinstance(context.language_context, dict)
         assert context.time_zone is not None
-    
-    def test_enhance_job_search_prompt(self):
-        """Test job search prompt enhancement with geographic context."""
-        base_prompt = "Find data scientist jobs in technology companies"
-        
-        enhanced_prompt = self.service.enhance_job_search_prompt(
-            base_prompt=base_prompt,
-            geographic_context=self.sample_geographic_context,
-            user_preferences={'salary_range': '$120k-$160k', 'remote_ok': True}
-        )
-        
-        assert isinstance(enhanced_prompt, str)
-        assert len(enhanced_prompt) > len(base_prompt)
-        assert 'North America' in enhanced_prompt or 'United States' in enhanced_prompt
-        assert '$120k-$160k' in enhanced_prompt or '120' in enhanced_prompt
-    
-    def test_generate_career_advice_with_context(self):
-        """Test career advice generation with geographic context."""
-        advice_request = {
-            'career_stage': 'mid-career',
-            'current_role': 'Data Scientist',
-            'target_role': 'Senior Data Scientist',
-            'concerns': ['salary negotiation', 'skill development']
-        }
-        
-        advice = self.service.generate_career_advice(
-            request=advice_request,
-            geographic_context=self.sample_geographic_context,
-            job_context=self.sample_job_context
-        )
-        
-        assert isinstance(advice, dict)
-        assert 'advice_text' in advice
-        assert 'cultural_considerations' in advice
-        assert 'region_specific_tips' in advice
-        assert 'next_steps' in advice
-        
-        # Should contain region-specific information
-        advice_text = advice['advice_text']
-        assert isinstance(advice_text, str)
-        assert len(advice_text) > 50  # Should be substantive
-    
-    def test_adapt_prompt_for_culture(self):
-        """Test prompt adaptation for different cultures."""
-        base_prompt = "How should I negotiate salary?"
-        
-        # Test adaptation for different cultural contexts
-        cultural_contexts = [
-            {'region': 'East Asia', 'country': 'Japan'},
-            {'region': 'Western Europe', 'country': 'Germany'},
-            {'region': 'Southeast Asia', 'country': 'Singapore'},
-            {'region': 'Latin America', 'country': 'Mexico'}
-        ]
-        
-        for context in cultural_contexts:
-            adapted_prompt = self.service.adapt_prompt_for_culture(
-                base_prompt=base_prompt,
-                cultural_context=context
-            )
-            
-            assert isinstance(adapted_prompt, str)
-            assert len(adapted_prompt) >= len(base_prompt)
-            # Should include cultural context
-            assert context['region'] in adapted_prompt or context['country'] in adapted_prompt
-    
-    def test_generate_location_specific_insights(self):
-        """Test generation of location-specific insights."""
-        insights = self.service.generate_location_insights(
-            location='San Francisco, CA',
-            job_category='technology',
-            user_profile={'experience_level': 'senior', 'skills': ['Python', 'ML']}
-        )
-        
-        assert isinstance(insights, dict)
-        assert 'market_overview' in insights
-        assert 'salary_insights' in insights
-        assert 'cultural_notes' in insights
-        assert 'networking_tips' in insights
-        assert 'cost_of_living' in insights
-        
-        # Should have substantive content
-        assert len(insights['market_overview']) > 50
-        assert isinstance(insights['salary_insights'], dict)
+        assert context.currency is not None
     
     @pytest.mark.asyncio
-    async def test_async_llm_integration(self):
-        """Test asynchronous LLM integration."""
-        prompt = "What are the best tech companies to work for in this region?"
+    async def test_build_geographic_context_caching(self):
+        """Test geographic context caching."""
+        # First call
+        context1 = await self.service._build_geographic_context('Western Europe', ContextType.ECONOMIC)
         
-        response = await self.service.get_async_llm_response(
-            prompt=prompt,
-            geographic_context=self.sample_geographic_context,
-            context_type=ContextType.INDUSTRY
+        # Second call should use cache
+        context2 = await self.service._build_geographic_context('Western Europe', ContextType.ECONOMIC)
+        
+        assert context1 is context2  # Same object from cache
+    
+    def test_select_prompt_template(self):
+        """Test prompt template selection."""
+        # Salary-related query
+        template = self.service._select_prompt_template(
+            "How should I negotiate my salary in Japan?", 
+            ContextType.CULTURAL
+        )
+        assert template.template_id == 'salary_negotiation'
+        
+        # Interview-related query
+        template = self.service._select_prompt_template(
+            "How do I prepare for interviews in Germany?", 
+            ContextType.CULTURAL
+        )
+        assert template.template_id == 'interview_prep'
+        
+        # General career query
+        template = self.service._select_prompt_template(
+            "What are the best career opportunities in Singapore?", 
+            ContextType.CAREER
+        )
+        assert template.template_id == 'career_advice'
+    
+    @pytest.mark.asyncio
+    async def test_adapt_prompt_for_culture(self):
+        """Test prompt adaptation for cultural context."""
+        # Build context
+        geo_context = await self.service._build_geographic_context('East Asia', ContextType.CULTURAL)
+        
+        # Get template
+        template = self.service.prompt_templates['career_advice']
+        
+        # Adapt prompt
+        adapted_prompt = self.service._adapt_prompt_for_culture(
+            template, geo_context, self.sample_user_profile, self.sample_additional_context
         )
         
-        assert isinstance(response, dict)
-        assert 'response_text' in response
-        assert 'confidence_score' in response
-        assert 'context_used' in response
-        
-        # Confidence score should be reasonable
-        assert 0 <= response['confidence_score'] <= 1
+        assert isinstance(adapted_prompt, str)
+        assert 'East Asia' in adapted_prompt
+        assert 'cultural_context' in adapted_prompt or 'East Asia' in adapted_prompt
+        assert len(adapted_prompt) > len(template.base_prompt)
     
-    def test_context_aware_company_analysis(self):
-        """Test company analysis with geographic context."""
-        company_info = {
-            'name': 'TechCorp',
-            'location': 'San Francisco, CA',
-            'industry': 'software',
-            'size': '1000-5000 employees'
-        }
+    @pytest.mark.asyncio
+    async def test_generate_base_llm_response(self):
+        """Test base LLM response generation."""
+        prompt = "Test prompt for career advice"
+        response = await self.service._generate_base_llm_response(prompt)
         
-        analysis = self.service.analyze_company_with_context(
-            company_info=company_info,
-            geographic_context=self.sample_geographic_context,
-            user_perspective={'values': ['innovation', 'work-life-balance']}
-        )
-        
-        assert isinstance(analysis, dict)
-        assert 'company_fit_score' in analysis
-        assert 'cultural_alignment' in analysis
-        assert 'growth_prospects' in analysis
-        assert 'regional_reputation' in analysis
-        
-        # Fit score should be numeric
-        assert isinstance(analysis['company_fit_score'], (int, float))
-        assert 0 <= analysis['company_fit_score'] <= 100
-    
-    def test_multi_language_support(self):
-        """Test multi-language prompt support."""
-        base_prompt = "What skills are most important for this role?"
-        
-        languages_to_test = ['English', 'Spanish', 'French', 'German', 'Japanese']
-        
-        for language in languages_to_test:
-            adapted_prompt = self.service.adapt_prompt_for_language(
-                base_prompt=base_prompt,
-                target_language=language,
-                cultural_context={'region': 'North America'}
-            )
-            
-            assert isinstance(adapted_prompt, str)
-            assert len(adapted_prompt) > 0
-            # For non-English, should include language indicator
-            if language != 'English':
-                assert language.lower() in adapted_prompt.lower() or 'translate' in adapted_prompt.lower()
-    
-    def test_regional_job_market_analysis(self):
-        """Test regional job market analysis."""
-        analysis = self.service.analyze_regional_job_market(
-            region='North America',
-            job_category='data_science',
-            time_horizon='next_6_months'
-        )
-        
-        assert isinstance(analysis, dict)
-        assert 'market_trends' in analysis
-        assert 'demand_forecast' in analysis
-        assert 'skill_requirements' in analysis
-        assert 'salary_trends' in analysis
-        assert 'key_employers' in analysis
-        
-        # Should have trend data
-        trends = analysis['market_trends']
-        assert isinstance(trends, list)
-        assert len(trends) > 0
-    
-    def test_personalized_networking_advice(self):
-        """Test personalized networking advice with geographic context."""
-        user_profile = {
-            'career_level': 'mid-career',
-            'industry': 'technology',
-            'personality_type': 'introverted',
-            'networking_experience': 'limited'
-        }
-        
-        advice = self.service.generate_networking_advice(
-            user_profile=user_profile,
-            geographic_context=self.sample_geographic_context,
-            goals=['find_new_job', 'expand_skillset']
-        )
-        
-        assert isinstance(advice, dict)
-        assert 'strategies' in advice
-        assert 'local_events' in advice
-        assert 'online_platforms' in advice
-        assert 'conversation_starters' in advice
-        
-        # Should have actionable strategies
-        strategies = advice['strategies']
-        assert isinstance(strategies, list)
-        assert len(strategies) > 0
-    
-    def test_cultural_interview_preparation(self):
-        """Test cultural interview preparation guidance."""
-        interview_context = {
-            'company_culture': 'corporate',
-            'interview_type': 'technical',
-            'interviewers': ['hiring_manager', 'technical_lead'],
-            'format': 'in_person'
-        }
-        
-        preparation = self.service.generate_interview_preparation(
-            interview_context=interview_context,
-            geographic_context=self.sample_geographic_context,
-            user_background={'experience': 'senior', 'cultural_background': 'international'}
-        )
-        
-        assert isinstance(preparation, dict)
-        assert 'cultural_expectations' in preparation
-        assert 'communication_style' in preparation
-        assert 'dress_code' in preparation
-        assert 'question_examples' in preparation
-        assert 'follow_up_protocol' in preparation
-    
-    def test_error_handling_invalid_context(self):
-        """Test error handling with invalid geographic context."""
-        # Test with None context
-        response = self.service.enhance_job_search_prompt(
-            base_prompt="Find jobs",
-            geographic_context=None
-        )
         assert isinstance(response, str)
         assert len(response) > 0
-        
-        # Test with empty context
-        response = self.service.enhance_job_search_prompt(
-            base_prompt="Find jobs",
-            geographic_context={}
-        )
-        assert isinstance(response, str)
+        assert 'Cultural Considerations' in response or 'recommendations' in response.lower()
     
-    def test_context_caching_and_retrieval(self):
-        """Test context caching and retrieval."""
-        location = "San Francisco, CA"
+    @pytest.mark.asyncio
+    async def test_enhance_with_geographic_intelligence(self):
+        """Test enhancement with geographic intelligence."""
+        base_response = "Sample career advice response"
+        geo_context = await self.service._build_geographic_context('North America', ContextType.CAREER)
         
-        # First call should build context
-        context1 = self.service.get_cached_context(location)
-        
-        # Second call should retrieve from cache
-        context2 = self.service.get_cached_context(location)
-        
-        # Should be equivalent (though may not be identical objects)
-        assert context1 is not None
-        assert context2 is not None
-        
-        if hasattr(context1, 'region') and hasattr(context2, 'region'):
-            assert context1.region == context2.region
-    
-    def test_prompt_template_management(self):
-        """Test prompt template management."""
-        # Test getting template
-        template = self.service.get_prompt_template(
-            category='job_search',
-            region='North America'
+        enhanced_response = await self.service._enhance_with_geographic_intelligence(
+            base_response, geo_context, 'North America', 'Career advice query'
         )
         
-        assert isinstance(template, (dict, LLMPromptTemplate))
+        assert isinstance(enhanced_response, EnhancedLLMResponse)
+        assert enhanced_response.content == base_response
+        assert isinstance(enhanced_response.confidence_score, float)
+        assert 0 <= enhanced_response.confidence_score <= 1
+        assert isinstance(enhanced_response.cultural_adaptations, list)
+        assert isinstance(enhanced_response.regional_insights, list)
+        assert isinstance(enhanced_response.actionable_recommendations, list)
+        assert isinstance(enhanced_response.local_context_warnings, list)
+        assert isinstance(enhanced_response.follow_up_suggestions, list)
+        assert isinstance(enhanced_response.sources, list)
+    
+    @pytest.mark.asyncio
+    async def test_generate_geographic_llm_response_complete(self):
+        """Test complete geographic LLM response generation."""
+        user_query = "How can I advance my career in data science in Singapore?"
         
-        # Test customizing template
-        custom_template = self.service.customize_prompt_template(
-            base_template=template,
-            customizations={'industry': 'technology', 'experience_level': 'senior'}
+        response = await self.service.generate_geographic_llm_response(
+            user_query=user_query,
+            region='Southeast Asia',
+            context_type=ContextType.CAREER,
+            user_profile=self.sample_user_profile,
+            additional_context=self.sample_additional_context
         )
         
-        assert custom_template is not None
-        assert isinstance(custom_template, (str, dict))
+        assert isinstance(response, EnhancedLLMResponse)
+        assert len(response.content) > 0
+        assert response.confidence_score > 0
+        assert len(response.cultural_adaptations) >= 0
+        assert len(response.regional_insights) >= 0
+        assert len(response.actionable_recommendations) > 0
     
-    def test_response_localization(self):
-        """Test response localization for different regions."""
-        base_response = {
-            'advice': 'Focus on technical skills and networking',
-            'next_steps': ['Update resume', 'Apply to companies', 'Practice interviews']
+    def test_get_cultural_dimensions(self):
+        """Test cultural dimensions retrieval."""
+        # Test known regions
+        na_dimensions = self.service._get_cultural_dimensions('North America')
+        assert isinstance(na_dimensions, dict)
+        assert 'power_distance' in na_dimensions
+        assert 'individualism' in na_dimensions
+        assert all(0 <= value <= 1 for value in na_dimensions.values())
+        
+        # Test East Asia
+        ea_dimensions = self.service._get_cultural_dimensions('East Asia')
+        assert ea_dimensions['individualism'] < 0.5  # Collectivist culture
+        assert ea_dimensions['power_distance'] > 0.5  # High power distance
+        
+        # Test unknown region (should return defaults)
+        unknown_dimensions = self.service._get_cultural_dimensions('Unknown Region')
+        assert all(value == 0.5 for value in unknown_dimensions.values())
+    
+    def test_get_economic_indicators(self):
+        """Test economic indicators retrieval."""
+        indicators = self.service._get_economic_indicators('North America')
+        
+        assert isinstance(indicators, dict)
+        expected_keys = ['gdp_growth_rate', 'unemployment_rate', 'inflation_rate', 
+                        'currency_stability', 'business_environment_rank', 'key_industries']
+        
+        for key in expected_keys:
+            assert key in indicators
+    
+    def test_get_legal_framework(self):
+        """Test legal framework information retrieval."""
+        legal_info = self.service._get_legal_framework('Western Europe')
+        
+        assert isinstance(legal_info, dict)
+        expected_keys = ['employment_law', 'visa_requirements', 'tax_structure', 
+                        'business_registration', 'intellectual_property']
+        
+        for key in expected_keys:
+            assert key in legal_info
+            assert isinstance(legal_info[key], str)
+    
+    def test_get_industry_landscape(self):
+        """Test industry landscape retrieval."""
+        landscape = self.service._get_industry_landscape('East Asia')
+        
+        assert isinstance(landscape, dict)
+        expected_keys = ['dominant_sectors', 'emerging_sectors', 'major_hubs', 'growth_outlook']
+        
+        for key in expected_keys:
+            assert key in landscape
+        
+        assert isinstance(landscape['dominant_sectors'], list)
+        assert isinstance(landscape['emerging_sectors'], list)
+        assert isinstance(landscape['major_hubs'], list)
+    
+    def test_get_language_context(self):
+        """Test language context retrieval."""
+        lang_context = self.service._get_language_context('North America')
+        
+        assert isinstance(lang_context, dict)
+        expected_keys = ['primary', 'secondary', 'business_language', 'cultural_notes']
+        
+        for key in expected_keys:
+            assert key in lang_context
+            assert isinstance(lang_context[key], str)
+    
+    def test_format_cultural_context(self):
+        """Test cultural context formatting."""
+        dimensions = {
+            'power_distance': 0.8,
+            'individualism': 0.2,
+            'uncertainty_avoidance': 0.5
         }
         
-        regions_to_test = ['North America', 'Western Europe', 'East Asia']
+        formatted = self.service._format_cultural_context(dimensions)
         
-        for region in regions_to_test:
-            localized = self.service.localize_response(
-                response=base_response,
-                target_region=region
-            )
-            
-            assert isinstance(localized, dict)
-            assert 'advice' in localized
-            assert 'next_steps' in localized
-            
-            # Should include region-specific context
-            advice_text = str(localized['advice'])
-            assert len(advice_text) >= len(base_response['advice'])
+        assert isinstance(formatted, str)
+        assert 'High power distance' in formatted
+        assert 'Low individualism' in formatted
+        assert 'Moderate uncertainty avoidance' in formatted
     
-    def test_performance_with_concurrent_requests(self):
-        """Test performance with concurrent requests."""
-        start_time = datetime.now()
+    def test_identify_cultural_adaptations(self):
+        """Test cultural adaptations identification."""
+        response = "Sample response text"
         
-        # Create multiple concurrent requests
-        prompts = [f"Career advice for data scientist {i}" for i in range(10)]
+        # High power distance context
+        geo_context = GeographicContext(
+            region='East Asia',
+            country='China',
+            city=None,
+            cultural_dimensions={'power_distance': 0.8, 'individualism': 0.2},
+            economic_indicators={},
+            legal_framework={},
+            industry_landscape={},
+            language_context={},
+            time_zone='CST',
+            currency='CNY'
+        )
         
-        responses = []
-        for prompt in prompts:
-            response = self.service.enhance_job_search_prompt(
-                base_prompt=prompt,
-                geographic_context=self.sample_geographic_context
-            )
-            responses.append(response)
+        adaptations = self.service._identify_cultural_adaptations(response, geo_context)
         
-        end_time = datetime.now()
-        processing_time = (end_time - start_time).total_seconds()
+        assert isinstance(adaptations, list)
+        assert len(adaptations) <= 3
         
-        # Should complete 10 requests in reasonable time
-        assert processing_time < 5.0
-        assert len(responses) == 10
-        assert all(isinstance(r, str) for r in responses)
+        # Should include hierarchy-related adaptation
+        hierarchy_adaptation = any('hierarchy' in adaptation.lower() for adaptation in adaptations)
+        assert hierarchy_adaptation
     
-    def test_context_type_filtering(self):
-        """Test filtering context by type."""
-        context_types = [ContextType.CULTURAL, ContextType.ECONOMIC, ContextType.INDUSTRY]
+    def test_generate_regional_insights(self):
+        """Test regional insights generation."""
+        geo_context = GeographicContext(
+            region='North America',
+            country='United States',
+            city=None,
+            cultural_dimensions={},
+            economic_indicators={},
+            legal_framework={},
+            industry_landscape={},
+            language_context={},
+            time_zone='EST',
+            currency='USD'
+        )
         
-        for context_type in context_types:
-            filtered_context = self.service.filter_context_by_type(
-                geographic_context=self.sample_geographic_context,
-                context_type=context_type
-            )
-            
-            assert isinstance(filtered_context, dict)
-            assert len(filtered_context) > 0
-            
-            # Should contain relevant fields based on type
-            if context_type == ContextType.CULTURAL:
-                assert 'cultural_dimensions' in str(filtered_context).lower()
-            elif context_type == ContextType.ECONOMIC:
-                assert 'economic' in str(filtered_context).lower()
+        insights = self.service._generate_regional_insights(geo_context, 'career advice')
+        
+        assert isinstance(insights, list)
+        assert len(insights) <= 3
+        assert all(isinstance(insight, str) for insight in insights)
+        
+        # Should mention the region
+        region_mentioned = any('North America' in insight for insight in insights)
+        assert region_mentioned
     
-    def test_llm_provider_selection(self):
-        """Test LLM provider selection based on context."""
-        # Test provider selection for different types of requests
-        request_types = ['creative', 'analytical', 'cultural_sensitive', 'technical']
+    def test_extract_actionable_recommendations(self):
+        """Test actionable recommendations extraction."""
+        response = "Sample career advice response"
+        geo_context = GeographicContext(
+            region='Western Europe',
+            country='Germany',
+            city=None,
+            cultural_dimensions={},
+            economic_indicators={},
+            legal_framework={},
+            industry_landscape={},
+            language_context={},
+            time_zone='CET',
+            currency='EUR'
+        )
         
-        for request_type in request_types:
-            provider = self.service.select_optimal_llm_provider(
-                request_type=request_type,
-                geographic_context=self.sample_geographic_context
-            )
-            
-            assert provider is not None
-            assert isinstance(provider, str)
-            assert len(provider) > 0
+        recommendations = self.service._extract_actionable_recommendations(response, geo_context)
+        
+        assert isinstance(recommendations, list)
+        assert len(recommendations) <= 4
+        assert all(isinstance(rec, str) for rec in recommendations)
+        
+        # Should include region-specific recommendations
+        region_specific = any('Western Europe' in rec for rec in recommendations)
+        assert region_specific
+    
+    def test_identify_local_context_warnings(self):
+        """Test local context warnings identification."""
+        geo_context = GeographicContext(
+            region='Middle East',
+            country='UAE',
+            city=None,
+            cultural_dimensions={},
+            economic_indicators={},
+            legal_framework={},
+            industry_landscape={},
+            language_context={},
+            time_zone='GST',
+            currency='AED'
+        )
+        
+        warnings = self.service._identify_local_context_warnings(geo_context, 'career advice')
+        
+        assert isinstance(warnings, list)
+        assert len(warnings) <= 2
+        
+        # Middle East should have cultural/religious warnings
+        cultural_warning = any('cultural' in warning.lower() or 'religious' in warning.lower() 
+                              for warning in warnings)
+        assert cultural_warning
+    
+    def test_generate_follow_up_suggestions(self):
+        """Test follow-up suggestions generation."""
+        suggestions = self.service._generate_follow_up_suggestions(
+            'career advice query', 'Southeast Asia'
+        )
+        
+        assert isinstance(suggestions, list)
+        assert len(suggestions) <= 3
+        assert all(isinstance(suggestion, str) for suggestion in suggestions)
+        
+        # Should mention the region
+        region_mentioned = any('Southeast Asia' in suggestion for suggestion in suggestions)
+        assert region_mentioned
+    
+    def test_calculate_response_confidence(self):
+        """Test response confidence calculation."""
+        # Complete context
+        complete_context = GeographicContext(
+            region='North America',
+            country='United States',
+            city='New York',
+            cultural_dimensions={'power_distance': 0.4, 'individualism': 0.9, 'uncertainty_avoidance': 0.3},
+            economic_indicators={'gdp': 'high', 'unemployment': 'low'},
+            legal_framework={'employment_law': 'at_will'},
+            industry_landscape={'tech': 'strong'},
+            language_context={'primary': 'English'},
+            time_zone='EST',
+            currency='USD'
+        )
+        
+        confidence = self.service._calculate_response_confidence(complete_context, 'career advice')
+        assert isinstance(confidence, float)
+        assert 0 <= confidence <= 1
+        assert confidence > 0.5  # Should be reasonably confident with complete context
+    
+    def test_compile_information_sources(self):
+        """Test information sources compilation."""
+        sources = self.service._compile_information_sources('East Asia')
+        
+        assert isinstance(sources, list)
+        assert len(sources) > 0
+        assert all(isinstance(source, str) for source in sources)
+        
+        # Should mention the region
+        region_mentioned = any('East Asia' in source for source in sources)
+        assert region_mentioned
+    
+    def test_create_fallback_response(self):
+        """Test fallback response creation."""
+        fallback = self.service._create_fallback_response('test query', 'Unknown Region')
+        
+        assert isinstance(fallback, EnhancedLLMResponse)
+        assert 'Unknown Region' in fallback.content
+        assert fallback.confidence_score < 0.5  # Should have low confidence
+        assert len(fallback.actionable_recommendations) > 0
+        assert len(fallback.follow_up_suggestions) > 0
+    
+    def test_helper_methods(self):
+        """Test various helper methods."""
+        # Test primary country retrieval
+        country = self.service._get_primary_country('North America')
+        assert country == 'United States'
+        
+        # Test timezone retrieval
+        timezone = self.service._get_primary_timezone('Western Europe')
+        assert timezone == 'CET'
+        
+        # Test currency retrieval
+        currency = self.service._get_primary_currency('East Asia')
+        assert 'CNY' in currency or 'JPY' in currency or 'KRW' in currency
+        
+        # Test key industries retrieval
+        industries = self.service._get_key_industries('North America')
+        assert isinstance(industries, list)
+        assert 'Technology' in industries
+    
+    @pytest.mark.asyncio
+    async def test_error_handling(self):
+        """Test error handling in various scenarios."""
+        # Test with None user profile
+        response = await self.service.generate_geographic_llm_response(
+            user_query="test query",
+            region='North America',
+            context_type=ContextType.CAREER,
+            user_profile=None
+        )
+        assert isinstance(response, EnhancedLLMResponse)
+        
+        # Test with empty query
+        response = await self.service.generate_geographic_llm_response(
+            user_query="",
+            region='North America',
+            context_type=ContextType.CAREER
+        )
+        assert isinstance(response, EnhancedLLMResponse)
     
     def test_global_service_instance(self):
         """Test global service instance."""
         assert geographic_llm_service is not None
         assert isinstance(geographic_llm_service, GeographicLLMIntegrationService)
-        assert len(geographic_llm_service.supported_regions) > 0
+        assert len(geographic_llm_service.prompt_templates) > 0
     
-    @pytest.mark.parametrize("region,expected_timezone", [
-        ('North America', 'PST'),
-        ('Western Europe', 'CET'),
-        ('East Asia', 'JST'),
-        ('Southeast Asia', 'SGT')
+    @pytest.mark.parametrize("region,expected_primary_country", [
+        ('North America', 'United States'),
+        ('Western Europe', 'Germany'),
+        ('East Asia', 'China'),
+        ('Southeast Asia', 'Singapore'),
+        ('Middle East', 'UAE')
     ])
-    def test_regional_timezone_mapping(self, region, expected_timezone):
-        """Test that regions map to expected timezones."""
-        context = self.service.build_geographic_context(
-            region=region,
-            country='Test Country'
-        )
-        
-        # Should have valid timezone information
-        assert context.time_zone is not None
-        # Note: Actual timezone might vary by country within region
+    def test_regional_primary_countries(self, region, expected_primary_country):
+        """Test expected primary countries for regions."""
+        country = self.service._get_primary_country(region)
+        assert country == expected_primary_country
     
-    def test_response_quality_validation(self):
-        """Test response quality validation."""
-        # Test with good response
-        good_response = {
-            'response_text': 'This is a comprehensive career advice response with specific actionable steps.',
-            'confidence_score': 0.85,
-            'context_used': ['cultural', 'economic']
-        }
+    @pytest.mark.parametrize("context_type", [
+        ContextType.CULTURAL,
+        ContextType.ECONOMIC,
+        ContextType.LEGAL,
+        ContextType.INDUSTRY,
+        ContextType.CAREER,
+        ContextType.SOCIAL
+    ])
+    @pytest.mark.asyncio
+    async def test_context_types_handling(self, context_type):
+        """Test handling of different context types."""
+        context = await self.service._build_geographic_context('North America', context_type)
+        assert isinstance(context, GeographicContext)
+        assert context.region == 'North America'
+    
+    def test_cultural_adaptations_structure(self):
+        """Test cultural adaptations structure."""
+        adaptations = self.service.cultural_adaptations
         
-        validation = self.service.validate_response_quality(good_response)
-        assert validation['is_valid'] is True
-        assert validation['quality_score'] > 0.7
+        expected_categories = ['communication_styles', 'decision_making_approaches', 'relationship_orientations']
         
-        # Test with poor response
-        poor_response = {
-            'response_text': 'Short.',
-            'confidence_score': 0.2,
-            'context_used': []
-        }
+        for category in expected_categories:
+            assert category in adaptations
+            assert isinstance(adaptations[category], dict)
+            assert len(adaptations[category]) > 0
+    
+    def test_regional_expertise_areas_completeness(self):
+        """Test regional expertise areas completeness."""
+        for region, expertise_list in self.service.regional_expertise_areas.items():
+            assert isinstance(expertise_list, list)
+            assert len(expertise_list) > 0
+            assert all(isinstance(expertise, str) for expertise in expertise_list)
+    
+    @pytest.mark.asyncio
+    async def test_integration_potential_with_other_services(self):
+        """Test integration potential with other enrichment services."""
+        # This would test integration with other services like cultural fit assessment
         
-        validation = self.service.validate_response_quality(poor_response)
-        assert validation['is_valid'] is False
-        assert validation['quality_score'] < 0.5
+        # Simulate geographic context that could be shared
+        geo_context = await self.service._build_geographic_context('East Asia', ContextType.CULTURAL)
+        
+        # Check that context has all necessary information for other services
+        assert geo_context.cultural_dimensions is not None
+        assert geo_context.region in ['East Asia']  # Should match cultural fit service regions
+        assert isinstance(geo_context.cultural_dimensions, dict)
+        
+        # Check cultural dimensions compatibility
+        for dimension, value in geo_context.cultural_dimensions.items():
+            assert isinstance(value, (int, float))
+            assert 0 <= value <= 1
 
 
 if __name__ == '__main__':
