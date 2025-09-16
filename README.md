@@ -1,5 +1,13 @@
 [![codecov](https://codecov.io/gh/kevin-toles/tpm-job-finder-poc/branch/dev/graph/badge.stests/                       # Comprehensive test suite (440+ tests)
+├── unit/               tests/                            # Comprehensive test suite (440+ tests)
 ├── unit/                    # Unit tests with fast mode support
+│   ├── job_collection_service/   # Job collection service TDD tests (complete)
+│   ├── job_normalizer_service/   # Job normalizer service TDD tests (complete)
+│   ├── enrichment/               # Enrichment tests (149 tests consolidated)
+│   ├── job_aggregator/           # Legacy job aggregator tests  
+│   ├── cache/                    # Cache system tests
+│   ├── models/                   # Data model tests
+│   └── llm_provider/             # LLM provider testsnit tests with fast mode support
 │   ├── enrichment/          # Enrichment tests (149 tests consolidated)
 │   ├── job_aggregator/      # Job aggregator tests  
 │   ├── cache/               # Cache system tests
@@ -91,6 +99,8 @@ Specialized Function → Cross-Component Workflows → Complete Platform
 1. **[Engineering Guidelines](ENGINEERING_GUIDELINES.md)** - Development constitution and coding standards
 2. **[TDD Component Audit Catalog](TDD_COMPONENT_AUDIT_CATALOG.md)** - Systematic TDD refactoring progress tracker
 3. **Component READMEs** - Co-located comprehensive documentation:
+   - **[Job Collection Service](tpm_job_finder_poc/job_collection_service/README.md)** - Modern TDD collection service
+   - **[Job Normalizer Service](tpm_job_finder_poc/job_normalizer_service/README.md)** - Modern TDD normalization service
    - **[Enrichment](tpm_job_finder_poc/enrichment/README.md)** - Multi-resume AI intelligence system
    - **[Job Aggregator](tpm_job_finder_poc/job_aggregator/README.md)** - Multi-source data collection
    - **[LLM Provider](tpm_job_finder_poc/llm_provider/README.md)** - Multi-provider AI integration
@@ -145,6 +155,11 @@ tpm_job_finder_poc/               # Main package
 │   ├── service.py                # JobCollectionService - production implementation
 │   ├── api.py                    # REST API endpoints
 │   └── contracts/                # Service interfaces and contracts
+├── job_normalizer_service/          # Modern job normalization service (TDD complete)
+│   ├── service.py                # JobNormalizerService - production implementation
+│   ├── api.py                    # REST API endpoints
+│   ├── config.py                 # Service configuration
+│   └── contracts/                # Service interfaces and contracts
 ├── job_aggregator/               # Legacy orchestration service (to be deprecated)
 │   ├── main.py                   # JobAggregatorService - legacy orchestrator
 │   ├── aggregators/              # API-based job sources
@@ -193,9 +208,10 @@ tests/                            # Comprehensive test suite (440+ tests)
 - **440+ Tests**: Complete test coverage across all components with strategic performance optimization
 - **Fast Mode**: 6.46s execution time with 334 passing tests (100% success rate) for rapid development feedback
 - **Comprehensive Mode**: Full test suite (~70s) including all advanced Phase 5+ features
-- **TDD Excellence**: Two major components completed with bulletproof TDD methodology:
+- **TDD Excellence**: Three major components completed with bulletproof TDD methodology:
   - ✅ **Multi-Resume Intelligence System** (~142,000+ lines test coverage)
   - ✅ **Job Collection Service** (30/30 tests, complete RED-GREEN-REFACTOR cycle)
+  - ✅ **Job Normalizer Service** (63/63 tests, complete RED-GREEN-REFACTOR cycle)
 - **Unit Tests**: Core functionality validation including 149 consolidated enrichment tests
 - **Integration Tests**: Service-to-service communication (15+ tests)
 - **End-to-End Tests**: Complete workflow validation (5+ tests)
@@ -254,6 +270,23 @@ job_query = JobQuery(
 )
 result = await service.collect_jobs(job_query)
 
+# Modern Job Normalizer Service (TDD-complete, production-ready)
+from tpm_job_finder_poc.job_normalizer_service.service import JobNormalizerService
+from tpm_job_finder_poc.shared.contracts.job_normalizer_service import JobNormalizationConfig
+
+# Initialize the normalization service
+normalizer_service = JobNormalizerService(config)
+await normalizer_service.start()
+
+# Normalize job data with advanced features
+normalization_config = JobNormalizationConfig(
+    normalize_titles=True,
+    normalize_locations=True,
+    deduplicate=True,
+    similarity_threshold=0.85
+)
+normalized_jobs = await normalizer_service.normalize_jobs(raw_jobs, normalization_config)
+
 # Legacy JobAggregatorService (for backward compatibility)
 from tpm_job_finder_poc.job_aggregator.main import JobAggregatorService
 from tpm_job_finder_poc.scraping_service.core.base_job_source import FetchParams
@@ -284,6 +317,9 @@ python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report=html
 
 # Run job collection service tests (TDD-complete)
 python -m pytest tests/unit/job_collection_service/ -v
+
+# Run job normalizer service tests (TDD-complete)
+python -m pytest tests/unit/job_normalizer_service/ -v
 
 # Run legacy job aggregator tests
 python -m pytest tests/unit/job_aggregator/ -v
@@ -346,6 +382,18 @@ Production-ready service for multi-source job collection with TDD excellence:
 - **Health Monitoring**: Source status tracking and system health checks
 - **TDD Excellence**: Complete RED-GREEN-REFACTOR implementation (30/30 tests passing, zero warnings)
 
+#### Job Normalizer Service ✅
+Production-ready job normalization service implementing complete TDD methodology:
+- **Complete Service Contract**: Implements IJobNormalizerService with standard lifecycle management
+- **Advanced Job Normalization**: Title, salary, location, and skill standardization with fuzzy matching
+- **Flexible Configuration**: Customizable normalization rules and business logic
+- **Deduplication Engine**: Advanced deduplication with similarity scoring and field-based matching
+- **Validation Pipeline**: Pydantic V2 models with comprehensive data validation
+- **REST API Integration**: FastAPI endpoints with OpenAPI documentation
+- **Error Handling**: Specific exception types (ValidationError, NormalizationError) with graceful degradation
+- **Production Features**: Health monitoring, statistics tracking, and comprehensive logging
+- **TDD Excellence**: Complete RED-GREEN-REFACTOR implementation (63/63 tests passing, zero warnings)
+
 #### Scraping Service v2
 Independent, production-ready browser scraping service:
 - **Modular Architecture**: Plugin-based scraper system
@@ -376,6 +424,16 @@ tpm-job-finder-poc/
 # Core Package
 tpm_job_finder_poc/               # Main application package
 ├── __init__.py
+├── job_collection_service/       # Modern job collection service (TDD complete)
+│   ├── service.py                # JobCollectionService
+│   ├── api.py                    # REST API endpoints
+│   ├── config.py                 # Service configuration
+│   └── contracts/                # Service interfaces and contracts
+├── job_normalizer_service/       # Modern job normalization service (TDD complete)
+│   ├── service.py                # JobNormalizerService
+│   ├── api.py                    # REST API endpoints
+│   ├── config.py                 # Service configuration
+│   └── contracts/                # Service interfaces and contracts
 ├── job_aggregator/               # Job collection orchestration
 │   ├── main.py                   # JobAggregatorService
 │   ├── aggregators/              # API-based job sources
@@ -510,6 +568,17 @@ print(f'Service Health: {len(statuses)} sources configured')
 print(f'Collection Stats: {stats}')
 "
 
+# Check modern job normalizer service health
+python -c "
+from tpm_job_finder_poc.job_normalizer_service.service import JobNormalizerService
+service = JobNormalizerService(config)
+await service.start()
+health = await service.health_check()
+stats = await service.get_normalization_statistics()
+print(f'Normalizer Health: {health.status}')
+print(f'Normalization Stats: {stats}')
+"
+
 # Check legacy aggregator service health
 python -c "
 from tpm_job_finder_poc.job_aggregator.main import JobAggregatorService
@@ -629,6 +698,10 @@ python -m pytest tests/ -v --cov=tpm_job_finder_poc
 # Run specific test categories
 python -m pytest tests/unit/ -v
 python -m pytest tests/integration/ -v
+
+# Run TDD service tests specifically
+python -m pytest tests/unit/job_collection_service/ -v
+python -m pytest tests/unit/job_normalizer_service/ -v
 
 # Run enrichment tests specifically
 python -m pytest tests/unit/enrichment/ -v

@@ -9,6 +9,17 @@ def parse_job(raw: Dict[str, Any], source: str) -> JobPosting:
 	Logs and raises errors for malformed or missing data.
 	"""
 	try:
+		# Parse date_posted if it's a string
+		date_posted = raw.get('date_posted', datetime.now(timezone.utc))
+		if isinstance(date_posted, str):
+			try:
+				# Try parsing ISO format datetime string
+				date_posted = datetime.fromisoformat(date_posted.replace('Z', '+00:00'))
+			except ValueError:
+				# Fallback to current time if parsing fails
+				logging.warning(f"Could not parse date_posted '{date_posted}', using current time")
+				date_posted = datetime.now(timezone.utc)
+		
 		job = JobPosting(
 			id=raw.get('id', ''),
 			source=source,
@@ -17,7 +28,7 @@ def parse_job(raw: Dict[str, Any], source: str) -> JobPosting:
 			location=raw.get('location'),
 			salary=raw.get('salary'),
 			url=raw.get('url', ''),
-			date_posted=raw.get('date_posted', datetime.now(timezone.utc)),
+			date_posted=date_posted,
 			raw=raw
 		)
 		return job

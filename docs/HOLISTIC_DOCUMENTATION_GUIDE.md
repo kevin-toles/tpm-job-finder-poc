@@ -54,7 +54,8 @@ Testing strategies, analysis, and quality assurance documentation:
 - **[Job Aggregator](../tpm_job_finder_poc/job_aggregator/README.md)** - Multi-source collection orchestration  
 - **[Scraping Service](../tpm_job_finder_poc/scraping_service/README.md)** - Browser automation with anti-detection
 - **[LLM Provider](../tpm_job_finder_poc/llm_provider/README.md)** - Multi-provider LLM integration
-- **[Job Normalizer](../tpm_job_finder_poc/job_normalizer/README.md)** - Data standardization
+- **[Job Normalizer Service](../tpm_job_finder_poc/job_normalizer_service/README.md)** - TDD Microservice for data standardization
+- **[Job Normalizer (Legacy)](../tpm_job_finder_poc/job_normalizer/README.md)** - Legacy normalization functions
 - **[Models](../tpm_job_finder_poc/models/README.md)** - Core data structures and schemas
 - **[Storage](../tpm_job_finder_poc/storage/README.md)** - Secure storage abstraction
 - **[Cache](../tpm_job_finder_poc/cache/README.md)** - Multi-level caching with deduplication

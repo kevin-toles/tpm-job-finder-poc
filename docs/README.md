@@ -4,6 +4,7 @@ Welcome to the comprehensive documentation for the TPM Job Finder POC, a product
 
 **🚀 Latest Updates:**
 - ✅ **JobCollectionService** - TDD-complete with 30/30 tests passing, zero warnings
+- ✅ **JobNormalizerService** - TDD-complete with 63/63 tests passing, zero warnings
 - ✅ **Enrichment Services** - Multi-resume intelligence with 149+ tests  
 - 📊 **Test Coverage** - 440+ comprehensive tests across all categories
 - 🏗️ **Modern Architecture** - Interface-driven design with Pydantic V2 compliance
@@ -69,6 +70,8 @@ docs/
 - **[CHANGELOG.md](../CHANGELOG.md)**: Version history and changes
 
 ### 🏗️ Architecture Documentation
+- **[Job Collection Service](../tpm_job_finder_poc/job_collection_service/README.md)**: Modern TDD collection service
+- **[Job Normalizer Service](../tpm_job_finder_poc/job_normalizer_service/README.md)**: Modern TDD normalization service
 - **[Job Aggregator Service](../tpm_job_finder_poc/job_aggregator/README.md)**: Central orchestration service
 - **[Scraping Service v2](../scraping_service_v2/README.md)**: Browser scraping service
 - **[Enrichment Pipeline](../tpm_job_finder_poc/enrichment/README.md)**: Job enhancement and analysis

@@ -24,9 +24,10 @@ The TPM Job Finder POC has evolved into a **production-ready, TDD-driven archite
 
 ### **Production-Ready Services (TDD-Complete)**
 - ✅ **JobCollectionService**: Complete TDD implementation (30/30 tests, zero warnings)
+- ✅ **JobNormalizerService**: Complete TDD microservice (63/63 tests, REST API, advanced features)
 - ✅ **Multi-Resume Intelligence**: ~142,000+ lines of comprehensive test coverage
-- ✅ **Service Contracts**: IJobCollectionService interface with proper lifecycle management
-- ✅ **Error Handling**: Specific exception types (ValidationError, JobCollectionTimeoutError, JobCollectionError)
+- ✅ **Service Contracts**: IJobCollectionService & IJobNormalizerService interfaces with lifecycle management
+- ✅ **Error Handling**: Specific exception types (ValidationError, JobCollectionTimeoutError, JobNormalizationError)
 - ✅ **Data Pipeline**: Raw Data → Deduplication → Enrichment → JobPosting objects
 - ✅ **Health Monitoring**: Real source status tracking and system health checks
 
@@ -409,12 +410,18 @@ await service.stop()
 │       │   ├── runner.py          # CLI runner
 │       │   ├── requirements.txt   # CLI dependencies
 │       │   └── tests/             # CLI tests
-│       ├── job_normalizer/        # Job data normalization
+│       ├── job_normalizer/        # Job data normalization (Legacy)
 │       │   ├── __init__.py
 │       │   ├── Dockerfile         # Container configuration
 │       │   ├── requirements.txt   # Service dependencies
-│       │   ├── jobs/              # Job processing
+│       │   ├── jobs/              # Job processing functions
 │       │   └── tests/             # Normalization tests
+│       ├── job_normalizer_service/ # 🚀 TDD Job Normalization Microservice
+│       │   ├── __init__.py
+│       │   ├── service.py         # Core service implementation
+│       │   ├── api.py             # FastAPI REST endpoints
+│       │   ├── config.py          # Service configuration
+│       │   └── README.md          # Service documentation
 │       ├── resume_store/          # Resume storage and management
 │       │   ├── __init__.py
 │       │   ├── metadata.py        # Resume metadata

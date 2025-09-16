@@ -81,6 +81,7 @@
     │        Data Processing                      │
     │  ┌──────────────┐  ┌─────────────────────┐  │
     │  │Job Normalizer│  │       Cache         │  │
+    │  │   Service   │  │                     │  │
     │  └──────────────┘  └─────────────────────┘  │
     └─────────────┬───────────────────────────────┘
                   │
@@ -111,7 +112,7 @@ User Input → CLI → Config → Resume Upload → Enrichment
     ↓
 Job Collection → Job Aggregator → Scraping Service
     ↓
-Data Processing → Job Normalizer → Cache → Models
+Data Processing → Job Normalizer Service → Cache → Models
     ↓
 AI Analysis → LLM Provider → Enrichment → Results
     ↓
@@ -221,7 +222,7 @@ class JobAggregatorService:
 ---
 
 ### **Pattern 3: Data Pipeline Processing**
-**Components**: Job Normalizer → Cache → Storage
+**Components**: Job Normalizer Service → Cache → Storage
 
 ```python
 # Sequential data processing pipeline
@@ -323,7 +324,7 @@ class IntelligenceOrchestrator:
 │  └── Service Registry & Health Monitoring  │
 └─────────────────────────────────────────────┘
 ```
-**Dependencies**: Job Normalizer, Cache, Health Monitor
+**Dependencies**: Job Normalizer Service, Cache, Health Monitor
 
 ### **Layer 4: Data Processing & Persistence**
 ```
@@ -360,7 +361,7 @@ Job Sources (Job Aggregator + Scraping Service)
     ↓
 Raw Job Data (Various APIs + Web Scraping)
     ↓
-Normalized Jobs (Job Normalizer + Models)
+Normalized Jobs (Job Normalizer Service + Models)
     ↓
 Deduplicated Jobs (Cache)
     ↓
@@ -419,7 +420,7 @@ System Metrics (Health Monitor)
 
 #### **Synchronous Integration**
 - **CLI → Config**: Direct method calls for configuration loading
-- **Job Normalizer → Models**: Direct schema validation
+- **Job Normalizer Service → Models**: Direct schema validation
 - **Cache → Storage**: Direct database operations
 
 #### **Asynchronous Integration**

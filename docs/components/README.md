@@ -9,7 +9,8 @@ All comprehensive component documentation is now located within each component's
 ### 🎯 **Core Intelligence Components**
 - **[Enrichment](../../tpm_job_finder_poc/enrichment/README.md)** - Multi-resume intelligence system with AI-powered matching
 - **[LLM Provider](../../tpm_job_finder_poc/llm_provider/README.md)** - Multi-provider LLM integration with fallback support
-- **[Job Normalizer](../../tpm_job_finder_poc/job_normalizer/README.md)** - Job data standardization and validation
+- **[Job Normalizer Service](../../tpm_job_finder_poc/job_normalizer_service/README.md)** - 🚀 TDD Microservice for job data standardization and validation
+- **[Job Normalizer (Legacy)](../../tpm_job_finder_poc/job_normalizer/README.md)** - Legacy normalization functions
 
 ### 🔄 **Data Collection & Processing**
 - **[Job Aggregator](../../tpm_job_finder_poc/job_aggregator/README.md)** - Multi-source job collection orchestration

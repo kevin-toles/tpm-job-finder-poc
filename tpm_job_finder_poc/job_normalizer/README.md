@@ -1,19 +1,43 @@
-# Job Normalizer Component
+# Job Normalizer Component (Legacy)
 
-The Job Normalizer is a production-ready service for standardizing job postings from multiple sources into a unified schema. It provides comprehensive data validation, intelligent normalization, deduplication, and quality assurance for the job aggregation pipeline.
+**Status**: Legacy Implementation - **Superseded by Job Normalizer Service**  
+**Replacement**: [Job Normalizer Service](../job_normalizer_service/README.md) - TDD Microservice  
+**Migration**: This component provides core normalization functions used by the new service
+
+> ⚠️ **MIGRATION NOTICE**: This legacy component is being superseded by the new **Job Normalizer Service** microservice. While this component remains functional for backward compatibility, new development should use the [Job Normalizer Service](../job_normalizer_service/README.md) which provides:
+> 
+> - 🎯 **Complete TDD Implementation** (63/63 tests passing)
+> - 🌐 **REST API Endpoints** with FastAPI
+> - 📊 **Advanced Quality Metrics** and monitoring
+> - ⚡ **Production-Ready Architecture** with async processing
+> - 🔧 **Service Lifecycle Management** and health monitoring
+
+The Job Normalizer is a production-ready component for standardizing job postings from multiple sources into a unified schema. It provides the core normalization functions that are utilized by the new **Job Normalizer Service** microservice.
 
 ## Architecture Overview
 
-The job_normalizer follows a pipeline architecture with clear separation between parsing, validation, normalization, and deduplication:
+> 📢 **NEW ARCHITECTURE**: The modern microservice architecture is implemented in [Job Normalizer Service](../job_normalizer_service/README.md). This legacy component provides the core normalization functions.
+
+The job_normalizer follows a pipeline architecture with clear separation between parsing, validation, normalization, and deduplication. **These functions are now utilized by the Job Normalizer Service microservice**:
 
 ```
-job_normalizer/
-├── jobs/                       # Core normalization logic
-│   ├── normalizer.py           # Field normalization functions
-│   ├── parser.py               # Multi-source parsing and validation
-│   └── schema.py               # Pydantic JobPosting model
+job_normalizer/                    # Legacy normalization functions
+├── jobs/                       # Core normalization logic (used by service)
+│   ├── normalizer.py           # Field normalization functions ⭐
+│   ├── parser.py               # Multi-source parsing and validation ⭐
+│   └── schema.py               # Pydantic JobPosting model ⭐
 ├── requirements.txt            # Component dependencies
+├── README.md                   # This legacy documentation
 └── Dockerfile                  # Containerization config
+
+job_normalizer_service/            # 🚀 NEW: TDD Microservice
+├── service.py                  # Core service implementation
+├── api.py                      # FastAPI REST endpoints
+├── config.py                   # Service configuration
+├── README.md                   # Modern service documentation
+└── __init__.py                 # Service exports
+
+⭐ = Functions used by Job Normalizer Service
 ```
 
 ## Core Components
