@@ -20,6 +20,15 @@ A **comprehensive, production-ready global job intelligence platform** implement
 - **Intelligent Deduplication**: Advanced cache-based deduplication across all sources with fuzzy matching
 - **AI-Powered Job Analysis**: LLM-powered job scoring, cultural fit assessment, and salary benchmarking
 - **Geographic Intelligence**: Regional organization with cultural adaptation insights and visa requirements
+- **Multi-Resume Intelligence**: Intelligent resume portfolio management with optimal resume selection and unique enhancement generation
+
+### **Multi-Resume Intelligence Features**
+- **Resume Portfolio Discovery**: Automatically scan and catalog resume variants across any folder structure
+- **Intelligent Resume Selection**: Two-stage selection with keyword pre-filtering and LLM scoring
+- **Master Resume Integration**: Automatically identify and exclude master/comprehensive resumes from selection
+- **Unique Enhancement Generation**: Generate 3 distinct, relevant recommendations with dual similarity validation (<80% similar to selected resume, <20% similar to each other)
+- **Enhanced Excel Export**: Extended column structure with Selected Resume, Match Score, Selection Rationale, and 3 Enhancements
+- **Cross-Professional Support**: Optimized for technology, business, sales, finance, consulting, and creative professionals
 
 ### **Phase 5+ Advanced Features**
 - **Immigration & Relocation Support**: Comprehensive visa analysis for 50+ countries, 200+ verified immigration lawyers, cost planning, timeline creation
@@ -247,6 +256,7 @@ LLM-powered job analysis and enhancement:
 - **Geographic Intelligence**: Regional insights and visa requirements
 - **ML Scoring**: Compatibility scoring based on user profile
 - **Resume Analysis**: Parse and match candidate profiles
+- **Multi-Resume Intelligence**: Intelligent resume portfolio management with optimal resume selection and unique enhancement generation
 
 ## 📁 Project Structure
 
