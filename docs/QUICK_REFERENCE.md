@@ -31,4 +31,4 @@ python scripts/generate_html.py
 python scripts/demo_automation.py
 ```
 
-**📚 Full Guide**: See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
+**📚 Full Guide**: See [SYSTEM_ARCHITECTURE_OVERVIEW.md](SYSTEM_ARCHITECTURE_OVERVIEW.md)

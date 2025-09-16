@@ -9,11 +9,27 @@
 ├── e2e/                     # End-to-end tests (5+ tests)
 └── regression/              # Regression tests (5+ tests)https://codecov.io/gh/kevin-toles/tpm-job-finder-poc)
 
-# TPM Job Finder POC
+# TPM Job Finder POC - Global Job Intelligence Platform
 
-A **comprehensive, production-ready global job intelligence platform** implementing Phase 5+ advanced features with automated job search, AI-powered assessment, enterprise multi-user capabilities, immigration support, and advanced career modeling. This system provides intelligent job discovery, comprehensive enrichment, and workflow automation across multiple job platforms with international expansion support.
+A **comprehensive, production-ready global job intelligence platform** implementing Phase 5+ advanced features with **holistic system integration**. This platform delivers automated job search, AI-powered assessment, enterprise multi-user capabilities, immigration support, and advanced career modeling through a unified, intelligent ecosystem.
 
-## 🚀 Key Features
+## 🌍 **HOLISTIC SYSTEM OVERVIEW**
+
+### **Integrated Intelligence Platform**
+The TPM Job Finder POC is designed as a **cohesive system** where every component works together to deliver comprehensive job intelligence. Rather than isolated tools, this platform provides:
+
+- **Seamless Data Flow**: From job collection → AI analysis → intelligent matching → actionable results
+- **Cross-Component Intelligence**: Components share context and enhance each other's capabilities
+- **Unified User Experience**: Single interface accessing the full power of the integrated system
+- **Enterprise-Scale Architecture**: Built for individual users and enterprise teams with global operations
+
+### **System-Wide Value Proposition**
+- **🎯 Individual Professionals**: Complete career advancement ecosystem with AI-powered job matching and international mobility planning
+- **🏢 Enterprise Teams**: Collaborative talent acquisition with systematic international expansion support
+- **🌍 Global Mobility**: End-to-end immigration and relocation planning across 50+ countries
+- **� Career Intelligence**: Data-driven career development with 5-year market forecasting
+
+## 🚀 **COMPREHENSIVE FEATURE ECOSYSTEM**
 
 ### **Core Job Intelligence Platform**
 - **Multi-Source Job Aggregation**: Collect jobs from API sources (RemoteOK, Greenhouse, Lever, Ashby, Workable, SmartRecruiters) and browser scraping (Indeed, LinkedIn, ZipRecruiter, Greenhouse)
@@ -44,25 +60,64 @@ A **comprehensive, production-ready global job intelligence platform** implement
 - **Secure Storage**: SecureStorage integration for all file operations
 - **Performance Optimization**: Strategic test suite with 6.46s fast mode (334 tests) and comprehensive mode (440+ tests)
 
-## 📁 Project Structure
+## 🏗️ **HOLISTIC SYSTEM ARCHITECTURE**
 
-This project follows a **clean, professional Python package structure**. For detailed guidance on file organization and workflows:
+This project follows a **holistic system design** where components are integrated for maximum effectiveness. For complete system understanding:
 
-- **📖 [Complete Structure Guide](docs/PROJECT_STRUCTURE.md)** - Comprehensive guide to project organization
-- **👤 [User Workflow Guide](USER_WORKFLOW_GUIDE.md)** - End-user workflows and personas
-- **🏗️ [System Architecture Workflows](SYSTEM_ARCHITECTURE_WORKFLOWS.md)** - Technical workflows and data flows
-- **⚡ [Quick Reference](docs/QUICK_REFERENCE.md)** - Fast lookup for file placement
-- **🔄 [Import Migration Plan](docs/IMPORT_MIGRATION_PLAN.md)** - Import system migration guide
+### **📚 Documentation Approach**
+- **[Holistic Documentation Guide](docs/HOLISTIC_DOCUMENTATION_GUIDE.md)** - Central navigation with system-wide perspective
+- **[System Architecture Overview](docs/SYSTEM_ARCHITECTURE_OVERVIEW.md)** - Complete system organization and design patterns
+- **[Component Integration Map](docs/components/COMPONENT_INTEGRATION_MAP.md)** - Visual guide to how components work together
+- **[Business Process Architecture](docs/architecture/BUSINESS_PROCESS_ARCHITECTURE.md)** - Complete business workflows and stakeholder value
 
-**Quick Structure Overview:**
+### **🔗 Component Integration Philosophy**
 ```
-tpm-job-finder-poc/
-├── 📦 tpm_job_finder_poc/    # Main application package
-├── 📚 docs/                  # Centralized documentation
-├── 🧪 tests/                 # Test suite (70+ tests)
-├── 🔧 scripts/               # Development automation
-├── 📊 logs/                  # Application logs
-└── 📈 output/                # Generated results
+Individual Components → Integration Patterns → Holistic System Value
+        ↓                      ↓                       ↓
+Specialized Function → Cross-Component Workflows → Complete Platform
+```
+
+**Component Documentation**: Each component has comprehensive documentation co-located with code (`tpm_job_finder_poc/*/README.md`) for developer efficiency, while integration and business documentation remains centralized for system understanding.
+
+## 🧭 **HOLISTIC NAVIGATION GUIDE**
+
+### **🚀 For System Understanding (Recommended Starting Point)**
+1. **[Business Process Architecture](docs/architecture/BUSINESS_PROCESS_ARCHITECTURE.md)** - Complete business workflows and stakeholder value
+2. **[Component Integration Map](docs/components/COMPONENT_INTEGRATION_MAP.md)** - Visual system architecture and data flows  
+3. **[Holistic Documentation Guide](docs/HOLISTIC_DOCUMENTATION_GUIDE.md)** - Central navigation hub
+4. **[Component Navigation Hub](docs/components/README.md)** - Gateway to all component documentation
+
+### **🔍 For Component Development**
+1. **[Engineering Guidelines](ENGINEERING_GUIDELINES.md)** - Development constitution and coding standards
+2. **Component READMEs** - Co-located comprehensive documentation:
+   - **[Enrichment](tpm_job_finder_poc/enrichment/README.md)** - Multi-resume AI intelligence system
+   - **[Job Aggregator](tpm_job_finder_poc/job_aggregator/README.md)** - Multi-source data collection
+   - **[LLM Provider](tpm_job_finder_poc/llm_provider/README.md)** - Multi-provider AI integration
+   - **[All Components](docs/components/README.md)** - Complete component navigation
+
+### **👥 For Users & Business Stakeholders**
+1. **[User Workflow Guide](USER_WORKFLOW_GUIDE.md)** - Complete user workflows and personas
+2. **[Multi-Resume Usage Guide](docs/specifications/MULTI_RESUME_USAGE_GUIDE.md)** - Multi-resume intelligence workflows
+3. **[Automation README](docs/AUTOMATION_README.md)** - Setup and automation workflows
+4. **[Quick Reference](docs/QUICK_REFERENCE.md)** - Essential commands and patterns
+## 🏗️ **SYSTEM DOCUMENTATION STRUCTURE**
+
+### **Comprehensive Documentation Organization**
+```
+📚 docs/
+├── 🌍 HOLISTIC_DOCUMENTATION_GUIDE.md  # Central navigation hub
+├── 🏗️ SYSTEM_ARCHITECTURE_OVERVIEW.md   # Complete system organization  
+├── ⚡ QUICK_REFERENCE.md                 # Fast lookup for file placement
+├── 🤖 AUTOMATION_README.md               # Setup and automation workflows
+├── 📋 architecture/                     # Business & system architecture
+├── � specifications/                   # User workflows and requirements
+├── ⚙️ implementation/                   # Technical implementation guides
+├── 🧪 testing/                          # Testing strategies and analysis
+└── 🔧 components/                       # Component navigation and integration
+    ├── README.md                       # Component navigation hub
+    └── COMPONENT_INTEGRATION_MAP.md     # Visual system integration guide
+
+🏗️ Component Documentation: tpm_job_finder_poc/*/README.md (co-located with code)
 ```
 
 ## 🏗️ Architecture Overview

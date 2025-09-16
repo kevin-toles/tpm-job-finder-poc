@@ -48,7 +48,7 @@ tpm-job-finder-poc/                 # ROOT - Project root directory
 │       ├── Careerjet_Integration_Plan.md # Strategic plans
 │       ├── Careerjet_Integration_Plan.html # HTML version
 │       ├── IMPORT_MIGRATION_PLAN.md # Import migration guide
-│       ├── PROJECT_STRUCTURE.md    # This file
+│       ├── SYSTEM_ARCHITECTURE_OVERVIEW.md    # This file
 │       ├── AUTOMATION_README.md    # Automation documentation
 │       ├── CODECOV.md             # Code coverage info
 │       ├── RELEASE.md             # Release procedures

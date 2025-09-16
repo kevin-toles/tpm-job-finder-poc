@@ -4,8 +4,8 @@ Welcome to the comprehensive documentation for the TPM Job Finder POC, a product
 
 ## � **Quick Navigation**
 
-- **[📖 DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Complete organized documentation index by category
-- **[📖 PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Comprehensive guide to project organization, file placement, and development workflows
+- **[📖 HOLISTIC_DOCUMENTATION_GUIDE.md](HOLISTIC_DOCUMENTATION_GUIDE.md)** - Complete organized documentation with holistic system perspective
+- **[📖 SYSTEM_ARCHITECTURE_OVERVIEW.md](SYSTEM_ARCHITECTURE_OVERVIEW.md)** - Comprehensive guide to system architecture, organization, and development workflows
 - **[⚡ QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Fast lookup reference for file placement and common commands  
 - **[🔄 IMPORT_MIGRATION_PLAN.md](IMPORT_MIGRATION_PLAN.md)** - Import system migration guide and compatibility layer documentation
 
@@ -14,8 +14,8 @@ Welcome to the comprehensive documentation for the TPM Job Finder POC, a product
 ```
 docs/
 ├── README.md                    # This file - documentation home
-├── DOCUMENTATION_INDEX.md       # Complete organized documentation index
-├── PROJECT_STRUCTURE.md         # Complete project structure guide
+├── HOLISTIC_DOCUMENTATION_GUIDE.md  # Complete organized documentation with holistic perspective
+├── SYSTEM_ARCHITECTURE_OVERVIEW.md  # Complete system architecture guide
 ├── QUICK_REFERENCE.md           # Quick reference for file placement
 ├── IMPORT_MIGRATION_PLAN.md     # Import migration documentation
 ├── specifications/              # User-facing specs and requirements
