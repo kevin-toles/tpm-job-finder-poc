@@ -89,7 +89,8 @@ Specialized Function → Cross-Component Workflows → Complete Platform
 
 ### **🔍 For Component Development**
 1. **[Engineering Guidelines](ENGINEERING_GUIDELINES.md)** - Development constitution and coding standards
-2. **Component READMEs** - Co-located comprehensive documentation:
+2. **[TDD Component Audit Catalog](TDD_COMPONENT_AUDIT_CATALOG.md)** - Systematic TDD refactoring progress tracker
+3. **Component READMEs** - Co-located comprehensive documentation:
    - **[Enrichment](tpm_job_finder_poc/enrichment/README.md)** - Multi-resume AI intelligence system
    - **[Job Aggregator](tpm_job_finder_poc/job_aggregator/README.md)** - Multi-source data collection
    - **[LLM Provider](tpm_job_finder_poc/llm_provider/README.md)** - Multi-provider AI integration

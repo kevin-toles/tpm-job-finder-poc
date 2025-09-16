@@ -40,7 +40,7 @@ Implementation details, status reports, and technical summaries:
 
 ### 🧪 **Testing** (`docs/testing/`)
 Testing strategies, analysis, and quality assurance documentation:
-- **[TDD Component Audit Catalog](testing/TDD_COMPONENT_AUDIT_CATALOG.md)** - Comprehensive component inventory for systematic TDD audit
+- **[TDD Component Audit Catalog](../TDD_COMPONENT_AUDIT_CATALOG.md)** - Comprehensive component inventory for systematic TDD audit
 - **[Fast Mode Test Analysis](testing/FAST_MODE_TEST_ANALYSIS.md)** - Performance testing and optimization analysis
 
 ### 🔧 **Component Documentation & Integration** (`docs/components/`)
@@ -95,7 +95,7 @@ API reference and technical documentation:
    - Start with **[Enrichment](../tpm_job_finder_poc/enrichment/README.md)** for AI intelligence
    - Review **[Job Aggregator](../tpm_job_finder_poc/job_aggregator/README.md)** for data collection
    - Check **[LLM Provider](../tpm_job_finder_poc/llm_provider/README.md)** for AI integration
-3. **[TDD Component Audit](testing/TDD_COMPONENT_AUDIT_CATALOG.md)** - Testing strategies per component
+3. **[TDD Component Audit](../TDD_COMPONENT_AUDIT_CATALOG.md)** - Testing strategies per component
 
 ### **👥 For Multi-Resume Intelligence (User & Business Perspective)**
 1. **[Multi-Resume Usage Guide](specifications/MULTI_RESUME_USAGE_GUIDE.md)** - Complete user workflows

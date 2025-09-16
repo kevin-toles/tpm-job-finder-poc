@@ -32,7 +32,7 @@ docs/
 │   ├── ADVANCED_ANALYTICS_IMPLEMENTATION.md
 │   └── DOCUMENT_SYNCHRONIZATION_STATUS.md
 ├── testing/                     # Testing strategies and analysis
-│   ├── TDD_COMPONENT_AUDIT_CATALOG.md
+│   ├── (TDD_COMPONENT_AUDIT_CATALOG.md moved to root)
 │   └── FAST_MODE_TEST_ANALYSIS.md
 ├── components/                  # Component-specific documentation
 │   ├── enrichment.md            # Multi-resume intelligence & LLM integration

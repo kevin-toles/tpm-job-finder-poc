@@ -88,7 +88,7 @@ Health Monitor ←→ Error Handler ←→ Audit Logger
 
 ### **Testing & Quality**
 - **[Testing Strategy](../testing/)** - Component testing approaches
-- **[TDD Component Audit](../testing/TDD_COMPONENT_AUDIT_CATALOG.md)** - Systematic testing inventory
+- **[TDD Component Audit](../../TDD_COMPONENT_AUDIT_CATALOG.md)** - Systematic testing inventory
 
 ---
 

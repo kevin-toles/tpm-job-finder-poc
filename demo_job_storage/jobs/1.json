@@ -1,0 +1,19 @@
+{
+  "id": "1",
+  "source": "remoteok",
+  "title": "Test Job",
+  "company": "Test Co",
+  "location": null,
+  "url": null,
+  "date_posted": null,
+  "job_type": "mid_level",
+  "remote_friendly": false,
+  "tpm_keywords_found": 0,
+  "raw_data": {
+    "id": "1",
+    "position": "Test Job",
+    "company": "Test Co"
+  },
+  "aggregated_at": "2025-09-15T21:32:28.372833",
+  "stored_at": "2025-09-15T21:32:28.372881"
+}
