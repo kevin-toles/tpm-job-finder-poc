@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 
 from fastapi import FastAPI, HTTPException, Query, Depends, BackgroundTasks
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from .service import JobCollectionService
 from .config import JobCollectionConfig
@@ -32,14 +32,8 @@ logger = logging.getLogger(__name__)
 # Request/Response models
 class CollectJobsRequest(BaseModel):
     """Request model for job collection."""
-    query: str = Field(..., description="Job search query")
-    sources: Optional[List[str]] = Field(None, description="Specific sources to search")
-    max_jobs: Optional[int] = Field(None, description="Maximum number of jobs to collect")
-    location: Optional[str] = Field(None, description="Job location filter")
-    remote_only: Optional[bool] = Field(None, description="Filter for remote jobs only")
-    
-    class Config:
-        schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "query": "Technical Project Manager",
                 "sources": ["remoteok", "greenhouse"],
@@ -48,19 +42,19 @@ class CollectJobsRequest(BaseModel):
                 "remote_only": True
             }
         }
+    )
+    
+    query: str = Field(..., description="Job search query")
+    sources: Optional[List[str]] = Field(None, description="Specific sources to search")
+    max_jobs: Optional[int] = Field(None, description="Maximum number of jobs to collect")
+    location: Optional[str] = Field(None, description="Job location filter")
+    remote_only: Optional[bool] = Field(None, description="Filter for remote jobs only")
 
 
 class CollectionResponse(BaseModel):
     """Response model for job collection."""
-    success: bool
-    message: str
-    total_jobs: int
-    jobs_by_source: Dict[str, int]
-    collection_time_seconds: float
-    jobs: List[Dict[str, Any]]
-    
-    class Config:
-        schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "success": True,
                 "message": "Successfully collected 45 jobs",
@@ -70,6 +64,14 @@ class CollectionResponse(BaseModel):
                 "jobs": []
             }
         }
+    )
+    
+    success: bool
+    message: str
+    total_jobs: int
+    jobs_by_source: Dict[str, int]
+    collection_time_seconds: float
+    jobs: List[Dict[str, Any]]
 
 
 class HealthResponse(BaseModel):

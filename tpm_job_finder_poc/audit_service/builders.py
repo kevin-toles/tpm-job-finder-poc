@@ -58,10 +58,15 @@ class AuditEventBuilder(IAuditEventBuilder):
         return self
     
     def category(self, category: AuditCategory) -> 'AuditEventBuilder':
-        """Set the audit category."""
-        if not isinstance(category, AuditCategory):
-            raise ValueError(f"category must be an AuditCategory, got {type(category)}")
+        """Set the event category."""
         self._category = category
+        return self
+    
+    def service_name(self, service_name: str) -> 'AuditEventBuilder':
+        """Override the service name."""
+        if not service_name or not service_name.strip():
+            raise ValueError("service_name cannot be empty")
+        self._service_name = service_name.strip()
         return self
     
     def user(self, user_id: str) -> 'AuditEventBuilder':

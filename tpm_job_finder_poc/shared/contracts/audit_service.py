@@ -8,7 +8,7 @@ these interfaces.
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 import uuid
@@ -47,7 +47,7 @@ class AuditEvent:
     """
     # Core event identification
     event_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     
     # Event classification
     level: AuditLevel = AuditLevel.INFO
@@ -109,7 +109,7 @@ class AuditQuery:
     
     # Ordering
     order_by: str = "timestamp"
-    order_desc: bool = True
+    order_desc: bool = False
 
 
 @dataclass

@@ -5,7 +5,7 @@ Core service for audit event management with async operations,
 event validation, and comprehensive logging capabilities.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 import asyncio
 import logging
@@ -64,12 +64,15 @@ class AuditService(IAuditService):
         # Performance counters
         self._events_processed = 0
         self._events_failed = 0
-        self._last_flush_time = datetime.utcnow()
+        self._last_flush_time = datetime.now(timezone.utc)
     
     async def start(self) -> None:
         """Start the audit service."""
         if self._is_running:
             return
+        
+        # Start storage layer first
+        await self.storage.start()
         
         self._is_running = True
         self._flush_task = asyncio.create_task(self._periodic_flush())
@@ -91,7 +94,15 @@ class AuditService(IAuditService):
                 pass
         
         # Flush remaining events
-        await self._flush_buffer()
+        try:
+            await self._flush_buffer()
+        except (AuditStorageError, Exception) as e:
+            self._logger.error(f"Failed to flush remaining events during shutdown: {e}")
+            # Don't re-raise during shutdown to avoid blocking stop
+        
+        # Stop storage layer
+        await self.storage.stop()
+        
         self._logger.info(f"Audit service stopped: {self.service_name}")
     
     async def log_event(self, event: AuditEvent) -> None:
@@ -110,6 +121,14 @@ class AuditService(IAuditService):
             
             self._events_processed += 1
             
+        except ValueError as e:
+            # Convert dataclass validation errors to service validation errors
+            self._events_failed += 1
+            raise AuditEventValidationError(str(e))
+        except (AuditServiceError, AuditEventValidationError, AuditStorageError):
+            # Re-raise audit-specific errors
+            self._events_failed += 1
+            raise
         except Exception as e:
             self._events_failed += 1
             self._logger.error(f"Failed to log audit event: {e}")
@@ -187,7 +206,7 @@ class AuditService(IAuditService):
             storage_health = await self.storage.health_check()
             
             # Calculate uptime and performance metrics
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             buffer_size = len(self._event_buffer)
             time_since_flush = (now - self._last_flush_time).total_seconds()
             
@@ -196,6 +215,7 @@ class AuditService(IAuditService):
                     "name": self.service_name,
                     "status": "healthy" if self._is_running else "stopped",
                     "running": self._is_running,
+                    "started": self._is_running,
                     "buffer_size": buffer_size,
                     "time_since_last_flush_seconds": time_since_flush,
                     "events_processed": self._events_processed,
@@ -216,6 +236,7 @@ class AuditService(IAuditService):
             )
             
             health_status["status"] = "healthy" if overall_healthy else "unhealthy"
+            health_status["timestamp"] = now.isoformat()
             
             return health_status
             
@@ -236,7 +257,7 @@ class AuditService(IAuditService):
     def _validate_event(self, event: AuditEvent) -> None:
         """Validate audit event."""
         if not event.event_id:
-            raise AuditValidationError("Event ID is required")
+            raise AuditEventValidationError("Event ID is required")
         
         if not event.action:
             raise AuditEventValidationError("Action is required")
@@ -268,7 +289,7 @@ class AuditService(IAuditService):
             # Store events
             await self.storage.store_events(events_to_flush)
             
-            self._last_flush_time = datetime.utcnow()
+            self._last_flush_time = datetime.now(timezone.utc)
             self._logger.debug(f"Flushed {len(events_to_flush)} audit events")
             
         except Exception as e:

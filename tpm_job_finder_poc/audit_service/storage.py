@@ -6,7 +6,7 @@ Supports multiple storage backends with async operations.
 """
 
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 import asyncio
 import json
@@ -48,6 +48,16 @@ class IAuditStorage(ABC):
     @abstractmethod
     async def health_check(self) -> Dict[str, Any]:
         """Check storage health."""
+        pass
+    
+    @abstractmethod
+    async def start(self) -> None:
+        """Start the storage layer."""
+        pass
+    
+    @abstractmethod
+    async def stop(self) -> None:
+        """Stop the storage layer."""
         pass
 
 
@@ -109,7 +119,7 @@ class JsonFileAuditStorage(IAuditStorage):
     
     async def query_events(self, query: AuditQuery) -> AuditQueryResult:
         """Query audit events with filtering."""
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         try:
             matching_events = []
@@ -125,13 +135,13 @@ class JsonFileAuditStorage(IAuditStorage):
                                 event = self._dict_to_event(event_dict)
                                 
                                 if self._matches_query(event, query):
-                                    total_count += 1
-                                    if len(matching_events) < query.limit and total_count > query.offset:
-                                        matching_events.append(event)
+                                    matching_events.append(event)
                                         
                             except (json.JSONDecodeError, ValueError) as e:
                                 self._logger.warning(f"Failed to parse audit event: {e}")
                                 continue
+            
+            total_count = len(matching_events)
             
             # Sort events
             if query.order_by == "timestamp":
@@ -145,7 +155,7 @@ class JsonFileAuditStorage(IAuditStorage):
             end_idx = start_idx + query.limit
             paginated_events = matching_events[start_idx:end_idx]
             
-            query_duration = (datetime.utcnow() - start_time).total_seconds() * 1000
+            query_duration = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
             
             return AuditQueryResult(
                 events=paginated_events,
@@ -295,6 +305,17 @@ class JsonFileAuditStorage(IAuditStorage):
         self.file_path.replace(backup_file)
         
         self._logger.info(f"Rotated audit log file: {self.file_path}")
+    
+    async def start(self) -> None:
+        """Start the storage layer."""
+        # Ensure directory exists
+        self.file_path.parent.mkdir(parents=True, exist_ok=True)
+        self._logger.info(f"Audit storage started: {self.file_path}")
+    
+    async def stop(self) -> None:
+        """Stop the storage layer."""
+        # Flush any pending operations
+        self._logger.info(f"Audit storage stopped: {self.file_path}")
 
 
 def create_default_storage(base_path: Optional[Path] = None) -> IAuditStorage:
