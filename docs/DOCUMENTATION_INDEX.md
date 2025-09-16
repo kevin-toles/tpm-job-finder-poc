@@ -4,7 +4,11 @@ This document provides a comprehensive index of all documentation files organize
 
 ## 📁 Documentation Structure
 
-### 📋 **Specifications** (`docs/specifications/`)
+### �️ **Development Standards** (Root Level)
+Core development guidelines and standards:
+- **[Engineering Guidelines](../ENGINEERING_GUIDELINES.md)** - Comprehensive coding standards, TDD practices, and AI/ML safety rules for Copilot-driven development
+
+### �📋 **Specifications** (`docs/specifications/`)
 User-facing specifications and requirements documents:
 - **[Advanced Resume Parsing & Scoring Functionality](specifications/Advanced%20Resume%20Parsing_Scoring%20Functionality.md)** - Complete specification for multi-resume intelligence system
 - **[Multi-Resume Usage Guide](specifications/MULTI_RESUME_USAGE_GUIDE.md)** - User guide for multi-resume portfolio management
@@ -12,7 +16,6 @@ User-facing specifications and requirements documents:
 
 ### 🏗️ **Architecture** (`docs/architecture/`)
 High-level system design and architecture documentation:
-- **[Project Overview](architecture/PROJECT_OVERVIEW.md)** - Complete project architecture and component overview
 - **[Business Process Architecture](architecture/BUSINESS_PROCESS_ARCHITECTURE.md)** - Business process flows and component interactions
 - **[System Architecture & Workflows](architecture/SYSTEM_ARCHITECTURE_WORKFLOWS.md)** - Detailed system workflows and technical architecture
 
@@ -61,9 +64,10 @@ API reference and technical documentation:
 ## 🎯 **Quick Navigation**
 
 ### **Getting Started**
-1. Start with **[Project Overview](architecture/PROJECT_OVERVIEW.md)** for system understanding
-2. Review **[User Workflow Guide](specifications/USER_WORKFLOW_GUIDE.md)** for usage patterns
-3. Check **[Automation README](AUTOMATION_README.md)** for setup and automation
+1. Start with **[Project Overview](../PROJECT_OVERVIEW.md)** for system understanding
+2. Review **[Engineering Guidelines](../ENGINEERING_GUIDELINES.md)** for development standards
+3. Check **[User Workflow Guide](specifications/USER_WORKFLOW_GUIDE.md)** for usage patterns
+4. Review **[Automation README](AUTOMATION_README.md)** for setup and automation
 
 ### **Multi-Resume Intelligence**
 1. **[Multi-Resume Usage Guide](specifications/MULTI_RESUME_USAGE_GUIDE.md)** - User perspective
