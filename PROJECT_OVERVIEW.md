@@ -12,6 +12,7 @@ The TPM Job Finder POC is a sophisticated, enterprise-grade global job intellige
 - **Core Architecture:**
   - **JobCollectionService**: Modern, TDD-complete service for multi-source job collection with production-ready architecture
   - **JobNormalizerService**: Complete TDD microservice (63/63 tests) for job data standardization with REST API
+  - **LLMProviderService**: Complete TDD microservice (63/63 tests) for multi-provider LLM integration with REST API
   - **JobAggregatorService**: Legacy orchestration service (being phased out in favor of modern services)
   - **Scraping Service v2**: Independent, modular browser scraping service
   - **Enrichment Pipeline**: LLM-powered job analysis and enhancement including Phase 5+ advanced services
@@ -19,7 +20,7 @@ The TPM Job Finder POC is a sophisticated, enterprise-grade global job intellige
   - **Enterprise Multi-User Service**: Team collaboration and international expansion tracking *(Phase 5+)*
   - **Advanced Career Modeling Service**: Career pathway analysis and skill forecasting *(Phase 5+)*
   - **CLI Automation**: Complete workflow automation with configuration management
-  - **TDD Excellence**: Complete Test-Driven Development for core services (93/93 tests passing, zero warnings)
+  - **TDD Excellence**: Complete Test-Driven Development for core services (156/156 tests passing, zero warnings)
   - **Comprehensive Testing**: 440+ tests with strategic fast mode (6.46s) and comprehensive mode (~70s)
 
 ## Key Features

@@ -24,7 +24,32 @@ from .scraping_service import (
     ConfigurationError
 )
 
+from .llm_provider_service_tdd import (
+    ILLMProviderService,
+    LLMProviderConfig,
+    LLMRequest,
+    LLMResponse,
+    ProviderInfo,
+    ProviderHealth,
+    LLMServiceStatistics,
+    ProviderType,
+    ProviderStatus,
+    SignalType,
+    RequestPriority,
+    LLMProviderError,
+    ServiceNotStartedError as LLMServiceNotStartedError,
+    ProviderNotFoundError,
+    ProviderUnavailableError,
+    RateLimitExceededError,
+    InvalidRequestError,
+    AuthenticationError,
+    ConfigurationError as LLMConfigurationError,
+    LLMTimeoutError,
+    ModelNotFoundError
+)
+
 __all__ = [
+    # Scraping Service
     "IScrapingService",
     "ScrapingConfig",
     "ScrapingQuery", 
@@ -35,5 +60,28 @@ __all__ = [
     "SourceNotFoundError",
     "ScrapingTimeoutError",
     "ServiceError",
-    "ConfigurationError"
+    "ConfigurationError",
+    
+    # LLM Provider Service
+    "ILLMProviderService",
+    "LLMProviderConfig",
+    "LLMRequest",
+    "LLMResponse",
+    "ProviderInfo",
+    "ProviderHealth", 
+    "LLMServiceStatistics",
+    "ProviderType",
+    "ProviderStatus",
+    "SignalType",
+    "RequestPriority",
+    "LLMProviderError",
+    "LLMServiceNotStartedError",
+    "ProviderNotFoundError",
+    "ProviderUnavailableError",
+    "RateLimitExceededError",
+    "InvalidRequestError",
+    "AuthenticationError",
+    "LLMConfigurationError",
+    "LLMTimeoutError",
+    "ModelNotFoundError"
 ]
