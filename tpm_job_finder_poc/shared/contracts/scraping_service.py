@@ -72,6 +72,46 @@ class ScrapingConfig(BaseModel):
         if v <= 0:
             raise ValueError("value must be positive")
         return v
+    
+    @field_validator('delay_min_seconds', 'delay_max_seconds')
+    @classmethod 
+    def validate_delay_range(cls, v, info):
+        """Validate delay range consistency."""
+        if info.field_name == 'delay_max_seconds' and 'delay_min_seconds' in info.data:
+            if v < info.data['delay_min_seconds']:
+                raise ValueError("delay_max_seconds must be >= delay_min_seconds")
+        return v
+
+    @classmethod
+    def from_env(cls) -> "ScrapingConfig":
+        """Create configuration from environment variables."""
+        import os
+        
+        return cls(
+            headless=os.environ.get("SCRAPING_HEADLESS", "true").lower() == "true",
+            timeout_seconds=int(os.environ.get("SCRAPING_TIMEOUT", "30")),
+            max_retries=int(os.environ.get("SCRAPING_MAX_RETRIES", "3")),
+            user_agent_rotation=os.environ.get("SCRAPING_USER_AGENT_ROTATION", "true").lower() == "true",
+            enable_anti_detection=os.environ.get("ANTI_DETECTION_ENABLED", "true").lower() == "true",
+            delay_min_seconds=float(os.environ.get("ANTI_DETECTION_DELAY_MIN", "1.0")),
+            delay_max_seconds=float(os.environ.get("ANTI_DETECTION_DELAY_MAX", "3.0")),
+            viewport_randomization=os.environ.get("VIEWPORT_RANDOMIZATION", "true").lower() == "true",
+            javascript_protection=os.environ.get("JAVASCRIPT_PROTECTION", "true").lower() == "true",
+            max_browser_instances=int(os.environ.get("MAX_BROWSER_INSTANCES", "5")),
+            browser_instance_timeout=int(os.environ.get("BROWSER_INSTANCE_TIMEOUT", "300")),
+            browser_memory_limit_mb=int(os.environ.get("BROWSER_MEMORY_LIMIT", "1024")),
+            cleanup_interval_seconds=int(os.environ.get("CLEANUP_INTERVAL", "60")),
+            indeed_rate_limit=int(os.environ.get("INDEED_RATE_LIMIT", "10")),
+            linkedin_rate_limit=int(os.environ.get("LINKEDIN_RATE_LIMIT", "5")),
+            ziprecruiter_rate_limit=int(os.environ.get("ZIPRECRUITER_RATE_LIMIT", "10")),
+            greenhouse_rate_limit=int(os.environ.get("GREENHOUSE_RATE_LIMIT", "15")),
+            enable_parallel_processing=os.environ.get("ENABLE_PARALLEL_PROCESSING", "true").lower() == "true",
+            max_concurrent_scrapers=int(os.environ.get("MAX_CONCURRENT_SCRAPERS", "3")),
+            batch_size=int(os.environ.get("BATCH_SIZE", "50")),
+            fail_on_source_error=os.environ.get("FAIL_ON_SOURCE_ERROR", "false").lower() == "true",
+            log_scraping_errors=os.environ.get("LOG_SCRAPING_ERRORS", "true").lower() == "true",
+            skip_failed_sources=os.environ.get("SKIP_FAILED_SOURCES", "true").lower() == "true"
+        )
 
 
 class ScrapingQuery(BaseModel):
@@ -126,8 +166,11 @@ class SourceHealth(BaseModel):
     response_time_ms: float
     success_rate: float  # 0.0 to 1.0
     last_check: datetime
+    error_count: int = 0
+    last_error: Optional[str] = None
     error_message: Optional[str] = None
     last_successful_scrape: Optional[datetime] = None
+    detailed_metrics: Optional[Dict[str, Any]] = None
     
     model_config = ConfigDict(
         validate_assignment=True

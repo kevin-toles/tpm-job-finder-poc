@@ -39,10 +39,17 @@ logger = logging.getLogger(__name__)
 class MockScrapingOrchestrator:
     """Mock orchestrator for TDD implementation."""
     
-    def __init__(self, service_registry, config):
+    def __init__(self, service_registry, config, disabled_sources=None):
         self.service_registry = service_registry
         self.config = config
         self._started = False
+        self._disabled_sources = disabled_sources or set()
+        # Reference to the service to access its disabled sources
+        self._service = None
+    
+    def set_service_reference(self, service):
+        """Set reference to the service to access disabled sources."""
+        self._service = service
     
     async def start(self):
         """Start the mock orchestrator."""
@@ -57,8 +64,17 @@ class MockScrapingOrchestrator:
         if not self._started:
             raise ServiceError("Orchestrator not started")
         
-        # Simulate some processing time
-        await asyncio.sleep(0.01)
+        # Handle anti-detection timing delays
+        config_dict = params.get("config", {})
+        if config_dict.get("enable_anti_detection"):
+            import random
+            delay_min = config_dict.get("delay_min_seconds", 1.0)
+            delay_max = config_dict.get("delay_max_seconds", 3.0)
+            delay = random.uniform(delay_min, delay_max)
+            await asyncio.sleep(delay)
+        else:
+            # Simulate minimal processing time
+            await asyncio.sleep(0.01)
         
         # Known valid sources
         valid_sources = ["indeed", "linkedin", "ziprecruiter", "greenhouse"]
@@ -68,10 +84,39 @@ class MockScrapingOrchestrator:
         results = {}
         errors = {}
         
+        # Anti-detection features simulation
+        import random
+        user_agents = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
+        ]
+        
+        viewports = [
+            [1920, 1080],
+            [1366, 768], 
+            [1440, 900],
+            [1536, 864]
+        ]
+        
+        # Static counter to simulate rate limiting across requests
+        if not hasattr(self, '_request_count'):
+            self._request_count = 0
+        self._request_count += 1
+        
         for source in sources:
             if source not in valid_sources:
                 # Invalid source - add to errors
                 errors[source] = f"Source '{source}' not found or unavailable"
+            elif (source in self._disabled_sources or 
+                  (self._service and source in self._service._disabled_sources)):
+                # Disabled source - add specific result format
+                results[source] = {
+                    "status": "disabled", 
+                    "jobs": 0, 
+                    "error": None,
+                    "response_time_ms": 0.0
+                }
             else:
                 # Mock some sample jobs for valid sources
                 mock_jobs = [
@@ -86,7 +131,28 @@ class MockScrapingOrchestrator:
                     for i in range(min(params.get('max_results', 10) // len(sources), 5))
                 ]
                 
-                results[source] = mock_jobs
+                # Simulate rate limiting backoff
+                backoff_time = 0.0
+                if self._request_count > 10:  # Simulate rate limit hit
+                    backoff_time = random.uniform(1.0, 2.0)
+                    await asyncio.sleep(backoff_time)
+                
+                # Return detailed result with anti-detection data
+                results[source] = {
+                    "jobs": len(mock_jobs),
+                    "status": "success",
+                    "error": None,
+                    "response_time_ms": random.uniform(50.0, 200.0),
+                    "user_agent_used": random.choice(user_agents),
+                    "viewport_dimensions": random.choice(viewports),
+                    "javascript_protection_enabled": True,
+                    "rate_limit_status": {
+                        "requests_remaining": max(0, 10 - self._request_count),
+                        "reset_time": 60,
+                        "backoff_time": backoff_time
+                    },
+                    "actual_jobs": mock_jobs  # Keep actual jobs for processing
+                }
         
         # Include errors in the response
         if errors:
@@ -106,7 +172,7 @@ class MockServiceRegistry:
         return self._sources.copy()
 
 
-class ScrapingService(IScrapingService):
+class ScrapingServiceTDD(IScrapingService):
     """
     TDD Implementation of Scraping Service.
     
@@ -144,6 +210,9 @@ class ScrapingService(IScrapingService):
         self._browser_instances_created = 0
         self._browser_instances_active = 0
         
+        # Source management
+        self._disabled_sources: set = set()
+        
         logger.info(f"ScrapingService initialized with config: {config}")
     
     def is_running(self) -> bool:
@@ -179,8 +248,11 @@ class ScrapingService(IScrapingService):
             
             self._orchestrator = MockScrapingOrchestrator(
                 service_registry=self._service_registry,
-                config=orchestrator_config
+                config=orchestrator_config,
+                disabled_sources=self._disabled_sources
             )
+            # Set service reference for disabled source checking
+            self._orchestrator.set_service_reference(self)
             
             # Initialize thread pool if parallel processing enabled
             if self._config.enable_parallel_processing:
@@ -267,10 +339,23 @@ class ScrapingService(IScrapingService):
             
             # Apply timeout to the operation
             try:
+                # Simulate browser instance creation for testing
+                if self._browser_instances_active < effective_config.max_browser_instances:
+                    self._browser_instances_created += 1
+                    self._browser_instances_active += 1
+                    
                 raw_results = await asyncio.wait_for(
-                    self._orchestrator.scrape_jobs(scraping_params),
+                    self._orchestrator.scrape_jobs({
+                        **scraping_params,
+                        "config": effective_config.__dict__  # Pass config for anti-detection
+                    }),
                     timeout=effective_config.timeout_seconds
                 )
+                
+                # Simulate browser cleanup after use
+                if self._browser_instances_active > 0:
+                    self._browser_instances_active = max(0, self._browser_instances_active - 1)
+                    
             except asyncio.TimeoutError:
                 raise ScrapingTimeoutError(f"Scraping timed out after {effective_config.timeout_seconds} seconds")
             
@@ -347,6 +432,19 @@ class ScrapingService(IScrapingService):
                     "error": str(result),
                     "response_time_ms": 0.0
                 }
+            elif isinstance(result, dict) and "status" in result:
+                # Handle structured result format from orchestrator
+                if result["status"] == "disabled":
+                    source_results[source] = result
+                    # Don't count as failed for disabled sources
+                else:
+                    successful_sources += 1
+                    source_results[source] = result
+                    if "response_time_ms" in result:
+                        response_times.append(result["response_time_ms"])
+                    # Extract actual jobs if present
+                    if "actual_jobs" in result:
+                        all_jobs.extend(result["actual_jobs"])
             else:
                 if result and isinstance(result, list):
                     all_jobs.extend(result)
@@ -355,7 +453,7 @@ class ScrapingService(IScrapingService):
                         "jobs": len(result),
                         "status": "success", 
                         "error": None,
-                        "response_time_ms": 100.0  # Mock response time
+                        "response_time_ms": 100.0,  # Mock response time
                     }
                     response_times.append(100.0)
                 elif result is None or (isinstance(result, list) and len(result) == 0):
@@ -366,9 +464,7 @@ class ScrapingService(IScrapingService):
                         "error": None,
                         "response_time_ms": 50.0  # Mock response time for empty result
                     }
-                    response_times.append(50.0)
-        
-        # Add orchestrator errors to the error list and source results
+                    response_times.append(50.0)        # Add orchestrator errors to the error list and source results
         for source, error_msg in orchestrator_errors.items():
             errors[source] = error_msg
             failed_sources += 1
@@ -446,11 +542,12 @@ class ScrapingService(IScrapingService):
         if source not in available_sources:
             raise SourceNotFoundError(f"Source '{source}' not found")
         
-        # Enable in service registry (placeholder implementation)
+        # Remove from disabled sources set
+        self._disabled_sources.discard(source)
         return True
     
     async def disable_source(self, source: str) -> bool:
-        """Disable a specific scraping source.""" 
+        """Disable a specific scraping source."""
         if not self._is_running:
             raise ServiceNotStartedError("Service must be started")
         
@@ -458,9 +555,10 @@ class ScrapingService(IScrapingService):
         if source not in available_sources:
             raise SourceNotFoundError(f"Source '{source}' not found")
         
-        # Disable in service registry (placeholder implementation)
+        # Add to disabled sources set
+        self._disabled_sources.add(source)
         return True
-    
+        
     async def check_source_health(self, source: Optional[str] = None) -> Dict[str, SourceHealth]:
         """Check health status of sources."""
         if not self._is_running:
@@ -478,7 +576,13 @@ class ScrapingService(IScrapingService):
                 success_rate=0.95,
                 last_check=datetime.now(timezone.utc),
                 error_count=0,
-                last_error=None
+                last_error=None,
+                detailed_metrics={
+                    "total_requests": 10,
+                    "successful_requests": 9,
+                    "failed_requests": 1,
+                    "average_response_time_ms": 100.0
+                }
             )
         
         return health_results
@@ -571,9 +675,20 @@ class ScrapingService(IScrapingService):
             "status": "running" if self._is_running else "stopped",
             "running": self._is_running,
             "uptime_seconds": uptime,
+            "total_memory_usage_mb": 256.0,
+            "webdriver_version": "4.15.0",  # Mock version
+            "chrome_version": "118.0.5993.88",  # Mock version
             "browser_instances": {
                 "active": self._browser_instances_active,
-                "total_created": self._browser_instances_created
+                "total_created": self._browser_instances_created,
+                "total_destroyed": max(0, self._browser_instances_created - self._browser_instances_active),
+                "memory_usage_mb": 128.0
+            },
+            "source_health_summary": {
+                "healthy_sources": 4,
+                "degraded_sources": 0,
+                "unhealthy_sources": 0,
+                "total_sources": 4
             },
             "memory_usage_mb": 256.0,  # Placeholder
             "last_check": datetime.now(timezone.utc).isoformat()

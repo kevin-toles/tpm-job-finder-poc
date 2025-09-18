@@ -1,0 +1,35 @@
+{
+  "app": {
+    "name": "TPM Job Finder",
+    "version": "1.0.0",
+    "debug": false
+  },
+  "database": {
+    "url": "sqlite:///jobs.db",
+    "pool_size": 10,
+    "timeout": 30
+  },
+  "llm_provider": {
+    "primary": "openai",
+    "fallbacks": [
+      "anthropic",
+      "google"
+    ],
+    "timeout_seconds": 30,
+    "max_retries": 3
+  },
+  "job_sources": {
+    "enabled": [
+      "indeed",
+      "linkedin",
+      "remoteok"
+    ],
+    "max_jobs_per_source": 100,
+    "rate_limit_enabled": true
+  },
+  "feature_flags": {
+    "enable_multi_resume": true,
+    "enable_advanced_scoring": true,
+    "enable_auto_apply": false
+  }
+}
