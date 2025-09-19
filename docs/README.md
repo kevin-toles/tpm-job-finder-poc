@@ -1,5 +1,18 @@
 # TPM Job Finder POC - Documentation
 
+Welcome to the comprehensive documentation for the TPM Job Finder POC, a production-ready automated job search and aggregation system featuring modern TDD-complete services with **unified API Gateway entry point**.
+
+**🚀 Latest Updates:**
+- ✅ **API Gateway Service** - TDD-complete with 65/65 tests passing, unified entry point
+- ✅ **JobCollectionService** - TDD-complete with 30/30 tests passing, zero warnings
+- ✅ **JobNormalizerService** - TDD-complete with 63/63 tests passing, zero warnings
+- ✅ **Enrichment Services** - Multi-resume intelligence with 149+ tests  
+- 📊 **Test Coverage** - 505+ comprehensive tests across all categories
+- 🏗️ **Modern Architecture** - Interface-driven design with Pydantic V2 compliance
+- 🌐 **API Gateway Integration** - Centralized routing, authentication, and service orchestration
+
+## 📚 **Quick Navigation** POC - Documentation
+
 Welcome to the comprehensive documentation for the TPM Job Finder POC, a production-ready automated job search and aggregation system featuring modern TDD-complete services alongside legacy components.
 
 **🚀 Latest Updates:**
@@ -46,6 +59,7 @@ docs/
 │   ├── (TDD_COMPONENT_AUDIT_CATALOG.md moved to root)
 │   └── FAST_MODE_TEST_ANALYSIS.md
 ├── components/                  # Component-specific documentation
+│   ├── api_gateway_service.md   # API Gateway unified entry point
 │   ├── enrichment.md            # Multi-resume intelligence & LLM integration
 │   ├── job_aggregator.md        # Job aggregation service docs
 │   ├── scraping_service.md      # Web scraping service docs
@@ -70,6 +84,7 @@ docs/
 - **[CHANGELOG.md](../CHANGELOG.md)**: Version history and changes
 
 ### 🏗️ Architecture Documentation
+- **[API Gateway Service](../tpm_job_finder_poc/api_gateway_service/README.md)**: Unified entry point with routing and authentication
 - **[Job Collection Service](../tpm_job_finder_poc/job_collection_service/README.md)**: Modern TDD collection service
 - **[Job Normalizer Service](../tpm_job_finder_poc/job_normalizer_service/README.md)**: Modern TDD normalization service
 - **[Job Aggregator Service](../tpm_job_finder_poc/job_aggregator/README.md)**: Central orchestration service
@@ -95,7 +110,7 @@ The TPM Job Finder POC is a sophisticated job aggregation system featuring:
 
 - **Multi-Source Collection**: API sources + browser scraping across 10+ platforms
 - **Intelligent Processing**: LLM-powered enrichment and deduplication
-- **Production-Ready**: 440+ tests with strategic fast mode (6.46s) and comprehensive validation (~70s)
+- **Production-Ready**: 505+ tests with strategic fast mode (6.46s) and comprehensive validation (~70s)
 - **Modular Architecture**: Microservice-inspired design with clear separation
 - **Advanced Features**: Phase 5+ services including cultural fit assessment, geographic LLM integration, and career modeling
 
@@ -127,7 +142,7 @@ Complete workflow automation with configuration management supporting multiple o
 
 - **Language**: Python 3.13+
 - **Web Scraping**: Selenium WebDriver
-- **Testing**: pytest (440+ tests with strategic fast mode)
+- **Testing**: pytest (505+ tests with strategic fast mode)
 - **Async Processing**: asyncio
 - **Database**: SQLite (caching and deduplication)
 - **LLM Integration**: Multiple providers (OpenAI, Anthropic, Google, DeepSeek, Ollama)
@@ -216,7 +231,7 @@ python -m pytest tests/unit/enrichment/ -v
 
 ### Production Readiness
 The system is production-ready with:
-- ✅ Complete test coverage (440+ tests with strategic performance optimization)
+- ✅ Complete test coverage (505+ tests with strategic performance optimization)
 - ✅ Comprehensive monitoring and health checks
 - ✅ Security compliance and best practices
 - ✅ Modular, scalable architecture
@@ -295,7 +310,7 @@ The system is production-ready with:
 
 - **Current Version**: v1.0.0 (Production Ready)
 - **Documentation Last Updated**: September 2025
-- **Test Suite Status**: 440+ tests with strategic fast mode (6.46s) and comprehensive validation
+- **Test Suite Status**: 505+ tests with strategic fast mode (6.46s) and comprehensive validation
 - **Architecture Status**: Production-ready with comprehensive validation and advanced features
 
 ---

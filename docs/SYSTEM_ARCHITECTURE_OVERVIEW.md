@@ -1,17 +1,18 @@
 # TPM Job Finder POC - System Architecture Overview
 
-**Version**: 3.0 (TDD-Complete Architecture)  
+**Version**: 3.0 (TDD-Complete Architecture with API Gateway)  
 **Branch**: `dev`  
 **Last Updated**: September 16, 2025
 
 ## 📖 **Overview**
 
-This document provides a comprehensive guide to the TPM Job Finder POC system architecture, explaining the modern, TDD-complete service implementations alongside legacy components. This serves as the central navigation point for understanding how core services work together to deliver global job intelligence.
+This document provides a comprehensive guide to the TPM Job Finder POC system architecture, explaining the modern, TDD-complete service implementations with **unified API Gateway entry point** alongside legacy components. This serves as the central navigation point for understanding how core services work together to deliver global job intelligence.
 
 ## 🏗️ **System Architecture Philosophy**
 
-The TPM Job Finder POC has evolved into a **production-ready, TDD-driven architecture** that:
+The TPM Job Finder POC has evolved into a **production-ready, TDD-driven architecture with unified API Gateway** that:
 
+- ✅ **API Gateway Integration**: Unified entry point for all services with authentication and routing
 - ✅ **TDD Excellence**: Core services implemented with complete Test-Driven Development (RED-GREEN-REFACTOR cycles)
 - ✅ **Modern Service Architecture**: New JobCollectionService represents production-ready patterns
 - ✅ **Legacy Compatibility**: Maintains JobAggregatorService during transition period
@@ -23,6 +24,7 @@ The TPM Job Finder POC has evolved into a **production-ready, TDD-driven archite
 ## 🚀 **Modern Architecture Highlights**
 
 ### **Production-Ready Services (TDD-Complete)**
+- ✅ **API Gateway Service**: Complete TDD implementation (65/65 tests, unified entry point)
 - ✅ **JobCollectionService**: Complete TDD implementation (30/30 tests, zero warnings)
 - ✅ **JobNormalizerService**: Complete TDD microservice (63/63 tests, REST API, advanced features)
 - ✅ **Multi-Resume Intelligence**: ~142,000+ lines of comprehensive test coverage
@@ -30,6 +32,7 @@ The TPM Job Finder POC has evolved into a **production-ready, TDD-driven archite
 - ✅ **Error Handling**: Specific exception types (ValidationError, JobCollectionTimeoutError, JobNormalizationError)
 - ✅ **Data Pipeline**: Raw Data → Deduplication → Enrichment → JobPosting objects
 - ✅ **Health Monitoring**: Real source status tracking and system health checks
+- ✅ **Unified Access**: All services accessible through API Gateway with intelligent routing
 
 ### **Legacy Services (Transitioning)**
 - 🔄 **JobAggregatorService**: Legacy orchestration service (functional but being replaced)
@@ -79,7 +82,7 @@ tpm-job-finder-poc/                 # ROOT - Project root directory
 │       ├── deploy.sh              # Deployment automation
 │       └── validate_automation.py  # Validation workflows
 │
-├── 🧪 TESTING INFRASTRUCTURE      # Comprehensive test suite (440+ tests)
+├── 🧪 TESTING INFRASTRUCTURE      # Comprehensive test suite (505+ tests)
 │   └── tests/
 │       ├── unit/                   # Unit tests with TDD excellence
 │       │   ├── job_collection_service/ # Modern service TDD tests (30 tests, complete)
@@ -204,7 +207,7 @@ Each top-level directory has a specific purpose:
 
 - **`docs/`**: ALL documentation (no scattered READMEs)
 - **`scripts/`**: ALL development tools and automation
-- **`tests/`**: ALL testing code with proper hierarchy (440+ tests)
+- **`tests/`**: ALL testing code with proper hierarchy (505+ tests)
 - **`tpm_job_finder_poc/`**: ONLY production application code
 - **`logs/`**: ALL log files (no logs in root)
 
@@ -213,7 +216,7 @@ Each top-level directory has a specific purpose:
 **TDD Methodology Applied:**
 - Complete RED-GREEN-REFACTOR cycles for new services
 - Interface-driven development with strict contracts
-- Comprehensive test coverage (440+ tests across categories)
+- Comprehensive test coverage (505+ tests across categories)
 - Zero-warning implementations with modern patterns
 - Production-ready code from day one
 

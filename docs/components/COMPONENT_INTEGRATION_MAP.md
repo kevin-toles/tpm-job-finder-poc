@@ -5,13 +5,13 @@
 **Audience**: Developers, System Architects, Product Managers  
 **Scope**: Cross-component data flows, integration patterns, and system architecture
 
-**🚀 Architecture Status**: Features modern TDD-complete services (job_collection_service, enrichment) alongside legacy components in transition.
+**🚀 Architecture Status**: Features modern TDD-complete services (job_collection_service, enrichment, api_gateway_service) alongside legacy components in transition.
 
 ---
 
 ## 🗺️ **SYSTEM OVERVIEW MAP**
 
-### **Modern Service Architecture (TDD-Complete)**
+### **Modern Service Architecture (TDD-Complete with API Gateway)**
 ```
                     🌐 External World
                          ↓
@@ -23,6 +23,13 @@
     └─────────────┬───────────────┬───────────────┘
                   │               │
                   ▼               ▼
+    ┌─────────────────────────────────────────────┐
+    │          🌐 API Gateway Service             │
+    │     (Unified Entry Point - 65 tests)       │
+    │   Authentication • Rate Limiting • Routing  │
+    └─────────────┬───────────────────────────────┘
+                  │
+                  ▼
     ┌─────────────────────────────────────────────┐
     │      🚀 Modern Service Layer (TDD)          │
     │  ┌─────────────────┐  ┌─────────────────┐   │
@@ -110,9 +117,13 @@
 
 ## 🔄 **DATA FLOW PATTERNS**
 
-### **1. Complete Job Search Workflow**
+### **1. Complete Job Search Workflow (via API Gateway)**
 ```
-User Input → CLI → Config → Resume Upload → Enrichment
+User Input → CLI → API Gateway → Authentication & Rate Limiting
+    ↓
+Config Validation → Service Discovery → Request Routing
+    ↓
+Resume Upload → Enrichment Service (via Gateway)
     ↓
 Job Collection → Job Aggregator → Scraping Service
     ↓
@@ -121,14 +132,17 @@ Data Processing → Job Normalizer Service → Cache → Models
 AI Analysis → LLM Provider → Enrichment → Results
     ↓
 Data Persistence → Storage → Secure Storage → Output
+    ↓
+Response Aggregation → API Gateway → Client Response
 ```
 
-### **2. Multi-Resume Intelligence Flow**
+### **2. Multi-Resume Intelligence Flow (Orchestrated by API Gateway)**
 ```
-Resume Portfolio Discovery
+Resume Portfolio Discovery → API Gateway Authentication
     ↓
 ┌─────────────────────────────────────────┐
 │          Enrichment Component           │
+│           (via API Gateway)             │
 │                                         │
 │  Resume Discovery → Portfolio Scanning  │
 │         ↓                               │
@@ -139,18 +153,18 @@ Resume Portfolio Discovery
 │  Enhancement Generation → Validation    │
 └─────────────────────────────────────────┘
     ↓
-Enhanced Job Matching Results
+Enhanced Job Matching Results → API Gateway → Client
 ```
 
-### **3. Enterprise Multi-User Flow**
+### **3. Enterprise Multi-User Flow (API Gateway Coordinated)**
 ```
-Team Configuration → Config Manager → User Permissions
+Team Configuration → API Gateway → Config Manager → User Permissions
     ↓
-Collaborative Search → Job Aggregator → Shared Opportunities
+Collaborative Search → API Gateway → Job Aggregator → Shared Opportunities
     ↓
-Team Analytics → Enrichment → Market Intelligence
+Team Analytics → API Gateway → Enrichment → Market Intelligence
     ↓
-Expansion Tracking → Storage → Progress Reports
+Expansion Tracking → Storage → Progress Reports → API Gateway → Teams
 ```
 
 ---

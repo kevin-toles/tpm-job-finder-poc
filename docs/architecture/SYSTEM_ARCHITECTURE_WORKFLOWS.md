@@ -5,14 +5,245 @@
 This document provides comprehensive technical workflows for the TPM Job Finder POC system architecture, covering data flows, service interactions, API integrations, and system orchestration patterns. The system features modern TDD-complete services alongside legacy components in transition.
 
 **📍 Architecture Status:**
-- 🚀 **Modern Services**: TDD-complete implementations with full test coverage (job_collection_service, job_normalizer_service, llm_provider_tdd, notification_service, enrichment)
+- 🚀 **Modern Services**: TDD-complete implementations with full test coverage (api_gateway_service, job_collection_service, job_normalizer_service, llm_provider_tdd, notification_service, enrichment)
 - 🔄 **Legacy Services**: Original implementations being modernized (job_aggregator, llm_provider)
-- ✅ **Test Coverage**: 480+ comprehensive tests including 30 for job_collection_service, 63 for job_normalizer_service, 63 for llm_provider_tdd, 44 for notification_service
+- ✅ **Test Coverage**: 505+ comprehensive tests including 65 for api_gateway_service, 30 for job_collection_service, 63 for job_normalizer_service, 63 for llm_provider_tdd, 44 for notification_service
 - 🎯 **Production Ready**: Zero-warning implementations with Pydantic V2 compliance
 
 ---
 
 ## 🔄 **Core System Workflows**
+
+## 🔄 **Core System Workflows**
+
+### **0. API Gateway Service - Unified Entry Point (TDD-Complete)**
+
+The modern `APIGatewayService` provides a production-ready unified entry point for all platform API requests with comprehensive routing, rate limiting, and security features:
+
+#### **APIGatewayService Architecture Flow**
+
+```mermaid
+graph TD
+    A[Client Request] --> B[API Gateway Service - TDD Complete]
+    B --> C[Request Validation & Security]
+    C --> D[Rate Limiting Check]
+    D --> E[Authentication & Authorization]
+    E --> F[Route Resolution]
+    F --> G[Service Discovery]
+    G --> H[Request Proxying]
+    H --> I[Backend Service]
+    I --> J[Response Processing]
+    J --> K[Metrics Collection]
+    K --> L[Response to Client]
+    
+    B --> M[Health Monitoring]
+    B --> N[Configuration Management]
+    B --> O[Error Handling & Recovery]
+    B --> P[Admin Interface]
+    
+    Q[CORS Policy] --> C
+    R[Service Registry] --> G
+    S[Metrics Store] --> K
+```
+
+**Key Gateway Features:**
+- ✅ **Unified Entry Point**: Single access point for all platform API requests
+- ✅ **Dynamic Routing**: Runtime route registration and intelligent request routing
+- ✅ **Rate Limiting**: Multi-scope rate limiting (global, user, IP, API key)
+- ✅ **Authentication Integration**: JWT token validation with AuthenticationService
+- ✅ **Request Proxying**: Timeout handling and retry logic for backend services
+- ✅ **Health Monitoring**: Service dependency tracking and availability checks
+- ✅ **Metrics Collection**: Real-time request/response tracking and performance monitoring
+- ✅ **Security Features**: CORS enforcement, request size validation, error message sanitization
+- ✅ **Admin Interface**: Configuration management and metrics reset capabilities
+- ✅ **HTTP Mocking Excellence**: Complete test mocking system with MockResponse class (65/65 tests passing)
+
+#### **Production API Gateway Implementation**
+
+**1. Gateway Service Core**
+```python
+# tpm_job_finder_poc/api_gateway_service/service.py
+class APIGatewayService:
+    """Production-ready API Gateway with unified entry point"""
+    
+    def __init__(self, config: APIGatewayConfig):
+        self.config = config
+        
+        # Core service components
+        self._routing_service = RoutingService(config)
+        self._rate_limit_service = RateLimitService(config)
+        self._proxy_service = ProxyService(config)
+        self._metrics_collector = MetricsCollector()
+        
+        # Service state
+        self._is_running = False
+        self._registered_services = {}
+        self._health_checks = {}
+        
+    async def process_request(self, context: RequestContext) -> ProxyResponse:
+        """Process incoming request through complete gateway pipeline"""
+        
+        if not self._is_running:
+            raise APIGatewayError("Gateway service not running")
+            
+        start_time = datetime.now(timezone.utc)
+        
+        try:
+            # 1. Security validation
+            await self._validate_request_security(context)
+            
+            # 2. Rate limiting check
+            rate_limit_result = await self._rate_limit_service.check_rate_limit(
+                context.client_ip, context.user_id, context.path
+            )
+            if rate_limit_result.is_rate_limited:
+                raise RateLimitExceededError("Rate limit exceeded")
+            
+            # 3. Authentication (if required)
+            if self._requires_authentication(context.path):
+                auth_result = await self._authenticate_request(context)
+                context.authenticated = auth_result.success
+                context.user_id = auth_result.user_id
+            
+            # 4. Route resolution
+            route = await self._routing_service.resolve_route(context.method, context.path)
+            if not route:
+                raise RouteNotFoundError(f"No route found for {context.method} {context.path}")
+            
+            # 5. Service health check
+            if not await self._is_service_healthy(route.backend_url):
+                raise ServiceUnavailableError(f"Backend service unavailable: {route.backend_url}")
+            
+            # 6. Request proxying with timeout
+            proxy_response = await asyncio.wait_for(
+                self._proxy_service.proxy_request(
+                    method=context.method.value,
+                    url=route.backend_url + context.path,
+                    headers=context.headers,
+                    query_params=context.query_params
+                ),
+                timeout=route.timeout_seconds
+            )
+            
+            # 7. Response processing
+            processed_response = await self._process_response(proxy_response, context)
+            
+            # 8. Metrics collection
+            duration_ms = (datetime.now(timezone.utc) - start_time).total_seconds() * 1000
+            self._metrics_collector.record_request(
+                method=context.method,
+                path=context.path,
+                status_code=processed_response.status_code,
+                response_time_ms=duration_ms,
+                user_id=context.user_id
+            )
+            
+            return processed_response
+            
+        except asyncio.TimeoutError:
+            self._metrics_collector.record_timeout(context.path)
+            raise RequestTimeoutError("Request timeout")
+        except Exception as e:
+            self._metrics_collector.record_error(context.path, str(e))
+            raise APIGatewayError(f"Request processing failed: {e}")
+```
+
+**2. FastAPI REST Interface**
+```python
+# tpm_job_finder_poc/api_gateway_service/api.py
+app = FastAPI(title="API Gateway Service", version="1.0.0")
+
+@app.get("/health")
+async def health_check(detailed: bool = False):
+    """Gateway health check with optional service dependency details"""
+    gateway_service = get_gateway_service()
+    health = await gateway_service.health_check()
+    
+    if detailed:
+        return {
+            "status": health["status"],
+            "gateway": health["gateway"],
+            "services": health["services"],
+            "metrics": await gateway_service.get_metrics()
+        }
+    return {"status": health["status"]}
+
+@app.any("/proxy/{path:path}")
+async def proxy_request(request: Request, path: str):
+    """Main proxy endpoint for backend service requests"""
+    gateway_service = get_gateway_service()
+    
+    # Build request context
+    context = RequestContext(
+        request_id=str(uuid.uuid4()),
+        method=HttpMethod(request.method),
+        path=f"/{path}",
+        headers=dict(request.headers),
+        query_params=dict(request.query_params),
+        client_ip=request.client.host
+    )
+    
+    # Process through gateway pipeline
+    response = await gateway_service.process_request(context)
+    
+    return Response(
+        content=response.body,
+        status_code=response.status_code,
+        headers=dict(response.headers)
+    )
+
+@app.post("/routes")
+async def register_route(route: RouteDefinition):
+    """Register new route in the gateway"""
+    gateway_service = get_gateway_service()
+    result = await gateway_service._routing_service.register_route(route)
+    return {"success": result, "route_id": route.route_id}
+```
+
+**3. Rate Limiting & Security**
+```python
+# Advanced rate limiting with multiple scopes
+class RateLimitService:
+    async def check_rate_limit(self, client_ip: str, user_id: Optional[str], 
+                              path: str) -> RateLimitResult:
+        """Multi-scope rate limiting check"""
+        
+        # Check global rate limits
+        global_result = await self._check_global_rate_limit()
+        if global_result.is_rate_limited:
+            return global_result
+            
+        # Check IP-based rate limits
+        ip_result = await self._check_ip_rate_limit(client_ip)
+        if ip_result.is_rate_limited:
+            return ip_result
+            
+        # Check user-based rate limits (if authenticated)
+        if user_id:
+            user_result = await self._check_user_rate_limit(user_id)
+            if user_result.is_rate_limited:
+                return user_result
+        
+        # Check path-specific rate limits
+        path_result = await self._check_path_rate_limit(path, client_ip)
+        return path_result
+
+# Security validation methods
+async def _validate_request_security(self, context: RequestContext):
+    """Comprehensive request security validation"""
+    
+    # Request size validation
+    await self._validate_request_size(context)
+    
+    # CORS validation
+    await self._validate_cors(context)
+    
+    # Header validation
+    await self._validate_headers(context)
+    
+    # Path traversal protection
+    await self._validate_path_safety(context.path)
+```
 
 ### **1. Modern Job Collection & Processing Pipeline (TDD-Complete)**
 
@@ -22,27 +253,29 @@ The modern `JobCollectionService` implements a production-ready architecture wit
 
 ```mermaid
 graph TD
-    A[CLI Entry Point] --> B[JobCollectionService - TDD Complete]
-    B --> C[Service Lifecycle Start]
-    C --> D[Configuration Validation]
-    D --> E[Multi-Source Collection]
-    E --> F[API Collection Pipeline]
-    E --> G[Scraping Collection Pipeline]
-    F --> H[RemoteOK, Greenhouse, Lever APIs]
-    G --> I[Indeed, LinkedIn, ZipRecruiter Scrapers]
-    H --> J[Job Enrichment Service]
-    I --> J
-    J --> K[Data Validation & Normalization]
-    K --> L[Deduplication Engine]
-    L --> M[JobPosting Objects]
-    M --> N[Storage Layer]
-    N --> O[Collection Statistics]
-    O --> P[Health Status Updates]
-    P --> Q[Service Lifecycle Stop]
+    A[API Gateway Entry] --> B[Authentication & Rate Limiting]
+    B --> C[Route to JobCollectionService]
+    C --> D[JobCollectionService - TDD Complete]
+    D --> E[Service Lifecycle Start]
+    E --> F[Configuration Validation]
+    F --> G[Multi-Source Collection]
+    G --> H[API Collection Pipeline]
+    G --> I[Scraping Collection Pipeline]
+    H --> J[RemoteOK, Greenhouse, Lever APIs]
+    I --> K[Indeed, LinkedIn, ZipRecruiter Scrapers]
+    J --> L[Job Enrichment Service]
+    K --> L
+    L --> M[Data Validation & Normalization]
+    M --> N[Deduplication Engine]
+    N --> O[JobPosting Objects]
+    O --> P[Storage Layer]
+    P --> Q[Collection Statistics]
+    Q --> R[Health Status Updates]
+    R --> S[Response via API Gateway]
     
-    B --> R[Error Handling & Recovery]
-    B --> S[Performance Monitoring]
-    B --> T[Audit Logging]
+    D --> T[Error Handling & Recovery]
+    D --> U[Performance Monitoring]
+    D --> V[Audit Logging]
 ```
 
 **Key Modern Features:**
@@ -383,29 +616,31 @@ The modern `LLMProviderService` implements a production-ready microservice with 
 
 ```mermaid
 graph TD
-    A[Client Request] --> B[LLMProviderService - TDD Complete]
-    B --> C[Service Lifecycle Management]
-    C --> D[Request Validation & Processing]
-    D --> E[Multi-Provider Selection]
-    E --> F[OpenAI Provider]
-    E --> G[Anthropic Provider]
-    E --> H[Gemini Provider]
-    E --> I[DeepSeek Provider]
-    E --> J[Ollama Provider]
-    F --> K[Provider Fallback Logic]
-    G --> K
-    H --> K
-    I --> K
-    J --> K
-    K --> L[Response Processing]
-    L --> M[Statistics Tracking]
-    M --> N[Health Monitoring]
-    N --> O[LLMResponse]
+    A[API Gateway Entry] --> B[Authentication & Rate Limiting]
+    B --> C[Route to LLMProviderService]
+    C --> D[LLMProviderService - TDD Complete]
+    D --> E[Service Lifecycle Management]
+    E --> F[Request Validation & Processing]
+    F --> G[Multi-Provider Selection]
+    G --> H[OpenAI Provider]
+    G --> I[Anthropic Provider]
+    G --> J[Gemini Provider]
+    G --> K[DeepSeek Provider]
+    G --> L[Ollama Provider]
+    H --> M[Provider Fallback Logic]
+    I --> M
+    J --> M
+    K --> M
+    L --> M
+    M --> N[Response Processing]
+    N --> O[Statistics Tracking]
+    O --> P[Health Monitoring]
+    P --> Q[Response via API Gateway]
     
-    B --> P[REST API Endpoints]
-    B --> Q[Configuration Management]
-    B --> R[Error Handling & Recovery]
-    B --> S[Memory Usage Monitoring]
+    D --> R[REST API Endpoints]
+    D --> S[Configuration Management]
+    D --> T[Error Handling & Recovery]
+    D --> U[Memory Usage Monitoring]
 ```
 
 **Key Modern Features:**
@@ -521,27 +756,29 @@ The modern `NotificationService` implements a production-ready multi-channel com
 
 ```mermaid
 graph TD
-    A[Client Request] --> B[NotificationService - TDD Complete]
-    B --> C[Service Lifecycle Management]
-    C --> D[Request Validation & Processing]
-    D --> E[Channel Selection]
-    E --> F[Email Provider - SMTP]
-    E --> G[Webhook Provider - HTTP]
-    E --> H[Alert Provider - System]
-    E --> I[Real-time Provider - WebSocket]
-    F --> J[Template Processing]
-    G --> J
-    H --> J
-    I --> J
-    J --> K[Delivery Tracking]
-    K --> L[Statistics & Metrics]
-    L --> M[Health Monitoring]
-    M --> N[NotificationResponse]
+    A[API Gateway Entry] --> B[Authentication & Rate Limiting]
+    B --> C[Route to NotificationService]
+    C --> D[NotificationService - TDD Complete]
+    D --> E[Service Lifecycle Management]
+    E --> F[Request Validation & Processing]
+    F --> G[Channel Selection]
+    G --> H[Email Provider - SMTP]
+    G --> I[Webhook Provider - HTTP]
+    G --> J[Alert Provider - System]
+    G --> K[Real-time Provider - WebSocket]
+    H --> L[Template Processing]
+    I --> L
+    J --> L
+    K --> L
+    L --> M[Delivery Tracking]
+    M --> N[Statistics & Metrics]
+    N --> O[Health Monitoring]
+    O --> P[Response via API Gateway]
     
-    B --> O[REST API Endpoints]
-    B --> P[Configuration Management]
-    B --> Q[Error Handling & Recovery]
-    B --> R[Template Management]
+    D --> Q[REST API Endpoints]
+    D --> R[Configuration Management]
+    D --> S[Error Handling & Recovery]
+    D --> T[Template Management]
 ```
 
 **Key Modern Features:**
@@ -1616,37 +1853,76 @@ class AutoRecoveryService:
 ### **REST API Architecture**
 
 ```python
-# tpm_job_finder_poc/api/main.py
-from fastapi import FastAPI, HTTPException, Depends
+# tpm_job_finder_poc/api_gateway_service/api.py - Main API Gateway
+from fastapi import FastAPI, HTTPException, Depends, Request, Response
 from fastapi.security import HTTPBearer
 
-app = FastAPI(title="TPM Job Finder API", version="1.0.0")
+app = FastAPI(title="TPM Job Finder API Gateway", version="1.0.0")
 security = HTTPBearer()
+
+@app.any("/proxy/{path:path}")
+async def proxy_request(request: Request, path: str):
+    """Main proxy endpoint - unified entry point for all backend services"""
+    gateway_service = get_gateway_service()
+    
+    # Build request context from incoming request
+    context = RequestContext(
+        request_id=str(uuid.uuid4()),
+        method=HttpMethod(request.method),
+        path=f"/{path}",
+        headers=dict(request.headers),
+        query_params=dict(request.query_params),
+        client_ip=request.client.host,
+        user_agent=request.headers.get("user-agent")
+    )
+    
+    # Process through complete gateway pipeline
+    response = await gateway_service.process_request(context)
+    
+    return Response(
+        content=response.body,
+        status_code=response.status_code,
+        headers=dict(response.headers)
+    )
 
 @app.post("/api/v1/search")
 async def search_jobs(search_request: JobSearchRequest, 
                      token: str = Depends(security)):
-    """Main job search endpoint"""
+    """Job search endpoint proxied through gateway"""
     
-    # 1. Validate and authenticate
-    user = await authenticate_user(token)
+    # Gateway handles authentication, rate limiting, and routing
+    # Automatically forwards to JobCollectionService backend
+    gateway_service = get_gateway_service()
     
-    # 2. Execute search
-    aggregator = JobAggregatorService()
-    jobs = await aggregator.collect_jobs(search_request.dict())
-    
-    # 3. Apply enrichment
-    enriched_jobs = await enrichment_service.enrich_jobs(
-        jobs, search_request.enrichment_level
+    context = RequestContext(
+        request_id=str(uuid.uuid4()),
+        method=HttpMethod.POST,
+        path="/api/v1/search",
+        headers={"Authorization": f"Bearer {token}"},
+        query_params={},
+        client_ip="gateway-internal"
     )
     
-    # 4. Return paginated results
-    return PaginatedResponse(
-        jobs=enriched_jobs,
-        total=len(enriched_jobs),
-        page=search_request.page,
-        page_size=search_request.page_size
-    )
+    response = await gateway_service.process_request(context)
+    return response
+
+@app.get("/api/v1/health")
+async def gateway_health():
+    """Gateway and all backend services health check"""
+    gateway_service = get_gateway_service()
+    health = await gateway_service.health_check()
+    
+    return {
+        "status": health["status"],
+        "services": {
+            "api_gateway": health["gateway"],
+            "job_collection": health["services"].get("job_collection", "unknown"),
+            "job_normalizer": health["services"].get("job_normalizer", "unknown"),
+            "llm_provider": health["services"].get("llm_provider", "unknown"),
+            "notification": health["services"].get("notification", "unknown")
+        },
+        "metrics": await gateway_service.get_metrics()
+    }
 
 @app.post("/api/v1/enterprise/analytics")
 async def generate_analytics(analytics_request: AnalyticsRequest,

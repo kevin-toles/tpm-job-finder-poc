@@ -7,6 +7,7 @@ This directory serves as a navigation hub for all system components. **Component
 All comprehensive component documentation is now located within each component's directory:
 
 ### 🎯 **Core Intelligence Components**
+- **[API Gateway Service](../../tpm_job_finder_poc/api_gateway_service/README.md)** - 🚀 TDD Microservice for unified entry point, routing, rate limiting, and request proxying
 - **[Enrichment](../../tpm_job_finder_poc/enrichment/README.md)** - Multi-resume intelligence system with AI-powered matching
 - **[LLM Provider Service](../../tpm_job_finder_poc/llm_provider_tdd/README.md)** - 🚀 TDD Microservice for multi-provider LLM integration with REST API
 - **[LLM Provider (Legacy)](../../tpm_job_finder_poc/llm_provider/README.md)** - Legacy multi-provider LLM integration
@@ -50,18 +51,23 @@ File Upload → Text Extraction → Job Aggregation → AI Analysis → Excel Wo
 
 ### **Service Dependencies**
 ```
+                         API Gateway (Entry Point)
+                              ↑        ↓
+                    Authentication ←→ Rate Limiting
+                              ↑        ↓
                     LLM Provider ←→ Enrichment
                          ↑              ↓
 Job Aggregator → Job Normalizer → Cache → Storage
       ↑                                      ↓
 Scraping Service                    Secure Storage
       ↑                                      ↓
-Health Monitor ←→ Error Handler ←→ Audit Logger
+Health Monitor ←→ Error Handler ←→ Audit Logger ←→ Notification Service
 ```
 
 ### **Component Interaction Patterns**
 
 #### **1. Data Collection Flow**
+- **API Gateway** provides unified entry point with authentication and rate limiting
 - **Job Aggregator** orchestrates collection from API and browser sources
 - **Scraping Service** provides browser-based data extraction
 - **Job Normalizer** standardizes data into consistent schemas
@@ -74,10 +80,12 @@ Health Monitor ←→ Error Handler ←→ Audit Logger
 - **Storage** persists results with audit trails
 
 #### **3. User Interface Flow**
+- **API Gateway** provides secure API access with authentication and routing
 - **CLI** provides unified command-line interface
 - **Config** manages system-wide configuration
 - **Resume Uploader** handles file processing
 - **Error Handler** ensures graceful failure recovery
+- **Notification Service** delivers multi-channel communications
 
 ---
 

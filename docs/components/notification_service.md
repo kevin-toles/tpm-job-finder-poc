@@ -1,22 +1,24 @@
 # Notification Service
 
-A production-ready, TDD-complete multi-channel notification service designed for comprehensive communication management across email, webhooks, alerts, and real-time updates. Built with complete test coverage, modern Pydantic V2 compliance, and FastAPI REST endpoints.
+A production-ready, TDD-complete multi-channel notification service designed for comprehensive communication management across email, webhooks, alerts, and real-time updates. Built with complete test coverage, modern Pydantic V2 compliance, and FastAPI REST endpoints. **Integrated with API Gateway service** for unified access, authentication, and intelligent routing.
 
 ## Architecture Overview
 
-The notification service follows a modern microservice architecture with clear separation of concerns:
+The notification service follows a modern microservice architecture with clear separation of concerns and **API Gateway integration** for unified access:
 
 ```
 notification_service/
 ├── __init__.py                  # Package initialization
 ├── service.py                   # NotificationService - main service implementation
-├── api.py                       # FastAPI REST endpoints (10 endpoints)
+├── api.py                       # FastAPI REST endpoints (10 endpoints) via API Gateway
 ├── config.py                    # Service configuration with Pydantic V2
 └── templates/                   # Notification templates
     ├── default_email.html       # Default HTML email template
     ├── default_email.txt        # Default plain text email template
     └── default_webhook.json     # Default webhook payload template
 ```
+
+**🌐 API Gateway Integration**: All notification service endpoints are accessible through the unified API Gateway at `/api/v1/notifications/*`, providing centralized authentication, rate limiting, and service discovery.
 
 ## Key Features
 

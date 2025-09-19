@@ -1,15 +1,32 @@
 # TPM Job Finder POC: Project Overview
 
 ## Purpose
-This document provides a comprehensive overview of the TPM Job Finder Proof of Concept (POC) - a **production-ready global job intelligence platform** implementing Phase 5+ advanced features. The system combines automated job search, AI-powered assessment, enterprise multi-user capabilities, immigration support, and advanced career modeling into a unified platform designed for Technical Product Managers and professionals seeking global career opportunities. It is intended for new developers, teams with dependencies, and stakeholders who need to understand the complete system architecture before diving into detailed documentation.
+This document provides a comprehensive overview of the TPM Job Finder Proof of Concept (POC) - a **production-ready global job intelligence platform**### 2. JobAggregatorService (`tpm_job_finder_poc/job_aggregator/main.py`)
+Legacy central orchestration service that coordinates all job collection activities (being phased out):
+
+**Features:**
+- Multi-source job collection (API + browser scraping)
+- Intelligent deduplication with SQLite caching
+- Health monitoring and service status tracking
+- Async processing for concurrent job collection
+- Comprehensive error handling and retry logic
+
+**Integration Points:**
+- API Aggregators: RemoteOK, Greenhouse, Lever, Ashby, Workable, SmartRecruiters
+- Browser Scrapers: Indeed, LinkedIn, ZipRecruiter, Greenhouse
+- Cache System: Deduplication and applied job tracking
+- Enrichment Pipeline: Job enhancement and scoring
+
+### 3. Scraping Service (`tpm_job_finder_poc/scraping_service/`)se 5+ advanced features. The system combines automated job search, AI-powered assessment, enterprise multi-user capabilities, immigration support, and advanced career modeling into a unified platform designed for Technical Product Managers and professionals seeking global career opportunities. It is intended for new developers, teams with dependencies, and stakeholders who need to understand the complete system architecture before diving into detailed documentation.
 
 ## System Overview
 The TPM Job Finder POC is a sophisticated, enterprise-grade global job intelligence platform that combines API-based job collection, browser scraping, intelligent deduplication, LLM-powered enrichment, immigration support, enterprise collaboration, and advanced career modeling into a unified workflow automation platform with international expansion capabilities.
 
 ## Architecture Summary
-- **Language & Frameworks:** Python 3.13+, Selenium WebDriver, pytest, asyncio
+- **Language & Frameworks:** Python 3.13+, Selenium WebDriver, pytest, asyncio, FastAPI
 - **Project Structure:** Modern Python package with microservice-inspired architecture
 - **Core Architecture:**
+  - **APIGatewayService**: Complete TDD microservice (65/65 tests) for unified entry point, routing, rate limiting, authentication integration, and request proxying with comprehensive HTTP mocking
   - **JobCollectionService**: Modern, TDD-complete service for multi-source job collection with production-ready architecture
   - **JobNormalizerService**: Complete TDD microservice (63/63 tests) for job data standardization with REST API
   - **LLMProviderService**: Complete TDD microservice (63/63 tests) for multi-provider LLM integration with REST API
@@ -21,8 +38,8 @@ The TPM Job Finder POC is a sophisticated, enterprise-grade global job intellige
   - **Enterprise Multi-User Service**: Team collaboration and international expansion tracking *(Phase 5+)*
   - **Advanced Career Modeling Service**: Career pathway analysis and skill forecasting *(Phase 5+)*
   - **CLI Automation**: Complete workflow automation with configuration management
-  - **TDD Excellence**: Complete Test-Driven Development for core services (200/200 tests passing, zero warnings)
-  - **Test Coverage**: 568+ individual tests across 41 test files
+  - **TDD Excellence**: Complete Test-Driven Development for core services (265/265 tests passing, zero warnings)
+  - **Test Coverage**: 633+ individual tests across 44 test files
 
 ## Key Features
 ### **Core Job Intelligence Platform**
@@ -58,6 +75,11 @@ tpm-job-finder-poc/
 # Core Package
 tpm_job_finder_poc/               # Main application package
 ├── __init__.py
+├── api_gateway_service/          # Unified entry point and routing service (TDD-complete)
+│   ├── service.py                # APIGatewayService - unified entry point implementation
+│   ├── api.py                    # FastAPI REST endpoints with middleware
+│   ├── config.py                 # Gateway configuration management
+│   └── README.md                 # Service documentation
 ├── job_collection_service/       # Modern job collection service (TDD-complete)
 │   ├── service.py                # JobCollectionService - production implementation
 │   ├── api.py                    # REST API endpoints
@@ -136,8 +158,9 @@ tpm_job_finder_poc/               # Main application package
 └── webhook/                      # Webhook handling
 
 # Comprehensive Testing
-tests/                            # Comprehensive test suite (480+ tests)
+tests/                            # Comprehensive test suite (505+ tests)
 ├── unit/                         # Unit tests with fast mode support
+│   ├── api_gateway_service/      # API Gateway service TDD tests (65/65 complete)
 │   ├── job_collection_service/   # Job collection service TDD tests (complete)
 │   ├── job_normalizer_service/   # Job normalizer service TDD tests (complete)
 │   ├── notification_service/     # Notification service TDD tests (complete)
@@ -173,7 +196,26 @@ output/                          # Default output directory
 
 ## Core Services
 
-### 1. JobAggregatorService (`tpm_job_finder_poc/job_aggregator/main.py`)
+### 1. APIGatewayService (`tpm_job_finder_poc/api_gateway_service/`)
+Production-ready unified entry point for all platform API requests:
+
+**Features:**
+- Unified API entry point with intelligent request routing
+- Advanced rate limiting (global, user, IP, API key scopes)
+- Authentication integration with JWT token validation
+- Request proxying to backend services with timeout handling
+- Real-time metrics collection and health monitoring
+- Service discovery and registration
+- CORS policy enforcement and security validation
+- Comprehensive HTTP mocking for reliable testing
+
+**TDD Excellence:**
+- 65/65 tests passing with comprehensive HTTP mocking
+- Complete RED-GREEN-REFACTOR implementation
+- MockResponse class for aiohttp ClientSession simulation
+- Zero external HTTP calls in unit tests
+
+### 2. JobAggregatorService (`tpm_job_finder_poc/job_aggregator/main.py`)
 Central orchestration service that coordinates all job collection activities:
 
 **Features:**
@@ -205,7 +247,7 @@ Independent, production-ready browser scraping service:
 - ZipRecruiter: Job board scraping
 - Greenhouse.io: Company career pages
 
-### 3. Enrichment Pipeline (`tpm_job_finder_poc/enrichment/`)
+### 4. Enrichment Pipeline (`tpm_job_finder_poc/enrichment/`)
 LLM-powered job analysis and enhancement system with Phase 5+ advanced features:
 
 **Core Components:**
@@ -230,7 +272,7 @@ LLM-powered job analysis and enhancement system with Phase 5+ advanced features:
 - DeepSeek
 - Ollama (Local LLM support)
 
-### 4. CLI Automation (`tpm_job_finder_poc/cli/`)
+### 5. CLI Automation (`tpm_job_finder_poc/cli/`)
 Complete workflow automation with configuration management:
 
 **Interfaces:**
@@ -247,6 +289,13 @@ Complete workflow automation with configuration management:
 ## Data Flow Architecture
 
 ```
+                           ┌─────────────────┐
+                           │  API Gateway    │
+                           │  (Entry Point)  │
+                           │   Rate Limiting │
+                           │   Auth & Proxy  │
+                           └─────────┬───────┘
+                                     │
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   API Sources   │    │ Browser Scrapers │    │  Configuration  │
 │  (6 providers)  │    │  (4 platforms)   │    │     Files       │
@@ -277,21 +326,21 @@ Complete workflow automation with configuration management:
 
 ## Testing Strategy
 
-### Test Coverage (440+ Tests, Strategic Performance Optimization)
+### Test Coverage (505+ Tests, Strategic Performance Optimization)
 - **Fast Mode (334 tests, 6.46s)**: Optimized for development with core functionality validation
   - Core business logic and unit tests
   - Local computation and logic validation  
   - Rapid feedback loop for development
   - 100% pass rate for executed tests
 
-- **Comprehensive Mode (440+ tests, ~70s)**: Full validation including external dependencies
+- **Comprehensive Mode (505+ tests, ~85s)**: Full validation including external dependencies
   - Network-dependent API integration tests
   - Browser automation and scraping tests
   - Advanced feature tests (Phase 5+ services)
   - Complete end-to-end workflow validation
 
 - **Strategic Test Organization**:
-  - **Unit Tests (334+ in fast mode)**: Core functionality validation including 149 consolidated enrichment tests
+  - **Unit Tests (399+ in fast mode)**: Core functionality validation including 149 consolidated enrichment tests and 65 API Gateway tests
   - **Integration Tests (15+ tests)**: Service-to-service communication
   - **End-to-End Tests (5+ tests)**: Complete workflow validation  
   - **Regression Tests (5+ tests)**: Stability and performance monitoring
@@ -421,7 +470,7 @@ jobs = await orchestrator.collect_jobs(['indeed', 'linkedin'], params)
 1. **Feature Development**: Create feature branch
 2. **Write Tests**: Add comprehensive tests for new functionality
 3. **Run Fast Tests**: `PYTEST_FAST_MODE=1 python -m pytest tests/ -v` during development
-4. **Run Full Tests**: `python -m pytest tests/ -v` before commits (ensure all 440+ tests pass)
+4. **Run Full Tests**: `python -m pytest tests/ -v` before commits (ensure all 505+ tests pass)
 5. **Update Documentation**: Update relevant documentation files
 6. **Code Review**: Submit pull request for review
 
@@ -440,8 +489,9 @@ For detailed change logs, see CHANGELOG.md.
 ## Production Readiness
 
 The TPM Job Finder POC is production-ready with Phase 5+ enterprise capabilities:
-- ✅ **Complete Test Coverage**: 480+ tests with strategic fast mode (6.46s) and comprehensive mode (~70s)
-- ✅ **Production Architecture**: Modular, scalable service design with enterprise features including notification service
+- ✅ **Complete Test Coverage**: 505+ tests with strategic fast mode (6.46s) and comprehensive mode (~85s)
+- ✅ **Production Architecture**: Modular, scalable service design with enterprise features including API Gateway and notification service
+- ✅ **Unified Entry Point**: Complete API Gateway service with routing, rate limiting, authentication, and monitoring
 - ✅ **Multi-Channel Communications**: Complete notification system (email, webhooks, alerts, real-time) with template management
 - ✅ **Comprehensive Monitoring**: Health checks and audit logging
 - ✅ **Security Compliance**: Secure storage, API key management, input validation
@@ -455,4 +505,4 @@ The TPM Job Finder POC is production-ready with Phase 5+ enterprise capabilities
 - ✅ **Phase 5+ Services**: Immigration, enterprise, and career modeling fully implemented and tested
 
 ---
-_Last updated: September 2025 - Phase 5+ global job intelligence platform with comprehensive immigration support, enterprise multi-user features, and advanced career modeling validated through comprehensive test suite (440+ tests) with strategic performance optimization_
+_Last updated: September 2025 - Phase 5+ global job intelligence platform with comprehensive immigration support, enterprise multi-user features, advanced career modeling, and unified API Gateway entry point validated through comprehensive test suite (505+ tests) with strategic performance optimization_

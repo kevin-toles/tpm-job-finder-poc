@@ -38,6 +38,8 @@ The TPM Job Finder POC is a **production-ready global job intelligence platform*
 
 ### **Core Business Flow**
 ```
+API Gateway (Entry Point) → Authentication & Rate Limiting → Service Routing
+     ↓                              ↓                           ↓
 CLI Entry → Resume Processing → Multi-Source Collection → LLM Scoring → Geographic Export
      ↓              ↓                    ↓                   ↓              ↓
 File Upload → Text Extraction → Job Aggregation → AI Analysis → Excel Workbooks
@@ -45,7 +47,8 @@ File Upload → Text Extraction → Job Aggregation → AI Analysis → Excel Wo
 
 ### **Actual System Components**
 ```
-AutomatedJobFinderCLI
+APIGatewayService (unified entry point, routing, rate limiting, auth integration)
+├── AutomatedJobFinderCLI
 ├── AutomatedJobSearchRunner (workflow orchestration)
 ├── ResumeUploader + ResumeParser (file processing)
 ├── JobAggregatorService (multi-source collection)
@@ -57,6 +60,84 @@ AutomatedJobFinderCLI
 ---
 
 ## 📋 **BUSINESS PROCESSES & COMPONENT INTERACTIONS**
+
+### **0. API GATEWAY SERVICE WORKFLOW**
+
+#### **Business Process:** Unified Entry Point and Request Management
+- **Business Value:** Centralized access control, security, and performance monitoring for all platform operations
+- **Stakeholder Impact:** Enterprises gain unified API access with comprehensive security, rate limiting, and monitoring capabilities
+
+#### **Component Architecture:**
+```
+API Gateway Service ←→ Authentication Service ←→ Backend Services
+         ↓                     ↓                      ↓
+[Entry Point]         [Security & Auth]        [Business Logic]
+         ↓                     ↓                      ↓
+[Rate Limiting] ←→ [Request Routing] ←→ [Health Monitoring]
+```
+
+#### **Actual Data Flow:**
+**Input Data Elements:**
+- `request_context`: RequestContext containing:
+  - `method`: HttpMethod - HTTP method (GET, POST, PUT, DELETE)
+  - `path`: String - API endpoint path
+  - `headers`: Dict - Request headers including Authorization
+  - `query_params`: Dict - URL query parameters
+  - `client_ip`: String - Client IP address for rate limiting
+
+**Process Data Transformations:**
+1. **Security Validation**:
+   - Request size validation against configured limits
+   - CORS policy enforcement with origin validation
+   - Header validation and sanitization
+   - Path safety validation to prevent traversal attacks
+
+2. **Rate Limiting Processing**:
+   - Global rate limit checks (system-wide protection)
+   - IP-based rate limiting (DDoS protection)
+   - User-based rate limiting (authenticated user quotas)
+   - API key-based rate limiting (service-specific limits)
+
+3. **Authentication & Authorization**:
+   - JWT token validation with AuthenticationService integration
+   - User context extraction from validated tokens
+   - Role-based access control for protected endpoints
+   - Session management and token refresh handling
+
+4. **Service Discovery & Routing**:
+   - Dynamic route resolution based on request path and method
+   - Backend service health validation before routing
+   - Load balancing and failover for redundant services
+   - Circuit breaker pattern for failing services
+
+5. **Request Proxying**:
+   - Intelligent request forwarding to backend services
+   - Timeout handling with configurable limits
+   - Retry logic with exponential backoff
+   - Response transformation and header management
+
+6. **Metrics & Monitoring**:
+   - Request/response time tracking
+   - Success rate and error rate analysis
+   - Service health monitoring and alerting
+   - Performance analytics and capacity planning
+
+**Output Data Elements:**
+- `proxy_response`: ProxyResponse containing:
+  - `status_code`: Integer - HTTP response status
+  - `headers`: Dict - Response headers
+  - `body`: Bytes - Response body content
+  - `response_time_ms`: Float - Processing time in milliseconds
+  - `backend_service`: String - Which backend service processed the request
+
+**Business Intelligence Generated:**
+- **API Usage Analytics**: Request patterns, endpoint popularity, user behavior analysis
+- **Performance Metrics**: Response time distributions, throughput analysis, bottleneck identification
+- **Security Intelligence**: Rate limiting effectiveness, authentication success rates, threat pattern detection
+- **Service Health Intelligence**: Backend service availability, dependency health correlation, failure analysis
+- **Capacity Planning Data**: Resource utilization trends, scaling recommendations, cost optimization insights
+
+---
 
 ### **1. RESUME PROCESSING WORKFLOW**
 

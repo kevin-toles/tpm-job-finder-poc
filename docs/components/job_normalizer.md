@@ -1,54 +1,23 @@
 # Job Normalizer Service (TDD Microservice)
 
-# Job Normalizer Service
-
 **Status**: Production-Ready TDD Implementation  
-
-**Architecture**: Modern Microservice with REST API  Production-ready job data normalization, validation, and deduplication service with comprehensive error handling and multi-source integration.
-
+**Architecture**: Modern Microservice with REST API  
 **Test Coverage**: 63/63 tests passing (100% success rate)  
+**API Gateway Integration**: Unified access via `/api/v1/normalizer/*` endpoints  
+**Documentation**: [Complete Service Documentation](../../tpm_job_finder_poc/job_normalizer_service/README.md)
 
-**Documentation**: [Complete Service Documentation](../../tpm_job_finder_poc/job_normalizer_service/README.md)## Overview
+## Overview
 
+The Job Normalizer Service is a **TDD-complete microservice** that standardizes job postings from multiple sources into a unified schema, performs intelligent deduplication, and ensures data quality across the entire job aggregation pipeline. **Integrated with API Gateway service** for centralized routing, authentication, and performance optimization.
 
+### 🚀 **Modern Architecture Highlights**
 
-## OverviewThe Job Normalizer Service is a critical component that standardizes job postings from multiple sources into a unified schema, performs intelligent deduplication, and ensures data quality across the entire job aggregation pipeline.
-
-
-
-The Job Normalizer Service is a **TDD-complete microservice** that standardizes job postings from multiple sources into a unified schema, performs intelligent deduplication, and ensures data quality across the entire job aggregation pipeline.## Features
-
-
-
-### 🚀 **Modern Architecture Highlights**### 🔧 Data Normalization
-
-- **Title Standardization**: Consistent job title formatting and classification
-
-- **✅ Complete TDD Implementation**: 63 tests covering all functionality (RED-GREEN-REFACTOR)- **Salary Parsing**: Intelligent salary range extraction and normalization
-
-- **🌐 REST API**: FastAPI endpoints with OpenAPI documentation- **Location Processing**: Geographic standardization and validation
-
-- **📊 Quality Intelligence**: Advanced data quality scoring and completeness tracking- **Company Normalization**: Company name standardization and domain extraction
-
+- **✅ Complete TDD Implementation**: 63 tests covering all functionality (RED-GREEN-REFACTOR)
+- **🌐 REST API**: FastAPI endpoints with OpenAPI documentation via API Gateway
+- **📊 Quality Intelligence**: Advanced data quality scoring and completeness tracking
 - **⚡ Production-Ready**: Async processing, health monitoring, service lifecycle management
-
-- **🔧 Configurable**: Comprehensive configuration management with validation### ✅ Data Validation
-
-- **Schema Validation**: Pydantic-based strict schema enforcement
-
-## Features- **Required Fields**: Comprehensive validation of essential job fields
-
-- **Data Type Validation**: Type checking and conversion with error reporting
-
-### 🔧 Advanced Data Normalization- **Business Logic Validation**: Domain-specific validation rules
-
-- **Title Standardization**: `"sr. software engineer" → "Senior Software Engineer"`
-
-- **Salary Processing**: `"$100k-$150k" → "$100,000 - $150,000"`### 🔍 Deduplication
-
-- **Location Enhancement**: `"SF, CA" → "San Francisco, CA"`- **Multi-Level Deduplication**: URL, content hash, and fuzzy matching
-
-- **Company Normalization**: Domain extraction and name standardization- **Company-Title Matching**: Intelligent duplicate detection by company and role
+- **🔧 Configurable**: Comprehensive configuration management with validation
+- **🌐 API Gateway Integration**: Centralized access with intelligent caching and rate limiting
 
 - **Temporal Deduplication**: Time-based duplicate filtering
 

@@ -15,7 +15,7 @@ The TPM Job Finder POC includes a comprehensive test suite with **568+ tests** c
 
 ### Comprehensive Mode (CI/CD and Production Validation)  
 - **Execution Time**: ~70 seconds
-- **Tests Executed**: 440+ tests
+- **Tests Executed**: 505+ tests
 - **Coverage**: Full suite including network/browser dependencies
 - **Usage**: `python -m pytest tests/ -v`
 - **Benefits**: Complete validation, external service testing
@@ -301,7 +301,7 @@ PYTEST_FAST_MODE=1 python -m pytest tests/ --cov=tpm_job_finder_poc --cov-report
 
 ### Comprehensive Mode (Full Validation)
 ```bash
-# Run all 440+ tests (~70s execution)
+# Run all 505+ tests (~85s execution)
 python -m pytest tests/ -v
 
 # Run with coverage report
