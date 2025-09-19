@@ -2,7 +2,7 @@
 
 ## Overview
 
-The TPM Job Finder POC includes a comprehensive test suite with **440+ tests** covering all major components and workflows. The test suite features a strategic **fast mode** (6.46s execution) for development and a **comprehensive mode** (~70s execution) for complete validation, ensuring both rapid development feedback and production readiness.
+The TPM Job Finder POC includes a comprehensive test suite with **568+ tests** covering all major components and workflows. The test suite features a strategic **fast mode** (6.46s execution) for development and a **comprehensive mode** (~70s execution) for complete validation, ensuring both rapid development feedback and production readiness.
 
 ## Test Performance Strategy
 
@@ -526,4 +526,4 @@ python -m pytest tests/regression/test_load_testing.py -v --concurrent=10
 
 ---
 
-_Last updated: September 2025 - Comprehensive test suite with 440+ tests, strategic fast mode (6.46s), and consolidated enrichment test organization_
+_Last updated: September 2025 - Comprehensive test suite with 568+ tests, strategic fast mode (6.46s), and consolidated enrichment test organization_

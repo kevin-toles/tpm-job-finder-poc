@@ -4,6 +4,13 @@
 aiohttp==3.9.1
 beautifulsoup4==4.12.2
 selenium>=4.0.0  # For browser-based scraping
+fastapi>=0.104.0  # For REST API endpoints
+uvicorn>=0.24.0  # ASGI server
+
+# Notification service dependencies
+aiosmtplib>=2.0.0  # For async SMTP email sending
+jinja2>=3.1.0  # For template rendering
+websockets>=12.0  # For real-time notifications
 
 # Data processing
 pydantic>=2.0.0
@@ -23,10 +30,17 @@ requests>=2.25.1
 pycountry==24.6.1
 forex-python==1.9.2
 
+# Authentication/Security
+PyJWT>=2.8.0
+bcrypt>=4.0.0
+passlib[bcrypt]>=1.7.4
+
 # Testing
 pytest>=7.0.0
 pytest-asyncio>=0.21.0
 pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+httpx>=0.25.0  # For FastAPI testing
 
 # Utilities
 python-dateutil>=2.8.2

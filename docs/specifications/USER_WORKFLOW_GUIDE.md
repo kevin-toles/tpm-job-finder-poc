@@ -4,7 +4,160 @@
 
 The TPM Job Finder POC provides comprehensive job search automation with global career intelligence, advanced analytics, and enterprise features. This guide covers end-user workflows for different personas and use cases.
 
-**🚨 Implementation Note**: The Phase 5+ advanced features (immigration support, enterprise multi-user, career modeling) are **fully implemented as services** but CLI integration is currently limited to the core automated workflow. Advanced features are accessible through the enrichment pipeline and configuration files.
+**🚨 Implementation Note**: The Phase 5+ advanced features (immigration support, enterprise multi-user, career modeling) are **fully - **System Performance Metrics**
+- **Search Speed**: Fast mode (6.46s), Standard mode (~30s), Comprehensive (~70s)
+- **Data Quality**: >95% geographic classification accuracy, >85% salary data coverage
+- **User Satisfaction**: Net Promoter Score and feature adoption rates
+
+---
+
+## 📧 **Notification & Communication Setup**
+
+### **Multi-Channel Notification Configuration**
+
+The platform includes a comprehensive notification system for timely updates and alerts:
+
+#### **Email Notifications**
+```bash
+# Configure email notifications for job alerts
+python -c "
+from tpm_job_finder_poc.notification_service.service import NotificationService
+from tpm_job_finder_poc.notification_service.config import NotificationServiceConfig
+
+# Set up email configuration
+config = NotificationServiceConfig(
+    smtp_server='smtp.gmail.com',
+    smtp_port=587,
+    smtp_username='your-email@gmail.com',
+    smtp_password='your-app-password'
+)
+
+service = NotificationService(config)
+await service.initialize()
+
+# Configure job alert notifications
+from tpm_job_finder_poc.notification_service.service import NotificationRequest, NotificationChannel
+
+notification = NotificationRequest(
+    channel=NotificationChannel.EMAIL,
+    recipient='your-email@gmail.com',
+    template_id='job_alert',
+    template_variables={
+        'notification_frequency': 'daily',
+        'job_keywords': ['Technical Product Manager', 'Senior PM'],
+        'location_preferences': ['Remote', 'San Francisco']
+    }
+)
+"
+```
+
+#### **Real-Time Alerts**
+- **High-Priority Matches**: Instant notifications for 90%+ job matches
+- **Application Deadlines**: Automated reminders 2-3 days before closing
+- **Market Changes**: Salary range updates and new company openings
+- **System Status**: Service health and data refresh notifications
+
+#### **Weekly Digest Configuration**
+```bash
+# Set up automated weekly summary emails
+python -c "
+notification = NotificationRequest(
+    channel=NotificationChannel.EMAIL,
+    recipient='your-email@gmail.com',
+    template_id='weekly_digest',
+    template_variables={
+        'summary_day': 'Sunday',
+        'include_analytics': True,
+        'max_opportunities': 10,
+        'include_market_trends': True
+    },
+    priority=NotificationPriority.MEDIUM
+)
+"
+```
+
+### **Webhook Integrations**
+
+#### **CRM Integration Example**
+```python
+# Integrate with your CRM system
+webhook_notification = NotificationRequest(
+    channel=NotificationChannel.WEBHOOK,
+    recipient="https://your-crm.com/webhooks/job-opportunities",
+    content=json.dumps({
+        "event": "new_job_match",
+        "match_score": 95,
+        "job_details": {...},
+        "user_id": "your-user-id"
+    }),
+    webhook_auth=WebhookAuth(
+        type="bearer",
+        token="your-crm-webhook-token"
+    )
+)
+```
+
+#### **Slack Integration**
+```python
+# Send job alerts to Slack channels
+slack_notification = NotificationRequest(
+    channel=NotificationChannel.WEBHOOK,
+    recipient="https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+    content=json.dumps({
+        "text": "🎯 New high-match job opportunity found!",
+        "attachments": [{
+            "title": "Senior Technical Product Manager",
+            "title_link": "https://job-url.com",
+            "fields": [
+                {"title": "Company", "value": "TechCorp", "short": True},
+                {"title": "Match Score", "value": "95%", "short": True}
+            ]
+        }]
+    })
+)
+```
+
+### **Notification Preferences**
+
+#### **Frequency Settings**
+- **Immediate**: Critical matches (95%+ score) and application deadlines
+- **Daily**: New opportunities digest and market updates
+- **Weekly**: Comprehensive summary and trend analysis
+- **Monthly**: Career progression insights and skill recommendations
+
+#### **Channel Preferences**
+- **Email**: Detailed job descriptions and weekly summaries
+- **Webhook**: Real-time integration with external systems
+- **Alerts**: High-priority system notifications
+- **Real-time**: Live updates for active job searches
+
+#### **Content Customization**
+```json
+{
+  "notification_preferences": {
+    "job_alerts": {
+      "minimum_match_score": 80,
+      "include_salary_info": true,
+      "include_company_insights": true,
+      "max_daily_notifications": 5
+    },
+    "market_updates": {
+      "include_salary_trends": true,
+      "include_skill_demand": true,
+      "geographic_focus": ["San Francisco", "Remote"]
+    },
+    "system_notifications": {
+      "service_health": false,
+      "data_refresh": true,
+      "feature_updates": true
+    }
+  }
+}
+```
+
+---
+
+## 🎯 **Next Steps & Advanced Features**ted as services** but CLI integration is currently limited to the core automated workflow. Advanced features are accessible through the enrichment pipeline and configuration files.
 
 ---
 
@@ -433,10 +586,11 @@ python -m tpm_job_finder_poc.cli profile \
 - **Salary Negotiation Tools**: Data-driven compensation discussions
 
 ### **API Access & Integrations**
-- **REST API**: Programmatic access to all features
-- **Webhook Support**: Real-time notifications and integrations
-- **Third-Party Connectors**: ATS, CRM, and HRIS integrations
-- **Mobile Apps**: Native iOS and Android applications
+- **REST API**: Programmatic access to all features including notification service
+- **Notification System**: Multi-channel communications (email, webhooks, alerts, real-time)
+- **Webhook Support**: Real-time notifications and external system integrations
+- **Third-Party Connectors**: ATS, CRM, and HRIS integrations with notification workflows
+- **Mobile Apps**: Native iOS and Android applications with push notifications
 
 ---
 

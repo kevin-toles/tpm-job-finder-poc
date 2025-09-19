@@ -46,8 +46,9 @@ Testing strategies, analysis, and quality assurance documentation:
 ### 🔧 **Component Documentation & Integration** (`docs/components/`)
 **NEW APPROACH**: Component navigation hub with direct links to co-located component READMEs:
 
-- **[Component Navigation Hub](components/README.md)** - Central navigation to all component documentation
+- **[Component Navigation Hub](components/README.md)** - Central navigation to all component documentation  
 - **[Component Integration Map](components/COMPONENT_INTEGRATION_MAP.md)** - How components work together holistically
+- **[Notification Service](components/notification_service.md)** - Multi-channel notification system documentation
 
 **Individual Component Documentation** (co-located with code):
 - **[Enrichment](../tpm_job_finder_poc/enrichment/README.md)** - Multi-resume intelligence system

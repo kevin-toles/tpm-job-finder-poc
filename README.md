@@ -1,13 +1,26 @@
-[![codecov](https://codecov.io/gh/kevin-toles/tpm-job-finder-poc/branch/dev/graph/badge.stests/                       # Comprehensive test suite (440+ tests)
+[!├── unit/                         # Unit tests with fast mode support
+│   ├── job_collection_service/   - **Component READMEs** - Co-located comprehensive documentation:
+   - **[Job Collection Service](tpm_job_finder_poc/job_collecti  - ✅ **Audit Service** (21/21 tests, complete TDD methodology)
+  - ✅ **Authentication Service** (32/32 tests, JWT and RBAC implementation)
+  - ✅ **Job Collection Service** (109/109 tests, complete RED-GREEN-REFACTOR cycle)
+  - ✅ **Job Normalizer Service** (63/63 tests, complete RED-GREEN-REFACTOR cycle)
+  - ✅ **LLM Provider Service** (63/63 tests, 100% test coverage, production-ready microservice)
+  - ✅ **Notification Service** (44/44 tests, 100% test coverage, multi-channel communications)ervice/README.md)** - Modern TDD collection service
+   - **[Job Normalizer Service](tpm_job_finder_poc/job_normalizer_service/README.md)** - Modern TDD normalization service
+   - **[LLM Provider Service](tpm_job_finder_poc/llm_provider_tdd/README.md)** - Modern TDD LLM service with multi-provider support
+   - **[Notification Service](tpm_job_finder_poc/notification_service/README.md)** - Modern TDD multi-channel notification system
+   - **[Authentication Service](tpm_job_finder_poc/auth_service/README.md)** - JWT authentication and RBAC authorization service  
+   - **[Health Monitoring Service](tpm_job_finder_poc/health_monitoring_service/README.md)** - System health monitoring and service dependency tracking
+   - **[Enrichment](tpm_job_finder_poc/enrichment/README.md)** - Multi-resume AI intelligence system collection service TDD tests (complete)
+│   ├── job_normalizer_service/   # Job normalizer service TDD tests (complete)
+│   ├── notification_service/     # Notification service TDD tests (complete)
+│   ├── enrichment/               # Enrichment tests (149 tests consolidated)ecov](https://codecov.io/gh/kevin-toles/tpm-job-finder-poc/branch/dev/graph/badge.stests/                       # Comprehensive test suite (440+ tests)
 ├── unit/               tests/                            # Comprehensive test suite (440+ tests)
 ├── unit/                    # Unit tests with fast mode support
 │   ├── job_collection_service/   # Job collection service TDD tests (complete)
 │   ├── job_normalizer_service/   # Job normalizer service TDD tests (complete)
 │   ├── enrichment/               # Enrichment tests (149 tests consolidated)
-│   ├── job_aggregator/           # Legacy job aggregator tests  
-│   ├── cache/                    # Cache system tests
-│   ├── models/                   # Data model tests
-│   └── llm_provider/             # LLM provider testsnit tests with fast mode support
+tests/                            # Comprehensive test suite (568+ tests)nit tests with fast mode support
 │   ├── enrichment/          # Enrichment tests (149 tests consolidated)
 │   ├── job_aggregator/      # Job aggregator tests  
 │   ├── cache/               # Cache system tests
@@ -45,6 +58,7 @@ The TPM Job Finder POC is designed as a **cohesive system** where every componen
 - **AI-Powered Job Analysis**: LLM-powered job scoring, cultural fit assessment, and salary benchmarking
 - **Geographic Intelligence**: Regional organization with cultural adaptation insights and visa requirements
 - **Multi-Resume Intelligence**: Intelligent resume portfolio management with optimal resume selection and unique enhancement generation
+- **Notification & Communication**: Multi-channel notification system (email, webhooks, alerts, real-time) with template management
 
 ### **Multi-Resume Intelligence Features**
 - **Resume Portfolio Discovery**: Automatically scan and catalog resume variants across any folder structure
@@ -62,6 +76,9 @@ The TPM Job Finder POC is designed as a **cohesive system** where every componen
 
 ### **Production Infrastructure**
 - **Browser Scraping Service**: Modern, modular scraping service with anti-detection capabilities
+- **Notification Service**: Multi-channel notification system with email, webhooks, alerts, and real-time updates
+- **Authentication Service**: JWT authentication, RBAC authorization, and comprehensive user management
+- **Health Monitoring Service**: System health monitoring, service dependency tracking, and metrics collection
 - **Health Monitoring**: Comprehensive service health checks and monitoring
 - **Automated Workflows**: Complete CLI automation with configuration management
 - **Audit Logging**: Complete audit trails for all operations
@@ -165,6 +182,11 @@ tpm_job_finder_poc/               # Main package
 │   ├── service.py                # LLMProviderService - production implementation
 │   ├── api.py                    # REST API endpoints (17 endpoints)
 │   └── contracts/                # Service interfaces and contracts
+├── notification_service/            # Modern notification service (TDD complete)
+│   ├── service.py                # NotificationService - production implementation
+│   ├── api.py                    # REST API endpoints (10 endpoints)
+│   ├── config.py                 # Service configuration
+│   └── templates/                # Notification templates
 ├── job_aggregator/               # Legacy orchestration service (to be deprecated)
 │   ├── main.py                   # JobAggregatorService - legacy orchestrator
 │   ├── aggregators/              # API-based job sources
@@ -218,6 +240,7 @@ tests/                            # Comprehensive test suite (440+ tests)
   - ✅ **Job Collection Service** (30/30 tests, complete RED-GREEN-REFACTOR cycle)
   - ✅ **Job Normalizer Service** (63/63 tests, complete RED-GREEN-REFACTOR cycle)
   - ✅ **LLM Provider Service** (63/63 tests, 100% test coverage, production-ready microservice)
+  - ✅ **Notification Service** (44/44 tests, 100% test coverage, multi-channel communications)
 - **Unit Tests**: Core functionality validation including 149 consolidated enrichment tests
 - **Integration Tests**: Service-to-service communication (15+ tests)
 - **End-to-End Tests**: Complete workflow validation (5+ tests)
@@ -293,6 +316,27 @@ normalization_config = JobNormalizationConfig(
 )
 normalized_jobs = await normalizer_service.normalize_jobs(raw_jobs, normalization_config)
 
+# Modern Notification Service (TDD-complete, production-ready)
+from tpm_job_finder_poc.notification_service.service import NotificationService
+from tpm_job_finder_poc.notification_service.config import NotificationServiceConfig
+
+# Initialize the notification service
+notification_config = NotificationServiceConfig()
+notification_service = NotificationService(notification_config)
+await notification_service.initialize()
+
+# Send multi-channel notifications
+from tpm_job_finder_poc.notification_service.service import NotificationRequest, NotificationChannel
+
+notification = NotificationRequest(
+    channel=NotificationChannel.EMAIL,
+    recipient="user@example.com",
+    subject="Job Alert: New Opportunities",
+    content="Found 5 new matching jobs!",
+    template_id="job_alert"
+)
+response = await notification_service.send_notification(notification)
+
 # Legacy JobAggregatorService (for backward compatibility)
 from tpm_job_finder_poc.job_aggregator.main import JobAggregatorService
 from tpm_job_finder_poc.scraping_service.core.base_job_source import FetchParams
@@ -326,6 +370,9 @@ python -m pytest tests/unit/job_collection_service/ -v
 
 # Run job normalizer service tests (TDD-complete)
 python -m pytest tests/unit/job_normalizer_service/ -v
+
+# Run notification service tests (TDD-complete)
+python -m pytest tests/unit/notification_service/ -v
 
 # Run legacy job aggregator tests
 python -m pytest tests/unit/job_aggregator/ -v

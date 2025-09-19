@@ -604,6 +604,52 @@ CareerModelingService ←→ SkillAnalyzer ←→ MarketForecaster ←→ Pathwa
 
 ---
 
+### **12. NOTIFICATION & COMMUNICATION SYSTEM WORKFLOW**
+
+#### **Business Process:** Multi-Channel Communication Infrastructure for User Engagement
+- **Business Value:** Comprehensive notification system enabling real-time updates, automated alerts, and user engagement across multiple channels
+- **Stakeholder Impact:** Enhanced user experience through timely communications, system reliability notifications, and customizable alert preferences
+
+#### **Component Architecture:**
+```
+NotificationService ←→ Template Engine ←→ Multi-Channel Providers
+        ↓                    ↓                     ↓
+[Channel Selection]    [Content Rendering]   [Delivery Tracking]
+```
+
+#### **Actual Data Flow:**
+**Input Data Elements:**
+- `notification_request`: NotificationRequest - Channel, recipient, content, template, priority
+- `template_variables`: Dictionary - Dynamic content for template rendering
+- `delivery_preferences`: UserPreferences - Channel priorities, frequency limits, quiet hours
+
+**Process Data Transformations:**
+1. **NotificationService** processes multi-channel communications:
+   - Email notifications: Job alerts, weekly digests, application confirmations
+   - Webhook integrations: External system notifications, API event streams
+   - Alert system: High-priority matches, system failures, deadline reminders
+   - Real-time updates: Live job feed updates, instant match notifications
+
+2. **Template Engine** renders dynamic content:
+   - Jinja2-based template processing with variable extraction
+   - Multi-format support: HTML email, plain text, JSON webhooks
+   - Default templates for common notification types
+   - Custom template creation and management
+
+3. **Multi-Provider Delivery System** ensures reliable delivery:
+   - SMTP email provider with authentication and error handling
+   - HTTP webhook provider with retry logic and timeout management
+   - Alert escalation system with priority-based routing
+   - Real-time WebSocket connections for live updates
+
+**Output Data Elements:**
+- `notification_response`: NotificationResponse - Delivery status, tracking ID, provider info
+- `delivery_metrics`: DeliveryMetrics - Success rates, performance analytics, error analysis
+- `audit_trail`: NotificationHistory - Complete delivery logs with timestamps and status
+- `health_status`: ProviderHealth - Real-time provider availability and performance monitoring
+
+---
+
 ## 🔄 **CROSS-CUTTING BUSINESS PROCESSES**
 
 ### **Data Models & Schema Management**

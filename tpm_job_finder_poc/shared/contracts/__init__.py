@@ -48,6 +48,36 @@ from .llm_provider_service_tdd import (
     ModelNotFoundError
 )
 
+from .auth_service import (
+    IAuthenticationService,
+    IAuthorizationService,
+    User,
+    Role,
+    Permission,
+    AuthToken,
+    LoginCredentials,
+    AuthResult,
+    TokenValidationResult,
+    PermissionCheck,
+    AuthorizationResult,
+    SecurityContext,
+    OperationResult,
+    UserStatus,
+    TokenType,
+    AuthenticationMethod,
+    PermissionEffect,
+    AuthServiceError,
+    AuthenticationError,
+    AuthorizationError,
+    TokenError,
+    UserValidationError,
+    PermissionError,
+    RoleError,
+    create_admin_user,
+    create_default_roles,
+    create_default_permissions
+)
+
 __all__ = [
     # Scraping Service
     "IScrapingService",
@@ -83,5 +113,34 @@ __all__ = [
     "AuthenticationError",
     "LLMConfigurationError",
     "LLMTimeoutError",
-    "ModelNotFoundError"
+    "ModelNotFoundError",
+    
+    # Auth Service
+    "IAuthenticationService",
+    "IAuthorizationService",
+    "User",
+    "Role", 
+    "Permission",
+    "AuthToken",
+    "LoginCredentials",
+    "AuthResult",
+    "TokenValidationResult",
+    "PermissionCheck",
+    "AuthorizationResult",
+    "SecurityContext",
+    "OperationResult",
+    "UserStatus",
+    "TokenType",
+    "AuthenticationMethod",
+    "PermissionEffect",
+    "AuthServiceError",
+    "AuthenticationError",
+    "AuthorizationError",
+    "TokenError",
+    "UserValidationError",
+    "PermissionError",
+    "RoleError",
+    "create_admin_user",
+    "create_default_roles",
+    "create_default_permissions"
 ]
